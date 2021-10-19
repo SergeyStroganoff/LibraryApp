@@ -1,0 +1,240 @@
+@startuml
+
+title __LIBRARYAPP's Class Diagram__\n
+
+  namespace org.stroganov {
+    class org.stroganov.App {
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace JsonDBAPI {
+      class org.stroganov.JsonDBAPI.BookBuilder {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace JsonDBAPI {
+      class org.stroganov.JsonDBAPI.JsonDBLoader {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace JsonDBAPI {
+      class org.stroganov.JsonDBAPI.JsonParser {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace JsonDBAPI {
+      class org.stroganov.JsonDBAPI.UserBuilder {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace dao {
+      class org.stroganov.dao.DAOFactory {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace dao {
+      enum DAOType {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace dao {
+      class org.stroganov.dao.JsonDataSource {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace dao {
+      interface org.stroganov.dao.LibraryDAO {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace dialogue {
+      class org.stroganov.dialogue.UserDialogue {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace dialogue {
+      class org.stroganov.dialogue.UserDialogueManager {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace dialogue {
+      namespace states {
+        class org.stroganov.dialogue.states.AdminMenuState {
+        }
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace dialogue {
+      namespace states {
+        class org.stroganov.dialogue.states.LoginState {
+        }
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace dialogue {
+      namespace states {
+        abstract class org.stroganov.dialogue.states.State {
+        }
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace dialogue {
+      namespace states {
+        interface org.stroganov.dialogue.states.StateAction {
+        }
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace dialogue {
+      namespace states {
+        class org.stroganov.dialogue.states.UserMenuState {
+        }
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace entities {
+      class org.stroganov.entities.Author {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace entities {
+      class org.stroganov.entities.Book {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace entities {
+      class org.stroganov.entities.BookMark {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace entities {
+      class org.stroganov.entities.User {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace exceptions {
+      class org.stroganov.exceptions.UnrealizedFunctionalityException {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace gui {
+      class org.stroganov.gui.UserConsoleInterface {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace gui {
+      interface org.stroganov.gui.UserInterface {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace gui {
+      class org.stroganov.gui.UserInterfaceFactory {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace util {
+      class org.stroganov.util.JSONUtil {
+      }
+    }
+  }
+  
+
+  org.stroganov.JsonDBAPI.JsonDBLoader o-- org.stroganov.JsonDBAPI.JsonParser : jsonParser
+  org.stroganov.JsonDBAPI.JsonDBLoader o-- org.stroganov.util.JSONUtil : jsonUtil
+  org.stroganov.dao.JsonDataSource .up.|> org.stroganov.dao.LibraryDAO
+  org.stroganov.dao.JsonDataSource o-- org.stroganov.JsonDBAPI.JsonDBLoader : jsonDBLoader
+  org.stroganov.dialogue.UserDialogue o-- org.stroganov.dialogue.states.StateAction : stateAction
+  org.stroganov.dialogue.UserDialogueManager o-- org.stroganov.dao.LibraryDAO : libraryDAO
+  org.stroganov.dialogue.UserDialogueManager o-- org.stroganov.entities.User : user
+  org.stroganov.dialogue.UserDialogueManager o-- org.stroganov.dialogue.UserDialogue : userDialogue
+  org.stroganov.dialogue.UserDialogueManager o-- org.stroganov.dialogue.states.StateAction : stateAction
+  org.stroganov.dialogue.states.AdminMenuState -up-|> org.stroganov.dialogue.states.UserMenuState
+  org.stroganov.dialogue.states.LoginState -up-|> org.stroganov.dialogue.states.State
+  org.stroganov.dialogue.states.State .up.|> org.stroganov.dialogue.states.StateAction
+  org.stroganov.dialogue.states.State o-- org.stroganov.gui.UserInterface : userInterface
+  org.stroganov.dialogue.states.UserMenuState -up-|> org.stroganov.dialogue.states.State
+  org.stroganov.entities.Book o-- org.stroganov.entities.Author : authorName
+  org.stroganov.entities.BookMark o-- org.stroganov.entities.Book : book
+  org.stroganov.entities.BookMark o-- org.stroganov.entities.User : user
+  org.stroganov.gui.UserConsoleInterface .up.|> org.stroganov.gui.UserInterface
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml
