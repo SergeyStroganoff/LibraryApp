@@ -19,7 +19,7 @@ public interface LibraryDAO {
 
     boolean saveUser(User user);
 
-    User findUser(String userLogin) throws UnrealizedFunctionalityException;
+    User findUser(String userLogin);
 
     boolean deleteUser(String userLogin);
 

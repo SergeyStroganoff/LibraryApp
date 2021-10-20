@@ -18,7 +18,7 @@ public class JsonDBLoader {
     JsonParser jsonParser = new JsonParser();
 
 
-    public List<Book> loadBooks() throws UnrealizedFunctionalityException {
+    public List<Book> loadBooks() {
 
 
         String jsonBooksString = null;
@@ -31,8 +31,8 @@ public class JsonDBLoader {
         return jsonParser.getListBooksFromDB(jsonBooksString);
     }
 
-    public List<User> loadUsers() throws UnrealizedFunctionalityException {
-        throw new UnrealizedFunctionalityException("Нет реализации loadUsers");
+    public List<User> loadUsers() {
+
     }
 
 }

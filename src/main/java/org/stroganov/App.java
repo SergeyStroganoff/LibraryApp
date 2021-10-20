@@ -1,6 +1,7 @@
 package org.stroganov;
 
 import org.apache.log4j.Logger;
+import org.stroganov.dialogue.UserDialogueManager;
 import org.stroganov.exceptions.PropertiesException;
 import org.stroganov.gui.UserInterface;
 import org.stroganov.gui.UserInterfaceFactory;
@@ -16,10 +17,10 @@ import java.util.Properties;
  * @author Sergey Stroganov
  */
 public class App {
-    public static final Logger logger = Logger.getLogger(App.class);
-    public static final String ERROR_LOADING_CONFIGURATION_FILE_MESSAGE = "Error loading configuration file: ";
-    public static final String PROGRAM_WILL_BE_CLOSED = "Program will be closed";
-    public static  Properties properties;
+    private static final Logger LOGGER = Logger.getLogger(App.class);
+    private static final String ERROR_LOADING_CONFIGURATION_FILE_MESSAGE = "Error loading configuration file: ";
+    private static final String PROGRAM_WILL_BE_CLOSED = "Program will be closed";
+    public static Properties properties;
 
     public static void main(String[] args) {
 
@@ -28,21 +29,19 @@ public class App {
         try {
             properties = configLoader.getAppProp();
         } catch (IOException | PropertiesException e) {
-            logger.error(ERROR_LOADING_CONFIGURATION_FILE_MESSAGE + e.getMessage());
+            LOGGER.error(ERROR_LOADING_CONFIGURATION_FILE_MESSAGE + e.getMessage());
             userInterface.showMessage(ERROR_LOADING_CONFIGURATION_FILE_MESSAGE + e.getMessage());
             userInterface.showMessage(PROGRAM_WILL_BE_CLOSED);
             System.exit(1);
         }
-
+        HistoryManager historyManager = null;
         try {
-            HistoryManager historyManager = new HistoryManager();
+            historyManager = new HistoryManager();
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
-
-
-
-
+        UserDialogueManager userDialogueManager = new UserDialogueManager(historyManager, userInterface);
+        userDialogueManager.runDialogue();
     }
 
 

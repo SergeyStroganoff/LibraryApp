@@ -1,9 +1,14 @@
 package org.stroganov.gui;
 
+import org.apache.log4j.Logger;
+import org.stroganov.App;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 
 public class UserConsoleInterface implements UserInterface {
+
+    private static final Logger logger = Logger.getLogger(App.class);
     BufferedReader reader;
 
     public UserConsoleInterface(BufferedReader reader) {
@@ -12,11 +17,12 @@ public class UserConsoleInterface implements UserInterface {
 
     @Override
     public String getStringFromUser() {
-        String expressionString = " ";
+        String expressionString = "";
         try {
             expressionString = reader.readLine();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
+            showMessage(e.getMessage());
         }
         return expressionString;
     }

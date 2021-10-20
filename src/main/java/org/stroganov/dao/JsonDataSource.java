@@ -1,10 +1,10 @@
 package org.stroganov.dao;
 
 import org.stroganov.JsonDBAPI.JsonDBLoader;
-import org.stroganov.entities.Author;
 import org.stroganov.entities.Book;
 import org.stroganov.entities.User;
 import org.stroganov.exceptions.UnrealizedFunctionalityException;
+
 import java.util.List;
 
 public class JsonDataSource implements LibraryDAO {
@@ -52,8 +52,8 @@ public class JsonDataSource implements LibraryDAO {
     }
 
     @Override
-    public User findUser(String userLogin) throws UnrealizedFunctionalityException {
-        throw new UnrealizedFunctionalityException("findUser not realized");
+    public User findUser(String userLogin) {
+        return null;
     }
 
     @Override

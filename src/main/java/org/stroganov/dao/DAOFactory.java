@@ -8,13 +8,12 @@ public class DAOFactory {
     private static final String ERROR_PARAMETER_MESSAGE = "Тип подключения к базе указан неверно";
 
 
-    public static LibraryDAO getLibraryDAO(DAOType type) throws UnrealizedFunctionalityException {
+    public static LibraryDAO getLibraryDAO(DAOType type) {
         LibraryDAO dao = null;
         switch (type) {
             case JSON:
                 dao = JsonDataSource.getInstance();
                 break;
-
             case H2DATABASE:
                 throw new IllegalArgumentException(REALIZATION_EXCEPTION_MESSAGE);
             default:

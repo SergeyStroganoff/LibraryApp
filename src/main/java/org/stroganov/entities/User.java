@@ -18,4 +18,28 @@ public class User {
         this.isBlocked = isBlocked;
         this.isAdmin = isAdmin;
     }
+
+    public int getNumberID() {
+        return numberID;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public int getPasscodeHash() {
+        return passcodeHash;
+    }
+
+    public boolean isBlocked() {
+        return isBlocked;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
 }
