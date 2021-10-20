@@ -10,11 +10,11 @@ import java.util.List;
 
 public class JsonParser {
 
-    public List<Book> getListBooksFromDB(String jsonString) throws UnrealizedFunctionalityException {
-       return null;
+    public List<Book> getListBooksFromDB(String jsonString) {
+        return null;
     }
 
-    public List<User> getListUsersFromDB(String jsonString) throws UnrealizedFunctionalityException {
+    public List<User> getListUsersFromDB(String jsonString) {
 
         return null;
     }

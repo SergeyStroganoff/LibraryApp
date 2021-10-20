@@ -15,7 +15,7 @@ public class ConfigLoader {
 
     public Properties getAppProp() throws IOException, PropertiesException {
         Properties properties = new Properties();
-        InputStream inputStream = App.class.getResourceAsStream(APP_PROPERTIES);
+        InputStream inputStream = ConfigLoader.class.getResourceAsStream(APP_PROPERTIES);
         if (inputStream == null) {
             throw new PropertiesException(FILE_WASN_T_FOUND);
         }
@@ -28,7 +28,7 @@ public class ConfigLoader {
 
     public boolean propertyVerify(Properties properties) {
         String historyLogFileName = properties.getProperty("historyLogFileName");
-        if (!historyLogFileName.matches("^\\d+")) {
+        if (!historyLogFileName.matches("^\\w+.json")) {
             return false;
         }
         return true;

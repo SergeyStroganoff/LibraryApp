@@ -3,8 +3,10 @@ package org.stroganov.dao;
 import org.stroganov.JsonDBAPI.JsonDBLoader;
 import org.stroganov.entities.Book;
 import org.stroganov.entities.User;
+import org.stroganov.exceptions.DBExceptions;
 import org.stroganov.exceptions.UnrealizedFunctionalityException;
 
+import java.io.IOException;
 import java.util.List;
 
 public class JsonDataSource implements LibraryDAO {
@@ -14,14 +16,14 @@ public class JsonDataSource implements LibraryDAO {
     List<Book> bookList;
     List<User> userList;
 
-    public static synchronized JsonDataSource getInstance() throws UnrealizedFunctionalityException {
+    public static synchronized JsonDataSource getInstance() throws DBExceptions {
         if (instance == null) {
             instance = new JsonDataSource();
         }
         return instance;
     }
 
-    private JsonDataSource() throws UnrealizedFunctionalityException {
+    private JsonDataSource() throws DBExceptions {
         bookList = jsonDBLoader.loadBooks();
         userList = jsonDBLoader.loadUsers();
     }

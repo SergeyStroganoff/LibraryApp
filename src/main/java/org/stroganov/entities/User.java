@@ -5,12 +5,12 @@ public class User {
     private int numberID;
     private String fullName;
     private String login;
-    private int passcodeHash;
+    private String passcodeHash;
     private boolean isBlocked;
     private boolean isAdmin;
 
 
-    public User(int ID, String fullName, String login, int passcodeHash, boolean isBlocked, boolean isAdmin) {
+    public User(int ID, String fullName, String login, String passcodeHash, boolean isBlocked, boolean isAdmin) {
         this.numberID = ID;
         this.fullName = fullName;
         this.login = login;
@@ -31,7 +31,7 @@ public class User {
         return login;
     }
 
-    public int getPasscodeHash() {
+    public String getPasscodeHash() {
         return passcodeHash;
     }
 

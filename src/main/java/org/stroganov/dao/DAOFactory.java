@@ -1,6 +1,9 @@
 package org.stroganov.dao;
 
+import org.stroganov.exceptions.DBExceptions;
 import org.stroganov.exceptions.UnrealizedFunctionalityException;
+
+import java.io.IOException;
 
 public class DAOFactory {
 
@@ -8,7 +11,7 @@ public class DAOFactory {
     private static final String ERROR_PARAMETER_MESSAGE = "Тип подключения к базе указан неверно";
 
 
-    public static LibraryDAO getLibraryDAO(DAOType type) {
+    public static LibraryDAO getLibraryDAO(DAOType type) throws DBExceptions {
         LibraryDAO dao = null;
         switch (type) {
             case JSON:
