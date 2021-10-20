@@ -16,8 +16,7 @@ public class DAOFactory {
                 break;
 
             case H2DATABASE:
-                throw new UnrealizedFunctionalityException(REALIZATION_EXCEPTION_MESSAGE);
-
+                throw new IllegalArgumentException(REALIZATION_EXCEPTION_MESSAGE);
             default:
                 throw new IllegalArgumentException(ERROR_PARAMETER_MESSAGE);
         }

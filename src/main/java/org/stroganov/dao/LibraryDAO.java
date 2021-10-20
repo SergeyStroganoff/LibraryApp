@@ -6,7 +6,7 @@ import org.stroganov.exceptions.UnrealizedFunctionalityException;
 import java.util.List;
 
 /**
- * Интерфейс для определения функций с DB
+ * Interface for defining functions with DB
  */
 public interface LibraryDAO {
     boolean addBook(Book book);

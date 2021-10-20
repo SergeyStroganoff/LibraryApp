@@ -1,8 +1,10 @@
 package org.stroganov;
 
+import org.apache.log4j.Logger;
 import org.stroganov.exceptions.PropertiesException;
 import org.stroganov.gui.UserInterface;
 import org.stroganov.gui.UserInterfaceFactory;
+import org.stroganov.history.HistoryManager;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -14,7 +16,9 @@ import java.util.Properties;
  * @author Sergey Stroganov
  */
 public class App {
-    public static final String ERROR_LOADING_CONFIGURATION_FILE_MESSAGE = "Error loading configuration file:, program will be closed";
+    public static final Logger logger = Logger.getLogger(App.class);
+    public static final String ERROR_LOADING_CONFIGURATION_FILE_MESSAGE = "Error loading configuration file: ";
+    public static final String PROGRAM_WILL_BE_CLOSED = "Program will be closed";
     public static  Properties properties;
 
     public static void main(String[] args) {
@@ -24,8 +28,21 @@ public class App {
         try {
             properties = configLoader.getAppProp();
         } catch (IOException | PropertiesException e) {
-            userInterface.showMessage(ERROR_LOADING_CONFIGURATION_FILE_MESSAGE);
+            logger.error(ERROR_LOADING_CONFIGURATION_FILE_MESSAGE + e.getMessage());
+            userInterface.showMessage(ERROR_LOADING_CONFIGURATION_FILE_MESSAGE + e.getMessage());
+            userInterface.showMessage(PROGRAM_WILL_BE_CLOSED);
+            System.exit(1);
         }
+
+        try {
+            HistoryManager historyManager = new HistoryManager();
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+
+
+
+
     }
 
 
