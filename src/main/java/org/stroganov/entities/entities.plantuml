@@ -43,8 +43,14 @@ title __ENTITIES's Class Diagram__\n
           - isBlocked : boolean
           - login : String
           - numberID : int
-          - passcodeHash : int
+          - passcodeHash : String
           + User()
+          + getFullName()
+          + getLogin()
+          + getNumberID()
+          + getPasscodeHash()
+          + isAdmin()
+          + isBlocked()
       }
     }
   }

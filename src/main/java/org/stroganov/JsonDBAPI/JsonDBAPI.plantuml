@@ -16,8 +16,6 @@ title __JSONDBAPI's Class Diagram__\n
   namespace org.stroganov {
     namespace JsonDBAPI {
       class org.stroganov.JsonDBAPI.JsonDBLoader {
-          {static} + FILE_PATH_BOOKS : String
-          {static} + FILE_PATH_USERS : String
           ~ logger : Logger
           + loadBooks()
           + loadUsers()
@@ -50,7 +48,6 @@ title __JSONDBAPI's Class Diagram__\n
   
 
   org.stroganov.JsonDBAPI.JsonDBLoader o-- org.stroganov.JsonDBAPI.JsonParser : jsonParser
-  org.stroganov.JsonDBAPI.JsonDBLoader o-- org.stroganov.util.JSONUtil : jsonUtil
 
 
 right footer

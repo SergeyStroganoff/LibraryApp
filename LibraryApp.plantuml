@@ -9,6 +9,12 @@ title __LIBRARYAPP's Class Diagram__\n
   
 
   namespace org.stroganov {
+    class org.stroganov.ConfigLoader {
+    }
+  }
+  
+
+  namespace org.stroganov {
     namespace JsonDBAPI {
       class org.stroganov.JsonDBAPI.BookBuilder {
       }
@@ -89,56 +95,6 @@ title __LIBRARYAPP's Class Diagram__\n
   
 
   namespace org.stroganov {
-    namespace dialogue {
-      namespace states {
-        class org.stroganov.dialogue.states.AdminMenuState {
-        }
-      }
-    }
-  }
-  
-
-  namespace org.stroganov {
-    namespace dialogue {
-      namespace states {
-        class org.stroganov.dialogue.states.LoginState {
-        }
-      }
-    }
-  }
-  
-
-  namespace org.stroganov {
-    namespace dialogue {
-      namespace states {
-        abstract class org.stroganov.dialogue.states.State {
-        }
-      }
-    }
-  }
-  
-
-  namespace org.stroganov {
-    namespace dialogue {
-      namespace states {
-        interface org.stroganov.dialogue.states.StateAction {
-        }
-      }
-    }
-  }
-  
-
-  namespace org.stroganov {
-    namespace dialogue {
-      namespace states {
-        class org.stroganov.dialogue.states.UserMenuState {
-        }
-      }
-    }
-  }
-  
-
-  namespace org.stroganov {
     namespace entities {
       class org.stroganov.entities.Author {
       }
@@ -165,6 +121,22 @@ title __LIBRARYAPP's Class Diagram__\n
   namespace org.stroganov {
     namespace entities {
       class org.stroganov.entities.User {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace exceptions {
+      class org.stroganov.exceptions.DBExceptions {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace exceptions {
+      class org.stroganov.exceptions.PropertiesException {
       }
     }
   }
@@ -203,6 +175,14 @@ title __LIBRARYAPP's Class Diagram__\n
   
 
   namespace org.stroganov {
+    namespace history {
+      class org.stroganov.history.HistoryManager {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
     namespace util {
       class org.stroganov.util.JSONUtil {
       }
@@ -210,20 +190,20 @@ title __LIBRARYAPP's Class Diagram__\n
   }
   
 
+  namespace org.stroganov {
+    namespace util {
+      class org.stroganov.util.PasswordAuthentication {
+      }
+    }
+  }
+  
+
   org.stroganov.JsonDBAPI.JsonDBLoader o-- org.stroganov.JsonDBAPI.JsonParser : jsonParser
-  org.stroganov.JsonDBAPI.JsonDBLoader o-- org.stroganov.util.JSONUtil : jsonUtil
   org.stroganov.dao.JsonDataSource .up.|> org.stroganov.dao.LibraryDAO
   org.stroganov.dao.JsonDataSource o-- org.stroganov.JsonDBAPI.JsonDBLoader : jsonDBLoader
-  org.stroganov.dialogue.UserDialogue o-- org.stroganov.dialogue.states.StateAction : stateAction
+  org.stroganov.dialogue.UserDialogueManager o-- org.stroganov.history.HistoryManager : historyManager
   org.stroganov.dialogue.UserDialogueManager o-- org.stroganov.dao.LibraryDAO : libraryDAO
-  org.stroganov.dialogue.UserDialogueManager o-- org.stroganov.entities.User : user
-  org.stroganov.dialogue.UserDialogueManager o-- org.stroganov.dialogue.UserDialogue : userDialogue
-  org.stroganov.dialogue.UserDialogueManager o-- org.stroganov.dialogue.states.StateAction : stateAction
-  org.stroganov.dialogue.states.AdminMenuState -up-|> org.stroganov.dialogue.states.UserMenuState
-  org.stroganov.dialogue.states.LoginState -up-|> org.stroganov.dialogue.states.State
-  org.stroganov.dialogue.states.State .up.|> org.stroganov.dialogue.states.StateAction
-  org.stroganov.dialogue.states.State o-- org.stroganov.gui.UserInterface : userInterface
-  org.stroganov.dialogue.states.UserMenuState -up-|> org.stroganov.dialogue.states.State
+  org.stroganov.dialogue.UserDialogueManager o-- org.stroganov.gui.UserInterface : userInterface
   org.stroganov.entities.Book o-- org.stroganov.entities.Author : authorName
   org.stroganov.entities.BookMark o-- org.stroganov.entities.Book : book
   org.stroganov.entities.BookMark o-- org.stroganov.entities.User : user

@@ -1,8 +1,11 @@
 package org.stroganov.dao;
 
+import org.stroganov.entities.Author;
 import org.stroganov.entities.Book;
+import org.stroganov.entities.BookMark;
 import org.stroganov.entities.User;
 import org.stroganov.exceptions.UnrealizedFunctionalityException;
+
 import java.util.List;
 
 /**
@@ -17,7 +20,7 @@ public interface LibraryDAO {
 
     Book findBook() throws UnrealizedFunctionalityException;
 
-    boolean saveUser(User user);
+    boolean addUser(User user);
 
     User findUser(String userLogin);
 
@@ -26,4 +29,12 @@ public interface LibraryDAO {
     boolean blockUser(String userLogin);
 
     boolean unblockUser(String userLogin);
+
+    boolean addBookMark(BookMark bookMark);
+
+    boolean deleteBookMark(BookMark bookMark);
+
+    boolean addAuthor(Author author);
+
+    boolean deleteAuthor(Author author);
 }

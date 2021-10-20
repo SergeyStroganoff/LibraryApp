@@ -4,6 +4,26 @@ title __EXCEPTIONS's Class Diagram__\n
 
   namespace org.stroganov {
     namespace exceptions {
+      class org.stroganov.exceptions.DBExceptions {
+          + DBExceptions()
+          + DBExceptions()
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace exceptions {
+      class org.stroganov.exceptions.PropertiesException {
+          + PropertiesException()
+          + PropertiesException()
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace exceptions {
       class org.stroganov.exceptions.UnrealizedFunctionalityException {
           + UnrealizedFunctionalityException()
       }

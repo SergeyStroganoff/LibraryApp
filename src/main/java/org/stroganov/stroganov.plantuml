@@ -4,7 +4,22 @@ title __STROGANOV's Class Diagram__\n
 
   namespace org.stroganov {
     class org.stroganov.App {
+        {static} + properties : Properties
+        {static} - ERROR_LOADING_CONFIGURATION_FILE_MESSAGE : String
+        {static} - LOGGER : Logger
+        {static} - PROGRAM_WILL_BE_CLOSED : String
         {static} + main()
+    }
+  }
+  
+
+  namespace org.stroganov {
+    class org.stroganov.ConfigLoader {
+        {static} + APP_PROPERTIES : String
+        {static} + FILE_HAS_INCORRECT_FORMAT : String
+        {static} + FILE_WASN_T_FOUND : String
+        + getAppProp()
+        + propertyVerify()
     }
   }
   

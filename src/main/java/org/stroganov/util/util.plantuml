@@ -13,6 +13,27 @@ title __UTIL's Class Diagram__\n
   }
   
 
+  namespace org.stroganov {
+    namespace util {
+      class org.stroganov.util.PasswordAuthentication {
+          {static} + ID : String
+          {static} + INVALID_SECRET_KEY_FACTORY : String
+          {static} + INVALID_TOKEN_FORMAT_MESSAGE : String
+          {static} + MISSING_ALGORITHM_MESSAGE : String
+          {static} - ALGORITHM : String
+          {static} - LOGGER : Logger
+          {static} - PATTERN : Pattern
+          {static} - SIZE : int
+          {static} - random : SecureRandom
+          {static} + authenticate()
+          {static} + hash()
+          {static} - iterations()
+          {static} - pbkdf2()
+      }
+    }
+  }
+  
+
 
 
 right footer

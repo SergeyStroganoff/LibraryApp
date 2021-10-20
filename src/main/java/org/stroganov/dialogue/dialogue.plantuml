@@ -5,8 +5,6 @@ title __DIALOGUE's Class Diagram__\n
   namespace org.stroganov {
     namespace dialogue {
       class org.stroganov.dialogue.UserDialogue {
-          + getStateAction()
-          + setStateAction()
       }
     }
   }
@@ -15,18 +13,17 @@ title __DIALOGUE's Class Diagram__\n
   namespace org.stroganov {
     namespace dialogue {
       class org.stroganov.dialogue.UserDialogueManager {
+          - logger : Logger
           + UserDialogueManager()
-          + runService()
+          + runDialogue()
       }
     }
   }
   
 
-  org.stroganov.dialogue.UserDialogue o-- org.stroganov.dialogue.states.StateAction : stateAction
+  org.stroganov.dialogue.UserDialogueManager o-- org.stroganov.history.HistoryManager : historyManager
   org.stroganov.dialogue.UserDialogueManager o-- org.stroganov.dao.LibraryDAO : libraryDAO
-  org.stroganov.dialogue.UserDialogueManager o-- org.stroganov.entities.User : user
-  org.stroganov.dialogue.UserDialogueManager o-- org.stroganov.dialogue.UserDialogue : userDialogue
-  org.stroganov.dialogue.UserDialogueManager o-- org.stroganov.dialogue.states.StateAction : stateAction
+  org.stroganov.dialogue.UserDialogueManager o-- org.stroganov.gui.UserInterface : userInterface
 
 
 right footer

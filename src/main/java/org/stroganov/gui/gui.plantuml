@@ -6,6 +6,7 @@ title __GUI's Class Diagram__\n
     namespace gui {
       class org.stroganov.gui.UserConsoleInterface {
           ~ reader : BufferedReader
+          {static} - logger : Logger
           + UserConsoleInterface()
           + getStringFromUser()
           + showMessage()
@@ -30,6 +31,7 @@ title __GUI's Class Diagram__\n
           {static} - ERROR_PARAMETER_MESSAGE : String
           {static} - REALIZATION_EXCEPTION_MESSAGE : String
           {static} + getUserInterface()
+          - UserInterfaceFactory()
       }
     }
   }

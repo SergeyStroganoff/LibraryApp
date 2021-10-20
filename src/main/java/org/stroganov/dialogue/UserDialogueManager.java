@@ -10,8 +10,6 @@ import org.stroganov.gui.UserInterface;
 import org.stroganov.history.HistoryManager;
 import org.stroganov.util.PasswordAuthentication;
 
-import java.io.IOException;
-
 public class UserDialogueManager {
 
     private final Logger logger = Logger.getLogger(UserDialogueManager.class);
@@ -33,7 +31,6 @@ public class UserDialogueManager {
     public void runDialogue() {
         System.out.println("Run Started");
         User user = null;
-
         // ask login pass
         userInterface.showMessage("Input login and password, 'q' for exit");
         userInterface.showMessage("You have only 3 attempts");
@@ -48,8 +45,6 @@ public class UserDialogueManager {
             String password = userInterface.getStringFromUser();
             if (!"".equals(login) && !"".equals(password)) {
                 user = libraryDAO.findUser(login);
-            } else {
-                userInterface.showMessage("You entered empty login, password? try again!");
             }
             if (user != null) {
                 boolean passwordCheck = PasswordAuthentication.authenticate(password.toCharArray(), user.getPasscodeHash());
@@ -57,17 +52,14 @@ public class UserDialogueManager {
                     userInterface.showMessage("You entered incorrect password, try again!");
                     historyManager.saveAction("User " + user.getLogin() + " tried to enter with incorrect password");
                     user = null;
-                } else {
-                    userInterface.showMessage("You entered incorrect login, try again!");
                 }
+            } else {
+                userInterface.showMessage("You entered incorrect login, try again!");
             }
         } while (user == null && countAttempt > 0);
 
         if (user == null) {
-            userInterface.showMessage("You entered incorrect credentials three times, \n program will be closed");
-            historyManager.saveAction("User entered incorrect credentials three times, program closed");
+            userInterface.showMessage("You entered incorrect credentials three times,\nprogram will be closed");
         }
-
-
     }
 }

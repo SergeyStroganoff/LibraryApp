@@ -1,20 +1,22 @@
 package org.stroganov.dao;
 
 import org.stroganov.JsonDBAPI.JsonDBLoader;
+import org.stroganov.entities.Author;
 import org.stroganov.entities.Book;
+import org.stroganov.entities.BookMark;
 import org.stroganov.entities.User;
 import org.stroganov.exceptions.DBExceptions;
 import org.stroganov.exceptions.UnrealizedFunctionalityException;
 
-import java.io.IOException;
 import java.util.List;
 
 public class JsonDataSource implements LibraryDAO {
 
     private static JsonDataSource instance;
-    private final JsonDBLoader jsonDBLoader = new JsonDBLoader();
     List<Book> bookList;
     List<User> userList;
+    List<BookMark> bookMarkListList;
+    List<Author> authorsList;
 
     public static synchronized JsonDataSource getInstance() throws DBExceptions {
         if (instance == null) {
@@ -24,8 +26,11 @@ public class JsonDataSource implements LibraryDAO {
     }
 
     private JsonDataSource() throws DBExceptions {
+        JsonDBLoader jsonDBLoader = new JsonDBLoader();
         bookList = jsonDBLoader.loadBooks();
         userList = jsonDBLoader.loadUsers();
+        bookMarkListList = jsonDBLoader.loadBookMarks();
+        authorsList = jsonDBLoader.loadAuthors();
     }
 
     @Override
@@ -49,7 +54,7 @@ public class JsonDataSource implements LibraryDAO {
     }
 
     @Override
-    public boolean saveUser(User user) {
+    public boolean addUser(User user) {
         return false;
     }
 
@@ -70,6 +75,26 @@ public class JsonDataSource implements LibraryDAO {
 
     @Override
     public boolean unblockUser(String userLogin) {
+        return false;
+    }
+
+    @Override
+    public boolean addBookMark(BookMark bookMark) {
+        return false;
+    }
+
+    @Override
+    public boolean deleteBookMark(BookMark bookMark) {
+        return false;
+    }
+
+    @Override
+    public boolean addAuthor(Author author) {
+        return false;
+    }
+
+    @Override
+    public boolean deleteAuthor(Author author) {
         return false;
     }
 }
