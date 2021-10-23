@@ -7,7 +7,7 @@ import org.stroganov.entities.Book;
 import org.stroganov.entities.BookMark;
 import org.stroganov.entities.User;
 import org.stroganov.exceptions.DBExceptions;
-import org.stroganov.util.JSONUtil;
+import org.stroganov.util.FileUtil;
 
 import java.io.IOException;
 import java.util.List;
@@ -20,7 +20,7 @@ public class JsonDBLoader {
     public List<Book> loadBooks() throws DBExceptions {
         String jsonString;
         try {
-            jsonString = JSONUtil.readFileAsString(App.properties.getProperty("booksJsonFile"));
+            jsonString = FileUtil.readFileAsString(App.properties.getProperty("booksJsonFile"));
         } catch (IOException e) {
             logger.error(e);
             throw new DBExceptions(DB_EXCEPTIONS + e.getMessage());
@@ -31,7 +31,7 @@ public class JsonDBLoader {
     public List<User> loadUsers() throws DBExceptions {
         String jsonString;
         try {
-            jsonString = JSONUtil.readFileAsString(App.properties.getProperty("usersJsonFile"));
+            jsonString = FileUtil.readFileAsString(App.properties.getProperty("usersJsonFile"));
         } catch (IOException e) {
             logger.error(e);
             throw new DBExceptions(DB_EXCEPTIONS + e.getMessage());
@@ -42,7 +42,7 @@ public class JsonDBLoader {
     public List<BookMark> loadBookMarks() throws DBExceptions {
         String jsonString;
         try {
-            jsonString = JSONUtil.readFileAsString(App.properties.getProperty("bookMarksJsonFile"));
+            jsonString = FileUtil.readFileAsString(App.properties.getProperty("bookMarksJsonFile"));
         } catch (IOException e) {
             logger.error(e);
             throw new DBExceptions(DB_EXCEPTIONS + e.getMessage());
@@ -53,7 +53,7 @@ public class JsonDBLoader {
     public List<Author> loadAuthors() throws DBExceptions {
         String jsonString;
         try {
-            jsonString = JSONUtil.readFileAsString(App.properties.getProperty("authorsJsonFile"));
+            jsonString = FileUtil.readFileAsString(App.properties.getProperty("authorsJsonFile"));
         } catch (IOException e) {
             logger.error(e);
             throw new DBExceptions(DB_EXCEPTIONS + e.getMessage());

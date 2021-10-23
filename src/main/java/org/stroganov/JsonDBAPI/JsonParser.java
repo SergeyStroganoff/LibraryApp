@@ -2,7 +2,9 @@ package org.stroganov.JsonDBAPI;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import org.stroganov.entities.Author;
 import org.stroganov.entities.Book;
+import org.stroganov.entities.BookMark;
 import org.stroganov.entities.User;
 import org.stroganov.exceptions.UnrealizedFunctionalityException;
 
@@ -19,6 +21,14 @@ public class JsonParser {
         return null;
     }
 
+    public List<BookMark> getListBookMarkFromDB(String jsonString) {
+        return null;
+    }
+
+    public List<Author> getListAuthorsFromDB(String jsonString) {
+        return null;
+    }
+
     public Book getBookFromJsonElement(JsonElement jsonElement) throws UnrealizedFunctionalityException {
         JsonObject currentJsonObject = jsonElement.getAsJsonObject();
         BookBuilder bookBuilder = new BookBuilder(currentJsonObject);
@@ -30,5 +40,6 @@ public class JsonParser {
         UserBuilder userBuilder = new UserBuilder(currentJsonObject);
         return userBuilder.buildUser();
     }
+
 
 }

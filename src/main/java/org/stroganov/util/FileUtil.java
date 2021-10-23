@@ -6,11 +6,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class JSONUtil {
+public class FileUtil {
 
-    private final static Logger logger = Logger.getLogger(JSONUtil.class);
+    private final static Logger logger = Logger.getLogger(FileUtil.class);
 
-    public static boolean jsonSaveToFile(String filePath, String jsonString) {
+    public static boolean saveStringToFile(String filePath, String jsonString) {
         try {
             Files.write(Paths.get(filePath), jsonString.getBytes());
         } catch (IOException e) {

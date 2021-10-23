@@ -1,5 +1,7 @@
 package org.stroganov.entities;
 
+import org.stroganov.util.PasswordAuthentication;
+
 public class User {
 
     private final int numberID;
@@ -13,7 +15,7 @@ public class User {
         this.numberID = numberID;
         this.fullName = fullName;
         this.login = login;
-        this.passcodeHash = passcodeHash;
+        this.passcodeHash = PasswordAuthentication.hash(passcodeHash.toCharArray());
         this.isBlocked = isBlocked;
         this.isAdmin = isAdmin;
     }
