@@ -6,9 +6,14 @@ import org.stroganov.entities.Author;
 import org.stroganov.entities.Book;
 import org.stroganov.entities.User;
 import org.stroganov.exceptions.ConsoleInterfaceException;
+import org.stroganov.exceptions.UnrealizedFunctionalityException;
 import org.stroganov.gui.UserInterface;
 import org.stroganov.history.HistoryManager;
+import org.stroganov.util.BookBuilder;
 import org.stroganov.util.StringValidator;
+
+import java.io.IOException;
+import java.util.List;
 
 public class UserDialogue {
     public static final String NOT_A_NUMBER_MESSAGE = "Error. You entered not a number";
@@ -29,7 +34,7 @@ public class UserDialogue {
         this.user = user;
     }
 
-    public void runDialogue() {
+    public void runDialogue() throws UnrealizedFunctionalityException {
         String rights = user.isAdmin() ? "admin" : "user";
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("You have successfully logged in with " + rights + " rights \n").
@@ -95,13 +100,30 @@ public class UserDialogue {
         } while ("q".equals(command));
     }
 
-    private boolean addBooksFromFile() {
+    private boolean addBooksFromFile() throws UnrealizedFunctionalityException {
         userInterface.showMessage("Enter path of file with books list");
         String filePath = userInterface.getStringFromUser();
         if (StringValidator.isStringFilePath(filePath)) {
-            libraryDAO.addBookList()
+            if (filePath.endsWith(".csv")) {
+                BookBuilder bookBuilder = new BookBuilder(libraryDAO);
+                try {
+                    List<Book> bookList = bookBuilder.getBookListFromTXTFile(filePath);
+                    bookList.forEach(libraryDAO::addBook);
+                } catch (IOException e) {
+                    String errorMessage = "Error IO with file" + filePath + "happen: " + e.getMessage();
+                    logger.error(errorMessage);
+                    userInterface.showMessage(errorMessage);
+                }
+                historyManager.saveAction("User " + user.getLogin() + "added books from file");
+                return true;
+            }
+            if (filePath.endsWith(".json")) {
+                //TODO
+                throw new UnrealizedFunctionalityException("filePath.endsWith(\".json\" not realized");
+            }
+        } else {
+            userInterface.showMessage("You enter wrong path format");
         }
-
         return false;
     }
 
@@ -160,8 +182,8 @@ public class UserDialogue {
         stringBuilder.append("1. Add new books to library \n").
                 append("2. Delete book \n").
                 append("3. Add new authors to library \n").
-                append("4. Delete author from home library with all books by this author \n").//TODO
-                append("5. Add books to the home library with a list from the catalog file (CSV and JSON) \n").//TODO
+                append("4. Delete author from home library with all books by this author \n").
+                append("5. Add books to the home library with a list from the catalog file (CSV and JSON) \n").
                 append("6. Add bookmarks to book \n").//TODO
                 append("7. Delete bookmarks from books \n").//TODO
                 append("8. Search for books by part of the name of the book \n").//TODO

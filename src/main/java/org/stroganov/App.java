@@ -3,6 +3,7 @@ package org.stroganov;
 import org.apache.log4j.Logger;
 import org.stroganov.dialogue.DialogueManager;
 import org.stroganov.exceptions.PropertiesException;
+import org.stroganov.exceptions.UnrealizedFunctionalityException;
 import org.stroganov.gui.UserInterface;
 import org.stroganov.gui.UserInterfaceFactory;
 import org.stroganov.history.HistoryManager;
@@ -22,7 +23,7 @@ public class App {
     private static final String PROGRAM_WILL_BE_CLOSED = "Program will be closed";
     public static Properties properties;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws UnrealizedFunctionalityException {
 
         UserInterface userInterface = UserInterfaceFactory.getUserInterface("ConsoleInterface");
         ConfigLoader configLoader = new ConfigLoader();
@@ -43,8 +44,5 @@ public class App {
         DialogueManager dialogueManager = new DialogueManager(historyManager, userInterface);
         dialogueManager.runDialogue();
 
-
     }
-
-
 }

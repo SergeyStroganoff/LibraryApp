@@ -4,7 +4,9 @@ title __DIALOGUE's Class Diagram__\n
 
   namespace org.stroganov {
     namespace dialogue {
-      class org.stroganov.dialogue.UserDialogue {
+      class org.stroganov.dialogue.AuthorGetterDialogue {
+          {static} + ENTER_BOOK_S_AUTHOR_NAME : String
+          + getAuthorFromUser()
       }
     }
   }
@@ -12,18 +14,63 @@ title __DIALOGUE's Class Diagram__\n
 
   namespace org.stroganov {
     namespace dialogue {
-      class org.stroganov.dialogue.UserDialogueManager {
+      class org.stroganov.dialogue.BookGetterDialogue {
+          {static} + ENTER_BOOK_S_ISBN : String
+          {static} + ENTER_BOOK_S_NAME : String
+          {static} + ENTER_BOOK_S_PAGES_COUNT : String
+          {static} + ENTER_BOOK_S_PUBLISHING_YEAR : String
+          + getAuthorGetterDialogue()
+          + getBookFromUser()
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace dialogue {
+      class org.stroganov.dialogue.DialogueManager {
+          {static} + ATTEMPTS_MESSAGE : String
+          {static} + EXIT_BEFORE_LOGIN_MESSAGE : String
+          {static} + INPUT_LOGIN_MESSAGE : String
           - logger : Logger
-          + UserDialogueManager()
+          + DialogueManager()
           + runDialogue()
       }
     }
   }
   
 
-  org.stroganov.dialogue.UserDialogueManager o-- org.stroganov.history.HistoryManager : historyManager
-  org.stroganov.dialogue.UserDialogueManager o-- org.stroganov.dao.LibraryDAO : libraryDAO
-  org.stroganov.dialogue.UserDialogueManager o-- org.stroganov.gui.UserInterface : userInterface
+  namespace org.stroganov {
+    namespace dialogue {
+      class org.stroganov.dialogue.UserDialogue {
+          {static} + ADDED_SUCCESSFUL_MESSAGE : String
+          {static} + AUTHOR_WAS_ADDED_SUCCESSFULLY : String
+          {static} + NOT_A_NUMBER_MESSAGE : String
+          {static} + NO_BOOK_WITH_SUCH_DATA_MESSAGE : String
+          ~ logger : Logger
+          + UserDialogue()
+          + addNewAuthor()
+          + addNewBook()
+          + deleteAuthor()
+          + deleteBook()
+          + returnAdminMenu()
+          + returnUserMenu()
+          + runDialogue()
+          - addBooksFromFile()
+      }
+    }
+  }
+  
+
+  org.stroganov.dialogue.BookGetterDialogue o-- org.stroganov.dialogue.AuthorGetterDialogue : authorGetterDialogue
+  org.stroganov.dialogue.DialogueManager o-- org.stroganov.history.HistoryManager : historyManager
+  org.stroganov.dialogue.DialogueManager o-- org.stroganov.dao.LibraryDAO : libraryDAO
+  org.stroganov.dialogue.DialogueManager o-- org.stroganov.gui.UserInterface : userInterface
+  org.stroganov.dialogue.UserDialogue o-- org.stroganov.dialogue.BookGetterDialogue : bookGetterDialogue
+  org.stroganov.dialogue.UserDialogue o-- org.stroganov.history.HistoryManager : historyManager
+  org.stroganov.dialogue.UserDialogue o-- org.stroganov.dao.LibraryDAO : libraryDAO
+  org.stroganov.dialogue.UserDialogue o-- org.stroganov.entities.User : user
+  org.stroganov.dialogue.UserDialogue o-- org.stroganov.gui.UserInterface : userInterface
 
 
 right footer

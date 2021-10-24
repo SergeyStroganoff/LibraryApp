@@ -4,10 +4,23 @@ title __UTIL's Class Diagram__\n
 
   namespace org.stroganov {
     namespace util {
+      class org.stroganov.util.BookBuilder {
+          + BookBuilder()
+          + buildBook()
+          + getBookListFromTXTFile()
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace util {
       class org.stroganov.util.FileUtil {
           {static} - logger : Logger
+          {static} + getListOfStringsFile()
           {static} + readFileAsString()
           {static} + saveStringToFile()
+          - FileUtil()
       }
     }
   }
@@ -34,6 +47,17 @@ title __UTIL's Class Diagram__\n
   }
   
 
+  namespace org.stroganov {
+    namespace util {
+      class org.stroganov.util.StringValidator {
+          {static} + isStringFilePath()
+          {static} - isStringValidPattern()
+      }
+    }
+  }
+  
+
+  org.stroganov.util.BookBuilder o-- org.stroganov.dao.LibraryDAO : libraryDAO
 
 
 right footer

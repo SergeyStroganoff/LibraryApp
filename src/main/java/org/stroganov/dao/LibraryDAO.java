@@ -13,8 +13,6 @@ import java.util.List;
 public interface LibraryDAO {
     boolean addBook(Book book);
 
-    boolean addBookList(List<Book> bookList);
-
     boolean deleteBook(Book book);
 
     Book findBook(int numberISBN);

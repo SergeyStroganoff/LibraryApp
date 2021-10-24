@@ -8,6 +8,7 @@ title __GUI's Class Diagram__\n
           ~ reader : BufferedReader
           {static} - logger : Logger
           + UserConsoleInterface()
+          + getIntFromUser()
           + getStringFromUser()
           + showMessage()
       }
@@ -18,6 +19,7 @@ title __GUI's Class Diagram__\n
   namespace org.stroganov {
     namespace gui {
       interface org.stroganov.gui.UserInterface {
+          {abstract} + getIntFromUser()
           {abstract} + getStringFromUser()
           {abstract} + showMessage()
       }

@@ -4,6 +4,16 @@ title __EXCEPTIONS's Class Diagram__\n
 
   namespace org.stroganov {
     namespace exceptions {
+      class org.stroganov.exceptions.ConsoleInterfaceException {
+          + ConsoleInterfaceException()
+          + ConsoleInterfaceException()
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace exceptions {
       class org.stroganov.exceptions.DBExceptions {
           + DBExceptions()
           + DBExceptions()

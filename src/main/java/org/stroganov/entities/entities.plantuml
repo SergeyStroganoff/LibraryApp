@@ -7,6 +7,7 @@ title __ENTITIES's Class Diagram__\n
       class org.stroganov.entities.Author {
           ~ authorName : String
           ~ numberID : int
+          + Author()
       }
     }
   }
@@ -20,6 +21,11 @@ title __ENTITIES's Class Diagram__\n
           - pagesNumber : int
           - yearPublishing : int
           + Book()
+          + getAuthorName()
+          + getName()
+          + getNumberISBN()
+          + getPagesNumber()
+          + getYearPublishing()
       }
     }
   }

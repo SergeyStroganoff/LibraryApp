@@ -6,6 +6,7 @@ import org.stroganov.dao.DAOType;
 import org.stroganov.dao.LibraryDAO;
 import org.stroganov.entities.User;
 import org.stroganov.exceptions.DBExceptions;
+import org.stroganov.exceptions.UnrealizedFunctionalityException;
 import org.stroganov.gui.UserInterface;
 import org.stroganov.history.HistoryManager;
 import org.stroganov.util.PasswordAuthentication;
@@ -31,7 +32,7 @@ public class DialogueManager {
         }
     }
 
-    public void runDialogue() {
+    public void runDialogue() throws UnrealizedFunctionalityException {
         User user = null;
         // ask login pass
         userInterface.showMessage(INPUT_LOGIN_MESSAGE);
