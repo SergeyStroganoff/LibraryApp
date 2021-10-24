@@ -1,14 +1,21 @@
 package org.stroganov.util;
 
 import org.apache.log4j.Logger;
+import org.stroganov.entities.Book;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FileUtil {
 
-    private final static Logger logger = Logger.getLogger(FileUtil.class);
+    private FileUtil() {
+    }
+
+    private static final Logger logger = Logger.getLogger(FileUtil.class);
 
     public static boolean saveStringToFile(String filePath, String jsonString) {
         try {
@@ -28,4 +35,11 @@ public class FileUtil {
             throw e;
         }
     }
+
+    public static List<String> getListOfStringsFile(String filePath) throws IOException {
+        Path path = Path.of(filePath);
+        return Files.readAllLines(path);
+    }
+
+
 }

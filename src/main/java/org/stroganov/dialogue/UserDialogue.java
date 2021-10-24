@@ -8,6 +8,7 @@ import org.stroganov.entities.User;
 import org.stroganov.exceptions.ConsoleInterfaceException;
 import org.stroganov.gui.UserInterface;
 import org.stroganov.history.HistoryManager;
+import org.stroganov.util.StringValidator;
 
 public class UserDialogue {
     public static final String NOT_A_NUMBER_MESSAGE = "Error. You entered not a number";
@@ -58,9 +59,11 @@ public class UserDialogue {
                     deleteAuthor();
                     break;
                 }
+                case "5": {
+                    addBooksFromFile();
+                    break;
+                }
 
-                case "5":
-                    System.out.println();
                 case "6":
                     System.out.println();
                 case "7":
@@ -89,9 +92,17 @@ public class UserDialogue {
                     userInterface.showMessage("Incorrect command");
                 }
             }
-
-
         } while ("q".equals(command));
+    }
+
+    private boolean addBooksFromFile() {
+        userInterface.showMessage("Enter path of file with books list");
+        String filePath = userInterface.getStringFromUser();
+        if (StringValidator.isStringFilePath(filePath)) {
+            libraryDAO.addBookList()
+        }
+
+        return false;
     }
 
     public boolean deleteAuthor() {

@@ -79,6 +79,5 @@ class UserConsoleInterfaceTest {
         System.setOut(oldStream);
         // THEN
         assertEquals(expected, actual);
-
     }
 }

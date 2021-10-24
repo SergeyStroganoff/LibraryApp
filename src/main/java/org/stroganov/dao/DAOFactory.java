@@ -1,9 +1,6 @@
 package org.stroganov.dao;
 
 import org.stroganov.exceptions.DBExceptions;
-import org.stroganov.exceptions.UnrealizedFunctionalityException;
-
-import java.io.IOException;
 
 public class DAOFactory {
 
