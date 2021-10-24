@@ -16,7 +16,10 @@ title __JSONDBAPI's Class Diagram__\n
   namespace org.stroganov {
     namespace JsonDBAPI {
       class org.stroganov.JsonDBAPI.JsonDBLoader {
+          {static} + DB_EXCEPTIONS : String
           ~ logger : Logger
+          + loadAuthors()
+          + loadBookMarks()
           + loadBooks()
           + loadUsers()
       }
@@ -28,9 +31,20 @@ title __JSONDBAPI's Class Diagram__\n
     namespace JsonDBAPI {
       class org.stroganov.JsonDBAPI.JsonParser {
           + getBookFromJsonElement()
+          + getListAuthorsFromDB()
+          + getListBookMarkFromDB()
           + getListBooksFromDB()
           + getListUsersFromDB()
           + getUserFromJsonElement()
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace JsonDBAPI {
+      class org.stroganov.JsonDBAPI.JsonSerializer {
+          {static} + entitySerializer()
       }
     }
   }

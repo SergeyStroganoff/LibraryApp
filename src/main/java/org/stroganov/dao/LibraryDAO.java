@@ -18,7 +18,7 @@ public interface LibraryDAO {
 
     boolean deleteBook(Book book);
 
-    Book findBook() throws UnrealizedFunctionalityException;
+    Book findBook(int numberISBN);
 
     boolean addUser(User user);
 
@@ -37,4 +37,5 @@ public interface LibraryDAO {
     boolean addAuthor(Author author);
 
     boolean deleteAuthor(Author author);
+
 }

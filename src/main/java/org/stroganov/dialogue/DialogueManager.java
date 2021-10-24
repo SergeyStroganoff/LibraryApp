@@ -10,14 +10,17 @@ import org.stroganov.gui.UserInterface;
 import org.stroganov.history.HistoryManager;
 import org.stroganov.util.PasswordAuthentication;
 
-public class UserDialogueManager {
+public class DialogueManager {
 
-    private final Logger logger = Logger.getLogger(UserDialogueManager.class);
+    public static final String EXIT_BEFORE_LOGIN_MESSAGE = "User asked exit before login";
+    public static final String INPUT_LOGIN_MESSAGE = "Input login and password, 'q' for exit";
+    public static final String ATTEMPTS_MESSAGE = "You have only 3 attempts";
+    private final Logger logger = Logger.getLogger(DialogueManager.class);
     private LibraryDAO libraryDAO = null;
     private final HistoryManager historyManager;
     private final UserInterface userInterface;
 
-    public UserDialogueManager(HistoryManager historyManager, UserInterface userInterface) {
+    public DialogueManager(HistoryManager historyManager, UserInterface userInterface) {
         this.historyManager = historyManager;
         this.userInterface = userInterface;
         try {
@@ -29,17 +32,17 @@ public class UserDialogueManager {
     }
 
     public void runDialogue() {
-        System.out.println("Run Started");
         User user = null;
         // ask login pass
-        userInterface.showMessage("Input login and password, 'q' for exit");
-        userInterface.showMessage("You have only 3 attempts");
+        userInterface.showMessage(INPUT_LOGIN_MESSAGE);
+        userInterface.showMessage(ATTEMPTS_MESSAGE);
         byte countAttempt = 3;
         do {
             countAttempt--;
             String login = userInterface.getStringFromUser();
             if ("q".equals(login)) {
-                historyManager.saveAction("User asked exit before login");
+                historyManager.saveAction(EXIT_BEFORE_LOGIN_MESSAGE);
+                logger.info(EXIT_BEFORE_LOGIN_MESSAGE);
                 System.exit(1);
             }
             String password = userInterface.getStringFromUser();
@@ -60,6 +63,11 @@ public class UserDialogueManager {
 
         if (user == null) {
             userInterface.showMessage("You entered incorrect credentials three times,\nprogram will be closed");
+            System.exit(1);
         }
+        historyManager.saveAction("User " + user.getLogin() + " entered in system");
+        logger.info("User " + user.getLogin() + " entered in system");
+        UserDialogue userDialogue = new UserDialogue(libraryDAO, historyManager, userInterface, user);
+        userDialogue.runDialogue();
     }
 }

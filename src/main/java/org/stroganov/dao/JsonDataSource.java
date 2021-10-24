@@ -49,8 +49,8 @@ public class JsonDataSource implements LibraryDAO {
     }
 
     @Override
-    public Book findBook() throws UnrealizedFunctionalityException {
-        throw new UnrealizedFunctionalityException("findBook not realized");
+    public Book findBook(int numberISBN) {
+        return null;
     }
 
     @Override

@@ -9,7 +9,7 @@ import java.util.Map;
 class JsonSerializerTest {
 
     @Test
-    void entitySerializer() {
+    void entitySerializer_Return_Valid_JSONString() {
         //GIVEN
         String expected = "{\"Car\":\"BMW\"}";
         Map<String, String> givenMap = new HashMap<>();

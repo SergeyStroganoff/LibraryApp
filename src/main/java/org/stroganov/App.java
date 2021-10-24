@@ -1,7 +1,7 @@
 package org.stroganov;
 
 import org.apache.log4j.Logger;
-import org.stroganov.dialogue.UserDialogueManager;
+import org.stroganov.dialogue.DialogueManager;
 import org.stroganov.exceptions.PropertiesException;
 import org.stroganov.gui.UserInterface;
 import org.stroganov.gui.UserInterfaceFactory;
@@ -40,8 +40,8 @@ public class App {
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
         }
-        UserDialogueManager userDialogueManager = new UserDialogueManager(historyManager, userInterface);
-        userDialogueManager.runDialogue();
+        DialogueManager dialogueManager = new DialogueManager(historyManager, userInterface);
+        dialogueManager.runDialogue();
 
 
     }

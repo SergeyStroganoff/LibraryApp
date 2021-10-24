@@ -26,18 +26,24 @@ title __DAO's Class Diagram__\n
   namespace org.stroganov {
     namespace dao {
       class org.stroganov.dao.JsonDataSource {
+          ~ authorsList : List<Author>
           ~ bookList : List<Book>
+          ~ bookMarkListList : List<BookMark>
           ~ userList : List<User>
           {static} - instance : JsonDataSource
+          + addAuthor()
           + addBook()
           + addBookList()
+          + addBookMark()
+          + addUser()
           + blockUser()
+          + deleteAuthor()
           + deleteBook()
+          + deleteBookMark()
           + deleteUser()
           + findBook()
           + findUser()
           {static} + getInstance()
-          + saveUser()
           + unblockUser()
           - JsonDataSource()
       }
@@ -48,14 +54,18 @@ title __DAO's Class Diagram__\n
   namespace org.stroganov {
     namespace dao {
       interface org.stroganov.dao.LibraryDAO {
+          {abstract} + addAuthor()
           {abstract} + addBook()
           {abstract} + addBookList()
+          {abstract} + addBookMark()
+          {abstract} + addUser()
           {abstract} + blockUser()
+          {abstract} + deleteAuthor()
           {abstract} + deleteBook()
+          {abstract} + deleteBookMark()
           {abstract} + deleteUser()
           {abstract} + findBook()
           {abstract} + findUser()
-          {abstract} + saveUser()
           {abstract} + unblockUser()
       }
     }
@@ -63,7 +73,6 @@ title __DAO's Class Diagram__\n
   
 
   org.stroganov.dao.JsonDataSource .up.|> org.stroganov.dao.LibraryDAO
-  org.stroganov.dao.JsonDataSource o-- org.stroganov.JsonDBAPI.JsonDBLoader : jsonDBLoader
 
 
 right footer

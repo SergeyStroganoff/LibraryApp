@@ -14,4 +14,24 @@ public class Book {
       this.yearPublishing = yearPublishing;
       this.pagesNumber = pagesNumber;
    }
+
+   public String getNumberISBN() {
+      return numberISBN;
+   }
+
+   public String getName() {
+      return name;
+   }
+
+   public Author getAuthorName() {
+      return authorName;
+   }
+
+   public int getYearPublishing() {
+      return yearPublishing;
+   }
+
+   public int getPagesNumber() {
+      return pagesNumber;
+   }
 }

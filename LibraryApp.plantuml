@@ -40,6 +40,14 @@ title __LIBRARYAPP's Class Diagram__\n
 
   namespace org.stroganov {
     namespace JsonDBAPI {
+      class org.stroganov.JsonDBAPI.JsonSerializer {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace JsonDBAPI {
       class org.stroganov.JsonDBAPI.UserBuilder {
       }
     }
@@ -184,7 +192,7 @@ title __LIBRARYAPP's Class Diagram__\n
 
   namespace org.stroganov {
     namespace util {
-      class org.stroganov.util.JSONUtil {
+      class org.stroganov.util.FileUtil {
       }
     }
   }
@@ -200,7 +208,6 @@ title __LIBRARYAPP's Class Diagram__\n
 
   org.stroganov.JsonDBAPI.JsonDBLoader o-- org.stroganov.JsonDBAPI.JsonParser : jsonParser
   org.stroganov.dao.JsonDataSource .up.|> org.stroganov.dao.LibraryDAO
-  org.stroganov.dao.JsonDataSource o-- org.stroganov.JsonDBAPI.JsonDBLoader : jsonDBLoader
   org.stroganov.dialogue.UserDialogueManager o-- org.stroganov.history.HistoryManager : historyManager
   org.stroganov.dialogue.UserDialogueManager o-- org.stroganov.dao.LibraryDAO : libraryDAO
   org.stroganov.dialogue.UserDialogueManager o-- org.stroganov.gui.UserInterface : userInterface

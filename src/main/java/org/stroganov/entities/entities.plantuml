@@ -51,6 +51,10 @@ title __ENTITIES's Class Diagram__\n
           + getPasscodeHash()
           + isAdmin()
           + isBlocked()
+          + setAdmin()
+          + setBlocked()
+          + setPasscodeHash()
+          + toString()
       }
     }
   }

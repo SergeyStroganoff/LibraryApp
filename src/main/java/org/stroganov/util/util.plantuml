@@ -4,10 +4,10 @@ title __UTIL's Class Diagram__\n
 
   namespace org.stroganov {
     namespace util {
-      class org.stroganov.util.JSONUtil {
+      class org.stroganov.util.FileUtil {
           {static} - logger : Logger
-          {static} + jsonSaveToFile()
           {static} + readFileAsString()
+          {static} + saveStringToFile()
       }
     }
   }
