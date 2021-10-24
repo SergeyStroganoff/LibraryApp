@@ -2,7 +2,7 @@ package org.stroganov.gui;
 
 import org.apache.log4j.Logger;
 import org.stroganov.App;
-import org.stroganov.exceptions.ConsoleInterfaceError;
+import org.stroganov.exceptions.ConsoleInterfaceException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,11 +29,11 @@ public class UserConsoleInterface implements UserInterface {
     }
 
     @Override
-    public int getIntFromUser() throws ConsoleInterfaceError {
+    public int getIntFromUser() throws ConsoleInterfaceException {
         String userString = getStringFromUser();
         if (userString.matches("^\\d{1,10}")) {
             return Integer.parseInt(userString);
-        } else throw new ConsoleInterfaceError("Got incorrect format number from user");
+        } else throw new ConsoleInterfaceException("Got incorrect format number from user");
 
     }
 

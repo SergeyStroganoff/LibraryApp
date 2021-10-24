@@ -54,6 +54,11 @@ public class JsonDataSource implements LibraryDAO {
     }
 
     @Override
+    public List<Book> findBooks() {
+        return null;
+    }
+
+    @Override
     public boolean addUser(User user) {
         return false;
     }
@@ -94,7 +99,12 @@ public class JsonDataSource implements LibraryDAO {
     }
 
     @Override
-    public boolean deleteAuthor(Author author) {
+    public Author findAuthor(String authorName) {
+        return null;
+    }
+
+    @Override
+    public boolean deleteAuthorWithAllHisBooks(Author author) {
         return false;
     }
 }

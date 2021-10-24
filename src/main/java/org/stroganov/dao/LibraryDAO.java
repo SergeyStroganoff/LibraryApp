@@ -4,7 +4,6 @@ import org.stroganov.entities.Author;
 import org.stroganov.entities.Book;
 import org.stroganov.entities.BookMark;
 import org.stroganov.entities.User;
-import org.stroganov.exceptions.UnrealizedFunctionalityException;
 
 import java.util.List;
 
@@ -19,6 +18,8 @@ public interface LibraryDAO {
     boolean deleteBook(Book book);
 
     Book findBook(int numberISBN);
+
+    List<Book> findBooks();
 
     boolean addUser(User user);
 
@@ -36,6 +37,8 @@ public interface LibraryDAO {
 
     boolean addAuthor(Author author);
 
-    boolean deleteAuthor(Author author);
+    Author findAuthor(String authorName);
+
+    boolean deleteAuthorWithAllHisBooks(Author author);
 
 }

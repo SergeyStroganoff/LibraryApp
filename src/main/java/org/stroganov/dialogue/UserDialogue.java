@@ -2,14 +2,18 @@ package org.stroganov.dialogue;
 
 import org.apache.log4j.Logger;
 import org.stroganov.dao.LibraryDAO;
+import org.stroganov.entities.Author;
 import org.stroganov.entities.Book;
 import org.stroganov.entities.User;
-import org.stroganov.exceptions.ConsoleInterfaceError;
+import org.stroganov.exceptions.ConsoleInterfaceException;
 import org.stroganov.gui.UserInterface;
 import org.stroganov.history.HistoryManager;
 
 public class UserDialogue {
     public static final String NOT_A_NUMBER_MESSAGE = "Error. You entered not a number";
+    public static final String ADDED_SUCCESSFUL_MESSAGE = "Book was added successfully";
+    public static final String NO_BOOK_WITH_SUCH_DATA_MESSAGE = "No book with such data. Operation rejected";
+    public static final String AUTHOR_WAS_ADDED_SUCCESSFULLY = "New Author was added successfully";
     private final LibraryDAO libraryDAO;
     private final HistoryManager historyManager;
     private final UserInterface userInterface;
@@ -38,29 +42,23 @@ public class UserDialogue {
             command = userInterface.getStringFromUser();
             switch (command) {
                 case "1": {
-                    Book newBook = bookGetterDialogue.getBookFromUser(userInterface);
-                    if (libraryDAO.addBook(newBook)) {
-                        historyManager.saveAction("User added book" + newBook.getName() + " ISBN " + newBook.getNumberISBN());
-                    }
+                    addNewBook();
+                    break;
+                }
+                case "2": {
+                    deleteBook();
+                    break;
+                }
+                case "3": {
+                    addNewAuthor();
                     break;
                 }
 
-                case "2": {
-                    userInterface.showMessage("Enter book's ISBN:");
-                    try {
-                        int numberISBN = userInterface.getIntFromUser();
-                        Book oldBook = libraryDAO.findBook(numberISBN);
-                        libraryDAO.deleteBook(oldBook);
-                    } catch (ConsoleInterfaceError e) {
-                        logger.error(e.getMessage());
-                        userInterface.showMessage(NOT_A_NUMBER_MESSAGE);
-                    }
+                case "4": {
+                    deleteAuthor();
+                    break;
                 }
 
-                case "3":
-                    System.out.println();
-                case "4":
-                    System.out.println();
                 case "5":
                     System.out.println();
                 case "6":
@@ -96,11 +94,61 @@ public class UserDialogue {
         } while ("q".equals(command));
     }
 
+    public boolean deleteAuthor() {
+        userInterface.showMessage("Enter the author's name");
+        String authorName = userInterface.getStringFromUser();
+        Author author = libraryDAO.findAuthor(authorName);
+        if (author != null) {
+            libraryDAO.deleteAuthorWithAllHisBooks(author);
+            String successMessage = "Author " + authorName + "was successfully deleted with all his books";
+            historyManager.saveAction(successMessage + " by User " + user.getLogin());
+            userInterface.showMessage(successMessage);
+            return true;
+        }
+        return false;
+    }
+
+    public void addNewAuthor() {
+        if (libraryDAO.addAuthor(bookGetterDialogue.getAuthorGetterDialogue().getAuthorFromUser(userInterface))) {
+            historyManager.saveAction(AUTHOR_WAS_ADDED_SUCCESSFULLY + " by user:" + user.getLogin());
+            userInterface.showMessage(AUTHOR_WAS_ADDED_SUCCESSFULLY);
+        }
+    }
+
+    public boolean deleteBook() {
+        userInterface.showMessage("Enter book's ISBN:");
+        Book oldBook = null;
+        try {
+            int numberISBN = userInterface.getIntFromUser();
+            oldBook = libraryDAO.findBook(numberISBN);
+        } catch (ConsoleInterfaceException e) {
+            logger.error(e.getMessage());
+            userInterface.showMessage(NOT_A_NUMBER_MESSAGE);
+        }
+        if (oldBook != null) {
+            libraryDAO.deleteBook(oldBook);
+            return true;
+        } else {
+            userInterface.showMessage(NO_BOOK_WITH_SUCH_DATA_MESSAGE);
+        }
+        return false;
+    }
+
+    public boolean addNewBook() {
+        Book newBook = bookGetterDialogue.getBookFromUser(userInterface);
+        if (libraryDAO.addBook(newBook)) {
+            historyManager.saveAction("User added book" + newBook.getName() + " ISBN " + newBook.getNumberISBN());
+            userInterface.showMessage(ADDED_SUCCESSFUL_MESSAGE);
+            return true;
+        }
+        return false;
+    }
+
     public StringBuilder returnUserMenu() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("1. Add new books to library \n"). //TODO
-                append("2. Delete book \n").//TODO
-                append("3. Add new authors to library \n").//TODO
+        stringBuilder.append("1. Add new books to library \n").
+                append("2. Delete book \n").
+                append("3. Add new authors to library \n").
                 append("4. Delete author from home library with all books by this author \n").//TODO
                 append("5. Add books to the home library with a list from the catalog file (CSV and JSON) \n").//TODO
                 append("6. Add bookmarks to book \n").//TODO

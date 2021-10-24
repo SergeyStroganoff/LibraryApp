@@ -1,36 +1,52 @@
 package org.stroganov.gui;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.stroganov.exceptions.ConsoleInterfaceException;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 class UserConsoleInterfaceTest {
 
-    public static final String TEST_STRING = "Результат поиска файлов";
-    public static final String INPUT_TEST_STRING = "Введите в терминале";
-    public static final String ERROR_TEST_STRING = "Произошла ошибка";
-
-    @InjectMocks
-    UserInterface userInterface;
+    String OUTPUT_MESSAGE = "Test string";
 
 
-    @Test
-    void When_get_notNumber_fromUser_ThenError() {
-
+    @ParameterizedTest
+    @ValueSource(strings = {"fgh12", "67!12", "dfgdfguu"})
+    void When_get_notNumber_fromUser_ThenError(String argument) throws IOException {
+        // GIVEN
+        String testString = argument;
+        //WHEN
+        BufferedReader reader = Mockito.mock(BufferedReader.class);
+        Mockito.when(reader.readLine()).thenReturn(testString);
+        UserInterface userTestInterface = new UserConsoleInterface(reader);
+        // THEN
+        Assertions.assertThrows(ConsoleInterfaceException.class, userTestInterface::getIntFromUser);
     }
 
     @Test
-    void showMessage() {
+    void getIntFromUser_Return_ValidInt() throws ConsoleInterfaceException, IOException {
+        // GIVEN
+        int expectedIntValue = 123;
+        BufferedReader reader = Mockito.mock(BufferedReader.class);
+        Mockito.when(reader.readLine()).thenReturn("123");
+        UserInterface userTestInterface = new UserConsoleInterface(reader);
+        // WHEN
+        int actualValue = userTestInterface.getIntFromUser();
+        // THEN
+        assertEquals(expectedIntValue, actualValue);
     }
 
 
@@ -42,7 +58,7 @@ class UserConsoleInterfaceTest {
         Mockito.when(reader.readLine()).thenReturn("test");
         UserInterface userTestInterface = new UserConsoleInterface(reader);
         // WHEN
-        String actualString = userInterface.getStringFromUser();
+        String actualString = userTestInterface.getStringFromUser();
         // THEN
         assertEquals(expectedString, actualString);
     }
@@ -50,35 +66,19 @@ class UserConsoleInterfaceTest {
     @Test
     void showInputMessage_System_out_PrintLn_Used() {
         // GIVEN
-        byte[] expected = INPUT_TEST_STRING.getBytes();
+        BufferedReader reader = Mockito.mock(BufferedReader.class);
+        UserInterface userTestInterface = new UserConsoleInterface(reader);
+        String expected = OUTPUT_MESSAGE + "\r\n";
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(bos, true);
         PrintStream oldStream = System.out;
         System.setOut(printStream);
         // WHEN
-        userInterface.showInputMessage("");
-        byte[] actualString = INPUT_TEST_STRING.getBytes();
-        // THEN
-        assertArrayEquals(expected, actualString);
+        userTestInterface.showMessage(OUTPUT_MESSAGE);
+        String actual = bos.toString(StandardCharsets.UTF_8);
         System.setOut(oldStream);
+        // THEN
+        assertEquals(expected, actual);
 
     }
-
-    @Test
-    void showOutputMessage_System_out_PrintLn_Used() {
-        // GIVEN
-        byte[] expected = TEST_STRING.getBytes();
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        PrintStream printStream = new PrintStream(bos, true);
-        PrintStream oldStream = System.out;
-        System.setOut(printStream);
-        // WHEN
-        userInterface.showOutputMessage("");
-        byte[] actualString = TEST_STRING.getBytes();
-        // THEN
-        assertArrayEquals(expected, actualString);
-        System.setOut(oldStream);
-    }
-
-
 }
