@@ -1,7 +1,7 @@
 package org.stroganov;
 
 import org.apache.log4j.Logger;
-import org.stroganov.dialogue.DialogueManager;
+import org.stroganov.dialogue.InitialDialogue;
 import org.stroganov.exceptions.PropertiesException;
 import org.stroganov.exceptions.UnrealizedFunctionalityException;
 import org.stroganov.gui.UserInterface;
@@ -41,8 +41,8 @@ public class App {
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
         }
-        DialogueManager dialogueManager = new DialogueManager(historyManager, userInterface);
-        dialogueManager.runDialogue();
+        InitialDialogue initialDialogue = new InitialDialogue(historyManager, userInterface);
+        initialDialogue.runDialogue();
 
     }
 }

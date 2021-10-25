@@ -4,8 +4,8 @@ import org.apache.log4j.Logger;
 import org.stroganov.dao.LibraryDAO;
 import org.stroganov.entities.Author;
 import org.stroganov.entities.Book;
+import org.stroganov.entities.BookMark;
 import org.stroganov.entities.User;
-import org.stroganov.exceptions.ConsoleInterfaceException;
 import org.stroganov.exceptions.UnrealizedFunctionalityException;
 import org.stroganov.gui.UserInterface;
 import org.stroganov.history.HistoryManager;
@@ -15,19 +15,21 @@ import org.stroganov.util.StringValidator;
 import java.io.IOException;
 import java.util.List;
 
-public class UserDialogue {
+public class MenuManagerDialogue {
     public static final String NOT_A_NUMBER_MESSAGE = "Error. You entered not a number";
     public static final String ADDED_SUCCESSFUL_MESSAGE = "Book was added successfully";
     public static final String NO_BOOK_WITH_SUCH_DATA_MESSAGE = "No book with such data. Operation rejected";
     public static final String AUTHOR_WAS_ADDED_SUCCESSFULLY = "New Author was added successfully";
+    public static final String USER = "User ";
     private final LibraryDAO libraryDAO;
     private final HistoryManager historyManager;
     private final UserInterface userInterface;
     private final User user;
     private final BookGetterDialogue bookGetterDialogue = new BookGetterDialogue();
-    Logger logger = Logger.getLogger(UserDialogue.class);
+    private final BookMarkGetterDialogue bookMarkGetterDialogue = new BookMarkGetterDialogue();
+    Logger logger = Logger.getLogger(MenuManagerDialogue.class);
 
-    public UserDialogue(LibraryDAO libraryDAO, HistoryManager historyManager, UserInterface userInterface, User user) {
+    public MenuManagerDialogue(LibraryDAO libraryDAO, HistoryManager historyManager, UserInterface userInterface, User user) {
         this.libraryDAO = libraryDAO;
         this.historyManager = historyManager;
         this.userInterface = userInterface;
@@ -69,10 +71,11 @@ public class UserDialogue {
                 }
 
                 case "6": {
-                    System.out.println();
+                    addBookMark();
                 }
-                case "7":
-                    System.out.println();
+                case "7": {
+                    deleteBookMark();
+                }
                 case "8":
                     System.out.println();
                 case "9":
@@ -100,7 +103,38 @@ public class UserDialogue {
         } while ("q".equals(command));
     }
 
-    private boolean addBooksFromFile() throws UnrealizedFunctionalityException {
+    public boolean deleteBookMark() {
+        BookMark bookMark = bookMarkGetterDialogue.getBookMarkFromUser(userInterface, libraryDAO, user);
+        if (bookMark == null) {
+            return false;
+        }
+        if (libraryDAO.deleteBookMark(bookMark)) {
+            historyManager.saveAction(USER + user.getLogin() + " deleted booksMark from book " + bookMark.getBook().getNumberISBN());
+            userInterface.showMessage("You successfully deleted this bookmark");
+            return true;
+        } else {
+            userInterface.showMessage("Bookmark was not deleted");
+        }
+        return false;
+    }
+
+    public boolean addBookMark() {
+
+        BookMark bookMark = bookMarkGetterDialogue.getBookMarkFromUser(userInterface, libraryDAO, user);
+        if (bookMark == null) {
+            return false;
+        }
+        if (libraryDAO.addBookMark(bookMark)) {
+            historyManager.saveAction(USER + user.getLogin() + "added booksMark to book " + bookMark.getBook().getNumberISBN());
+            userInterface.showMessage("You successfully added this bookmark");
+            return true;
+        } else {
+            userInterface.showMessage("Bookmark wasn't added");
+        }
+        return false;
+    }
+
+    public boolean addBooksFromFile() throws UnrealizedFunctionalityException {
         userInterface.showMessage("Enter path of file with books list");
         String filePath = userInterface.getStringFromUser();
         if (StringValidator.isStringFilePath(filePath)) {
@@ -114,7 +148,7 @@ public class UserDialogue {
                     logger.error(errorMessage);
                     userInterface.showMessage(errorMessage);
                 }
-                historyManager.saveAction("User " + user.getLogin() + "added books from file");
+                historyManager.saveAction(USER + user.getLogin() + "added books from file");
                 return true;
             }
             if (filePath.endsWith(".json")) {
@@ -137,6 +171,8 @@ public class UserDialogue {
             historyManager.saveAction(successMessage + " by User " + user.getLogin());
             userInterface.showMessage(successMessage);
             return true;
+        } else {
+            userInterface.showMessage("Author " + authorName + "was not found");
         }
         return false;
     }
@@ -145,22 +181,22 @@ public class UserDialogue {
         if (libraryDAO.addAuthor(bookGetterDialogue.getAuthorGetterDialogue().getAuthorFromUser(userInterface))) {
             historyManager.saveAction(AUTHOR_WAS_ADDED_SUCCESSFULLY + " by user:" + user.getLogin());
             userInterface.showMessage(AUTHOR_WAS_ADDED_SUCCESSFULLY);
+        } else {
+            userInterface.showMessage("Unable to add new author");
         }
     }
 
     public boolean deleteBook() {
         userInterface.showMessage("Enter book's ISBN:");
-        Book oldBook = null;
-        try {
-            int numberISBN = userInterface.getIntFromUser();
-            oldBook = libraryDAO.findBook(numberISBN);
-        } catch (ConsoleInterfaceException e) {
-            logger.error(e.getMessage());
-            userInterface.showMessage(NOT_A_NUMBER_MESSAGE);
-        }
+        Book oldBook;
+        String numberISBN = userInterface.getStringFromUser();
+        oldBook = libraryDAO.findBook(numberISBN);
         if (oldBook != null) {
-            libraryDAO.deleteBook(oldBook);
-            return true;
+            if (libraryDAO.deleteBook(oldBook)) {
+                historyManager.saveAction(USER + user.getLogin() + " deleted book " + oldBook.getNumberISBN());
+                userInterface.showMessage("You successfully deleted book");
+                return true;
+            }
         } else {
             userInterface.showMessage(NO_BOOK_WITH_SUCH_DATA_MESSAGE);
         }
@@ -173,25 +209,28 @@ public class UserDialogue {
             historyManager.saveAction("User added book" + newBook.getName() + " ISBN " + newBook.getNumberISBN());
             userInterface.showMessage(ADDED_SUCCESSFUL_MESSAGE);
             return true;
+        } else {
+            userInterface.showMessage("Book was not added");
         }
         return false;
     }
 
     public StringBuilder returnUserMenu() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("1. Add new books to library \n").
-                append("2. Delete book \n").
-                append("3. Add new authors to library \n").
-                append("4. Delete author from home library with all books by this author \n").
-                append("5. Add books to the home library with a list from the catalog file (CSV and JSON) \n").
-                append("6. Add bookmarks to book \n").//TODO
-                append("7. Delete bookmarks from books \n").//TODO
-                append("8. Search for books by part of the name of the book \n").//TODO
-                append("9. Search for books by part of the author's name \n").//TODO
-                append("10. Search for books by the unique book identifier (ISBN) \n").//TODO
-                append("11. Search for books by the range of years from and to with the occurrence of boundary values \n").//TODO
-                append("12. Search for books by year, number of pages and part of the title of the book \n").//TODO
-                append("13. See the list of books that have my bookmarks \n");//TODO
+        stringBuilder
+                .append("1. Add new books to library \n")
+                .append("2. Delete book \n")
+                .append("3. Add new authors to library \n")
+                .append("4. Delete author from home library with all books by this author \n")
+                .append("5. Add books to the home library with a list from the catalog file (CSV and JSON) \n")
+                .append("6. Add bookmarks to book \n")
+                .append("7. Delete bookmarks from books \n")
+                .append("8. Search for books by part of the name of the book \n")//todo
+                .append("9. Search for books by part of the author's name \n")//todo
+                .append("10. Search for books by the unique book identifier (ISBN) \n")//todo
+                .append("11. Search for books by the range of years from and to with the occurrence of boundary values \n")//TODO
+                .append("12. Search for books by year, number of pages and part of the title of the book \n")//todo
+                .append("13. See the list of books that have my bookmarks \n");//TODO
         return stringBuilder;
     }
 

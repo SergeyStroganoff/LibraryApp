@@ -15,19 +15,19 @@ public interface LibraryDAO {
 
     boolean deleteBook(Book book);
 
-    Book findBook(int numberISBN);
+    Book findBook(String numberISBN);
 
-    List<Book> findBooks();
+    List<Book> findBooksByPartName(String partOfName);
 
     boolean addUser(User user);
 
     User findUser(String userLogin);
 
-    boolean deleteUser(String userLogin);
+    boolean deleteUser(User user);
 
-    boolean blockUser(String userLogin);
+    boolean blockUser(User user);
 
-    boolean unblockUser(String userLogin);
+    boolean unblockUser(User user);
 
     boolean addBookMark(BookMark bookMark);
 

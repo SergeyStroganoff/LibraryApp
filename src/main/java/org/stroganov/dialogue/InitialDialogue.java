@@ -11,17 +11,17 @@ import org.stroganov.gui.UserInterface;
 import org.stroganov.history.HistoryManager;
 import org.stroganov.util.PasswordAuthentication;
 
-public class DialogueManager {
+public class InitialDialogue {
 
     public static final String EXIT_BEFORE_LOGIN_MESSAGE = "User asked exit before login";
     public static final String INPUT_LOGIN_MESSAGE = "Input login and password, 'q' for exit";
     public static final String ATTEMPTS_MESSAGE = "You have only 3 attempts";
-    private final Logger logger = Logger.getLogger(DialogueManager.class);
+    private final Logger logger = Logger.getLogger(InitialDialogue.class);
     private LibraryDAO libraryDAO = null;
     private final HistoryManager historyManager;
     private final UserInterface userInterface;
 
-    public DialogueManager(HistoryManager historyManager, UserInterface userInterface) {
+    public InitialDialogue(HistoryManager historyManager, UserInterface userInterface) {
         this.historyManager = historyManager;
         this.userInterface = userInterface;
         try {
@@ -68,7 +68,7 @@ public class DialogueManager {
         }
         historyManager.saveAction("User " + user.getLogin() + " entered in system");
         logger.info("User " + user.getLogin() + " entered in system");
-        UserDialogue userDialogue = new UserDialogue(libraryDAO, historyManager, userInterface, user);
-        userDialogue.runDialogue();
+        MenuManagerDialogue menuManagerDialogue = new MenuManagerDialogue(libraryDAO, historyManager, userInterface, user);
+        menuManagerDialogue.runDialogue();
     }
 }

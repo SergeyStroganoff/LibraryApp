@@ -11,16 +11,22 @@ import org.stroganov.util.FileUtil;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Properties;
 
 public class JsonDBLoader {
     public static final String DB_EXCEPTIONS = "DB files was not founded ore read :";
-    Logger logger = org.apache.log4j.Logger.getLogger(JsonDBLoader.class);
-    JsonParser jsonParser = new JsonParser();
+    private Logger logger = org.apache.log4j.Logger.getLogger(JsonDBLoader.class);
+    private JsonParser jsonParser = new JsonParser();
+    private Properties properties;
+
+    public JsonDBLoader(Properties properties) {
+        this.properties = properties;
+    }
 
     public List<Book> loadBooks() throws DBExceptions {
         String jsonString;
         try {
-            jsonString = FileUtil.readFileAsString(App.properties.getProperty("booksJsonFile"));
+            jsonString = FileUtil.readFileAsString(properties.getProperty("booksJsonFile"));
         } catch (IOException e) {
             logger.error(e);
             throw new DBExceptions(DB_EXCEPTIONS + e.getMessage());
@@ -31,7 +37,7 @@ public class JsonDBLoader {
     public List<User> loadUsers() throws DBExceptions {
         String jsonString;
         try {
-            jsonString = FileUtil.readFileAsString(App.properties.getProperty("usersJsonFile"));
+            jsonString = FileUtil.readFileAsString(properties.getProperty("usersJsonFile"));
         } catch (IOException e) {
             logger.error(e);
             throw new DBExceptions(DB_EXCEPTIONS + e.getMessage());
@@ -42,7 +48,7 @@ public class JsonDBLoader {
     public List<BookMark> loadBookMarks() throws DBExceptions {
         String jsonString;
         try {
-            jsonString = FileUtil.readFileAsString(App.properties.getProperty("bookMarksJsonFile"));
+            jsonString = FileUtil.readFileAsString(properties.getProperty("bookMarksJsonFile"));
         } catch (IOException e) {
             logger.error(e);
             throw new DBExceptions(DB_EXCEPTIONS + e.getMessage());
@@ -53,7 +59,7 @@ public class JsonDBLoader {
     public List<Author> loadAuthors() throws DBExceptions {
         String jsonString;
         try {
-            jsonString = FileUtil.readFileAsString(App.properties.getProperty("authorsJsonFile"));
+            jsonString = FileUtil.readFileAsString(properties.getProperty("authorsJsonFile"));
         } catch (IOException e) {
             logger.error(e);
             throw new DBExceptions(DB_EXCEPTIONS + e.getMessage());

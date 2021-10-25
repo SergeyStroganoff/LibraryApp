@@ -4,7 +4,7 @@ import org.stroganov.util.PasswordAuthentication;
 
 public class User {
 
-    private final int numberID;
+    private int numberID;
     private final String fullName;
     private final String login;
     private String passcodeHash;
@@ -54,6 +54,10 @@ public class User {
 
     public void setAdmin(boolean admin) {
         isAdmin = admin;
+    }
+
+    public void setNumberID(int numberID) {
+        this.numberID = numberID;
     }
 
     @Override
