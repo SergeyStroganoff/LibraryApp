@@ -1,22 +1,25 @@
 package org.stroganov.dao;
 
+import org.stroganov.App;
 import org.stroganov.JsonDBAPI.JsonDBLoader;
+import org.stroganov.JsonDBAPI.JsonSerializer;
 import org.stroganov.entities.Author;
 import org.stroganov.entities.Book;
 import org.stroganov.entities.BookMark;
 import org.stroganov.entities.User;
 import org.stroganov.exceptions.DBExceptions;
-import org.stroganov.exceptions.UnrealizedFunctionalityException;
+import org.stroganov.util.FileUtil;
 
 import java.util.List;
 
 public class JsonDataSource implements LibraryDAO {
 
     private static JsonDataSource instance;
-    List<Book> bookList;
-    List<User> userList;
-    List<BookMark> bookMarkListList;
-    List<Author> authorsList;
+    private List<Book> bookList;
+    private List<User> userList;
+    private List<BookMark> bookMarkListList;
+    private List<Author> authorsList;
+    p
 
     public static synchronized JsonDataSource getInstance() throws DBExceptions {
         if (instance == null) {
@@ -35,11 +38,14 @@ public class JsonDataSource implements LibraryDAO {
 
     @Override
     public boolean addBook(Book book) {
-        return false;
-    }
+        if (!bookList.contains(book)) {
+            bookList.add(book);
+            папап
+            if (!authorsList.contains(book.getAuthor())) {
+                authorsList.add(book.getAuthor());
+            }
+        }
 
-    @Override
-    public boolean addBookList(List<Book> bookList) {
         return false;
     }
 

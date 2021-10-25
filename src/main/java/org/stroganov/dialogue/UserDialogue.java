@@ -59,7 +59,6 @@ public class UserDialogue {
                     addNewAuthor();
                     break;
                 }
-
                 case "4": {
                     deleteAuthor();
                     break;
@@ -69,8 +68,9 @@ public class UserDialogue {
                     break;
                 }
 
-                case "6":
+                case "6": {
                     System.out.println();
+                }
                 case "7":
                     System.out.println();
                 case "8":
