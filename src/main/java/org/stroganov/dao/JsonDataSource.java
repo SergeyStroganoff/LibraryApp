@@ -82,8 +82,8 @@ public class JsonDataSource implements LibraryDAO {
         if (!userList.contains(user)) {
             if (!userList.isEmpty()) {
                 int maxCurrentID = 0;
-                for (User user1 : userList) {
-                    if (user1.getNumberID() > maxCurrentID) {
+                for (User currentUser : userList) {
+                    if (currentUser.getNumberID() > maxCurrentID) {
                         maxCurrentID = user.getNumberID();
                     }
                 }

@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class MenuManagerDialogue {
-    public static final String NOT_A_NUMBER_MESSAGE = "Error. You entered not a number";
+
     public static final String ADDED_SUCCESSFUL_MESSAGE = "Book was added successfully";
     public static final String NO_BOOK_WITH_SUCH_DATA_MESSAGE = "No book with such data. Operation rejected";
     public static final String AUTHOR_WAS_ADDED_SUCCESSFULLY = "New Author was added successfully";
@@ -26,27 +26,28 @@ public class MenuManagerDialogue {
     private final LibraryDAO libraryDAO;
     private final HistoryManager historyManager;
     private final UserInterface userInterface;
-    private final User user;
+    private final User currentUser;
     private final BookGetterDialogue bookGetterDialogue = new BookGetterDialogue();
     private final BookMarkGetterDialogue bookMarkGetterDialogue = new BookMarkGetterDialogue();
+    private final UserGetterDialogue userGetterDialogue = new UserGetterDialogue();
     Logger logger = Logger.getLogger(MenuManagerDialogue.class);
 
-    public MenuManagerDialogue(LibraryDAO libraryDAO, HistoryManager historyManager, UserInterface userInterface, User user) {
+    public MenuManagerDialogue(LibraryDAO libraryDAO, HistoryManager historyManager, UserInterface userInterface, User currentUser) {
         this.libraryDAO = libraryDAO;
         this.historyManager = historyManager;
         this.userInterface = userInterface;
-        this.user = user;
+        this.currentUser = currentUser;
     }
 
     public void runDialogue() throws UnrealizedFunctionalityException {
-        String rights = user.isAdmin() ? "admin" : "user";
+        String rights = currentUser.isAdmin() ? "admin" : "user";
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("You have successfully logged in with " + rights + " rights \n").
                 append("The following actions are available to you: \n").
                 append("Enter number of menu");
         userInterface.showMessage(stringBuilder.toString());
         String command;
-        String menu = user.isAdmin() ? returnAdminMenu().toString() : returnUserMenu().toString();
+        String menu = currentUser.isAdmin() ? returnAdminMenu().toString() : returnUserMenu().toString();
         do {
             userInterface.showMessage(menu);
             command = userInterface.getStringFromUser();
@@ -104,17 +105,26 @@ public class MenuManagerDialogue {
                     break;
                 }
                 case "14": {
-                    if (user.isAdmin()) {
+                    if (currentUser.isAdmin()) {
                         addNewUser();
                     }
                     break;
                 }
                 case "15":
-                    System.out.println();
+                    if (currentUser.isAdmin()) {
+                        changeUserStatus(true);
+                    }
+                    break;
                 case "16":
-                    System.out.println();
+                    if (currentUser.isAdmin()) {
+                        changeUserStatus(false);
+                    }
+                    break;
                 case "17":
-                    System.out.println();
+                    if (currentUser.isAdmin()) {
+                        historyManager.getHistoryList().forEach(userInterface::showMessage);
+                    }
+                    break;
                 default: {
                     userInterface.showMessage("Incorrect command");
                 }
@@ -122,13 +132,40 @@ public class MenuManagerDialogue {
         } while ("q".equals(command));
     }
 
+    private boolean changeUserStatus(boolean blockAction) {
+        userInterface.showMessage("Enter user login");
+        String userLogin = userInterface.getStringFromUser();
+        User user = libraryDAO.findUser(userLogin);
+        if (user != null) {
+            if (blockAction) {
+                if (libraryDAO.blockUser(user)) {
+                    historyManager.saveAction(USER + currentUser.getLogin() + "blocked user: " + user.getLogin());
+                    return true;
+                }
+            } else {
+                if (libraryDAO.unblockUser(user)) {
+                    historyManager.saveAction(USER + currentUser.getLogin() + "blocked user: " + user.getLogin());
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     private boolean addNewUser() {
+        User user = userGetterDialogue.getUserFromDialogue(userInterface);
+        if (libraryDAO.addUser(user)) {
+            historyManager.saveAction(USER + currentUser.getLogin() + " added a new user: " + user.getLogin());
+            return true;
+        } else {
+            userInterface.showMessage("User wasn't added");
+        }
         return false;
     }
 
     private void findBookWithBookmarks() {
-        libraryDAO.findBooksWithUserBookMarks(user).forEach(x -> userInterface.showMessage(x.toString()));
-        historyManager.saveAction(USER + user.getLogin() + " have got a list of books with his bookmarks");
+        libraryDAO.findBooksWithUserBookMarks(currentUser).forEach(x -> userInterface.showMessage(x.toString()));
+        historyManager.saveAction(USER + currentUser.getLogin() + " have got a list of books with his bookmarks");
     }
 
     private boolean findBookByParameters() {
@@ -147,7 +184,7 @@ public class MenuManagerDialogue {
         userInterface.showMessage("Enter part of book name");
         String partBookName = userInterface.getStringFromUser();
         libraryDAO.findBooksByParameters(bookYear, bookPages, partBookName).forEach(x -> userInterface.showMessage(x.toString()));
-        historyManager.saveAction(USER + user.getLogin() + " have got a list of books by parameters");
+        historyManager.saveAction(USER + currentUser.getLogin() + " have got a list of books by parameters");
         return true;
     }
 
@@ -158,7 +195,7 @@ public class MenuManagerDialogue {
             userInterface.showMessage("Enter second year of range");
             int secondYear = userInterface.getIntFromUser();
             libraryDAO.findBooksByYearsRange(firstYear, secondYear).forEach(x -> userInterface.showMessage(x.toString()));
-            historyManager.saveAction(USER + user.getLogin() + " have got a list of books in years range");
+            historyManager.saveAction(USER + currentUser.getLogin() + " have got a list of books in years range");
             return true;
         } catch (ConsoleInterfaceException e) {
             logger.error(e.getMessage());
@@ -173,7 +210,7 @@ public class MenuManagerDialogue {
         Book book = libraryDAO.findBook(numberISBN);
         if (book != null) {
             userInterface.showMessage(book.toString());
-            historyManager.saveAction(USER + user.getLogin() + " have got a list of books by part of author name");
+            historyManager.saveAction(USER + currentUser.getLogin() + " have got a list of books by part of author name");
             return true;
         } else {
             userInterface.showMessage("Book wast not found");
@@ -185,23 +222,23 @@ public class MenuManagerDialogue {
         userInterface.showMessage("Enter part of author name");
         String partAuthorName = userInterface.getStringFromUser();
         libraryDAO.findBooksByPartAuthorName(partAuthorName).forEach(x -> userInterface.showMessage(x.toString()));
-        historyManager.saveAction(USER + user.getLogin() + " have got a list of books by part of author name");
+        historyManager.saveAction(USER + currentUser.getLogin() + " have got a list of books by part of author name");
     }
 
     public void findBooksByPartName() {
         userInterface.showMessage("Enter part of book's name");
         String partBookName = userInterface.getStringFromUser();
         libraryDAO.findBooksByPartName(partBookName).forEach(x -> userInterface.showMessage(x.toString()));
-        historyManager.saveAction(USER + user.getLogin() + " have got a list of books by part of name");
+        historyManager.saveAction(USER + currentUser.getLogin() + " have got a list of books by part of name");
     }
 
     public boolean deleteBookMark() {
-        BookMark bookMark = bookMarkGetterDialogue.getBookMarkFromUser(userInterface, libraryDAO, user);
+        BookMark bookMark = bookMarkGetterDialogue.getBookMarkFromUser(userInterface, libraryDAO, currentUser);
         if (bookMark == null) {
             return false;
         }
         if (libraryDAO.deleteBookMark(bookMark)) {
-            historyManager.saveAction(USER + user.getLogin() + " deleted booksMark from book " + bookMark.getBook().getNumberISBN());
+            historyManager.saveAction(USER + currentUser.getLogin() + " deleted booksMark from book " + bookMark.getBook().getNumberISBN());
             userInterface.showMessage("You successfully deleted this bookmark");
             return true;
         } else {
@@ -212,12 +249,12 @@ public class MenuManagerDialogue {
 
     public boolean addBookMark() {
 
-        BookMark bookMark = bookMarkGetterDialogue.getBookMarkFromUser(userInterface, libraryDAO, user);
+        BookMark bookMark = bookMarkGetterDialogue.getBookMarkFromUser(userInterface, libraryDAO, currentUser);
         if (bookMark == null) {
             return false;
         }
         if (libraryDAO.addBookMark(bookMark)) {
-            historyManager.saveAction(USER + user.getLogin() + "added booksMark to book " + bookMark.getBook().getNumberISBN());
+            historyManager.saveAction(USER + currentUser.getLogin() + "added booksMark to book " + bookMark.getBook().getNumberISBN());
             userInterface.showMessage("You successfully added this bookmark");
             return true;
         } else {
@@ -240,7 +277,7 @@ public class MenuManagerDialogue {
                     logger.error(errorMessage);
                     userInterface.showMessage(errorMessage);
                 }
-                historyManager.saveAction(USER + user.getLogin() + "added books from file");
+                historyManager.saveAction(USER + currentUser.getLogin() + "added books from file");
                 return true;
             }
             if (filePath.endsWith(".json")) {
@@ -260,7 +297,7 @@ public class MenuManagerDialogue {
         if (author != null) {
             libraryDAO.deleteAuthorWithAllHisBooks(author);
             String successMessage = "Author " + authorName + "was successfully deleted with all his books";
-            historyManager.saveAction(successMessage + " by User " + user.getLogin());
+            historyManager.saveAction(successMessage + " by User " + currentUser.getLogin());
             userInterface.showMessage(successMessage);
             return true;
         } else {
@@ -271,7 +308,7 @@ public class MenuManagerDialogue {
 
     public void addNewAuthor() {
         if (libraryDAO.addAuthor(bookGetterDialogue.getAuthorGetterDialogue().getAuthorFromUser(userInterface))) {
-            historyManager.saveAction(AUTHOR_WAS_ADDED_SUCCESSFULLY + " by user:" + user.getLogin());
+            historyManager.saveAction(AUTHOR_WAS_ADDED_SUCCESSFULLY + " by user:" + currentUser.getLogin());
             userInterface.showMessage(AUTHOR_WAS_ADDED_SUCCESSFULLY);
         } else {
             userInterface.showMessage("Unable to add new author");
@@ -285,7 +322,7 @@ public class MenuManagerDialogue {
         oldBook = libraryDAO.findBook(numberISBN);
         if (oldBook != null) {
             if (libraryDAO.deleteBook(oldBook)) {
-                historyManager.saveAction(USER + user.getLogin() + " deleted book " + oldBook.getNumberISBN());
+                historyManager.saveAction(USER + currentUser.getLogin() + " deleted book " + oldBook.getNumberISBN());
                 userInterface.showMessage("You successfully deleted book");
                 return true;
             }
@@ -328,9 +365,9 @@ public class MenuManagerDialogue {
 
     public StringBuilder returnAdminMenu() {
         return returnUserMenu().
-                append("14. Create a new user \n").  //TODO
-                append("15. Block user \n"). //TODO
-                append("16. Unblock user \n"). //TODO
-                append("17. Show history all users \n"); //TODO
+                append("14. Create a new user \n").
+                append("15. Block user \n").
+                append("16. Unblock user \n").
+                append("17. Show history all users \n");
     }
 }

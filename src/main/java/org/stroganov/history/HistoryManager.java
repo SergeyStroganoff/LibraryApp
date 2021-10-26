@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.stroganov.App;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Save user action history in json format:
@@ -27,14 +28,19 @@ import java.io.IOException;
 public class HistoryManager {
 
     private final Logger logger = Logger.getLogger(HistoryManager.class);
+    String historyFileName = App.properties.getProperty("historyLogFileName");
 
     public HistoryManager() throws IOException {
-        String historyFileName = App.properties.getProperty("historyLogFileName");
         logger.addAppender(new FileAppender(new JSONEventLayoutV1(), historyFileName));
     }
 
     public void saveAction(String stringAction) {
         logger.info(stringAction);
+    }
+
+    public List<String> getHistoryList() {
+        List<String> stringList = null;
+        return stringList;
     }
 
 }
