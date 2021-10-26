@@ -122,7 +122,8 @@ public class MenuManagerDialogue {
                     break;
                 case "17":
                     if (currentUser.isAdmin()) {
-                        historyManager.getHistoryList().forEach(userInterface::showMessage);
+                        getHistory();
+
                     }
                     break;
                 default: {
@@ -130,6 +131,16 @@ public class MenuManagerDialogue {
                 }
             }
         } while ("q".equals(command));
+    }
+
+    private void getHistory() {
+        try {
+            historyManager.getHistoryEventsList().forEach(userInterface::showMessage);
+            historyManager.saveAction(USER + currentUser.getLogin() + "have got a list of history events");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+            userInterface.showMessage("Unable to get history events, see logfile");
+        }
     }
 
     private boolean changeUserStatus(boolean blockAction) {

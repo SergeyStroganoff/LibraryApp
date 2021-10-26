@@ -1,9 +1,11 @@
 package org.stroganov.history;
 
+import com.google.gson.Gson;
 import net.logstash.log4j.JSONEventLayoutV1;
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.Logger;
 import org.stroganov.App;
+import org.stroganov.util.FileUtil;
 
 import java.io.IOException;
 import java.util.List;
@@ -38,9 +40,9 @@ public class HistoryManager {
         logger.info(stringAction);
     }
 
-    public List<String> getHistoryList() {
-        List<String> stringList = null;
-        return stringList;
+    public List<String> getHistoryEventsList() throws IOException {
+        String jsonHistoryString = FileUtil.readFileAsString(historyFileName);
+        Gson gson = new Gson();
+        return gson.fromJson(jsonHistoryString, List.class);
     }
-
 }
