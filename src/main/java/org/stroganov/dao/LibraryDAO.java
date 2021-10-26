@@ -39,4 +39,12 @@ public interface LibraryDAO {
 
     boolean deleteAuthorWithAllHisBooks(Author author);
 
+    List<Book> findBooksByPartAuthorName(String partAuthorName);
+
+    List<Book> findBooksByYearsRange(int firstYear, int secondYear);
+
+    List<Book> findBooksByParameters(int bookYear, int bookPages, String partBookName);
+
+    List<Book> findBooksWithUserBookMarks(User user);
+
 }

@@ -28,12 +28,27 @@ title __DIALOGUE's Class Diagram__\n
 
   namespace org.stroganov {
     namespace dialogue {
-      class org.stroganov.dialogue.DialogueManager {
+      class org.stroganov.dialogue.BookMarkGetterDialogue {
+          {static} + ENTER_BOOK_S_ISBN_MESSAGE : String
+          {static} + ENTER_PAGE_NUMBER_MESSAGE : String
+          {static} + NOT_A_NUMBER_OF_PAGE_MESSAGE : String
+          {static} + NO_SUCH_BOOK_MESSAGE : String
+          {static} + NO_SUCH_PAGE_MESSAGE : String
+          ~ logger : Logger
+          + getBookMarkFromUser()
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace dialogue {
+      class org.stroganov.dialogue.InitialDialogue {
           {static} + ATTEMPTS_MESSAGE : String
           {static} + EXIT_BEFORE_LOGIN_MESSAGE : String
           {static} + INPUT_LOGIN_MESSAGE : String
           - logger : Logger
-          + DialogueManager()
+          + InitialDialogue()
           + runDialogue()
       }
     }
@@ -42,35 +57,47 @@ title __DIALOGUE's Class Diagram__\n
 
   namespace org.stroganov {
     namespace dialogue {
-      class org.stroganov.dialogue.UserDialogue {
+      class org.stroganov.dialogue.MenuManagerDialogue {
           {static} + ADDED_SUCCESSFUL_MESSAGE : String
           {static} + AUTHOR_WAS_ADDED_SUCCESSFULLY : String
           {static} + NOT_A_NUMBER_MESSAGE : String
+          {static} + NOT_A_NUMBER_OF_YEAR_MESSAGE : String
           {static} + NO_BOOK_WITH_SUCH_DATA_MESSAGE : String
+          {static} + USER : String
           ~ logger : Logger
-          + UserDialogue()
+          + MenuManagerDialogue()
+          + addBookMark()
+          + addBooksFromFile()
           + addNewAuthor()
           + addNewBook()
           + deleteAuthor()
           + deleteBook()
+          + deleteBookMark()
+          + findBooksByPartName()
           + returnAdminMenu()
           + returnUserMenu()
           + runDialogue()
-          - addBooksFromFile()
+          - addNewUser()
+          - findBookByISBN()
+          - findBookByParameters()
+          - findBookByYearsRange()
+          - findBookWithBookmarks()
+          - findBooksByPartAuthorName()
       }
     }
   }
   
 
   org.stroganov.dialogue.BookGetterDialogue o-- org.stroganov.dialogue.AuthorGetterDialogue : authorGetterDialogue
-  org.stroganov.dialogue.DialogueManager o-- org.stroganov.history.HistoryManager : historyManager
-  org.stroganov.dialogue.DialogueManager o-- org.stroganov.dao.LibraryDAO : libraryDAO
-  org.stroganov.dialogue.DialogueManager o-- org.stroganov.gui.UserInterface : userInterface
-  org.stroganov.dialogue.UserDialogue o-- org.stroganov.dialogue.BookGetterDialogue : bookGetterDialogue
-  org.stroganov.dialogue.UserDialogue o-- org.stroganov.history.HistoryManager : historyManager
-  org.stroganov.dialogue.UserDialogue o-- org.stroganov.dao.LibraryDAO : libraryDAO
-  org.stroganov.dialogue.UserDialogue o-- org.stroganov.entities.User : user
-  org.stroganov.dialogue.UserDialogue o-- org.stroganov.gui.UserInterface : userInterface
+  org.stroganov.dialogue.InitialDialogue o-- org.stroganov.history.HistoryManager : historyManager
+  org.stroganov.dialogue.InitialDialogue o-- org.stroganov.dao.LibraryDAO : libraryDAO
+  org.stroganov.dialogue.InitialDialogue o-- org.stroganov.gui.UserInterface : userInterface
+  org.stroganov.dialogue.MenuManagerDialogue o-- org.stroganov.dialogue.BookGetterDialogue : bookGetterDialogue
+  org.stroganov.dialogue.MenuManagerDialogue o-- org.stroganov.dialogue.BookMarkGetterDialogue : bookMarkGetterDialogue
+  org.stroganov.dialogue.MenuManagerDialogue o-- org.stroganov.history.HistoryManager : historyManager
+  org.stroganov.dialogue.MenuManagerDialogue o-- org.stroganov.dao.LibraryDAO : libraryDAO
+  org.stroganov.dialogue.MenuManagerDialogue o-- org.stroganov.entities.User : user
+  org.stroganov.dialogue.MenuManagerDialogue o-- org.stroganov.gui.UserInterface : userInterface
 
 
 right footer

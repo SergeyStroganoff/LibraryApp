@@ -6,6 +6,7 @@ import org.stroganov.entities.Author;
 import org.stroganov.entities.Book;
 import org.stroganov.entities.BookMark;
 import org.stroganov.entities.User;
+import org.stroganov.exceptions.ConsoleInterfaceException;
 import org.stroganov.exceptions.UnrealizedFunctionalityException;
 import org.stroganov.gui.UserInterface;
 import org.stroganov.history.HistoryManager;
@@ -21,6 +22,7 @@ public class MenuManagerDialogue {
     public static final String NO_BOOK_WITH_SUCH_DATA_MESSAGE = "No book with such data. Operation rejected";
     public static final String AUTHOR_WAS_ADDED_SUCCESSFULLY = "New Author was added successfully";
     public static final String USER = "User ";
+    public static final String NOT_A_NUMBER_OF_YEAR_MESSAGE = "You entered not a number of year, try again";
     private final LibraryDAO libraryDAO;
     private final HistoryManager historyManager;
     private final UserInterface userInterface;
@@ -69,27 +71,44 @@ public class MenuManagerDialogue {
                     addBooksFromFile();
                     break;
                 }
-
                 case "6": {
                     addBookMark();
+                    break;
                 }
                 case "7": {
                     deleteBookMark();
+                    break;
                 }
-                case "8":
-                    System.out.println();
-                case "9":
-                    System.out.println();
-                case "10":
-                    System.out.println();
-                case "11":
-                    System.out.println();
-                case "12":
-                    System.out.println();
-                case "13":
-                    System.out.println();
-                case "14":
-                    System.out.println();
+                case "8": {
+                    findBooksByPartName();
+                    break;
+                }
+                case "9": {
+                    findBooksByPartAuthorName();
+                    break;
+                }
+                case "10": {
+                    findBookByISBN();
+                    break;
+                }
+                case "11": {
+                    findBookByYearsRange();
+                    break;
+                }
+                case "12": {
+                    findBookByParameters();
+                    break;
+                }
+                case "13": {
+                    findBookWithBookmarks();
+                    break;
+                }
+                case "14": {
+                    if (user.isAdmin()) {
+                        addNewUser();
+                    }
+                    break;
+                }
                 case "15":
                     System.out.println();
                 case "16":
@@ -101,6 +120,79 @@ public class MenuManagerDialogue {
                 }
             }
         } while ("q".equals(command));
+    }
+
+    private boolean addNewUser() {
+        return false;
+    }
+
+    private void findBookWithBookmarks() {
+        libraryDAO.findBooksWithUserBookMarks(user).forEach(x -> userInterface.showMessage(x.toString()));
+        historyManager.saveAction(USER + user.getLogin() + " have got a list of books with his bookmarks");
+    }
+
+    private boolean findBookByParameters() {
+        userInterface.showMessage("Enter book's year publishing");
+        int bookYear;
+        int bookPages;
+        try {
+            bookYear = userInterface.getIntFromUser();
+            userInterface.showMessage("Enter number of book's pages");
+            bookPages = userInterface.getIntFromUser();
+        } catch (ConsoleInterfaceException e) {
+            logger.error(e.getMessage());
+            userInterface.showMessage(NOT_A_NUMBER_OF_YEAR_MESSAGE + "ore not number of book's pages");
+            return false;
+        }
+        userInterface.showMessage("Enter part of book name");
+        String partBookName = userInterface.getStringFromUser();
+        libraryDAO.findBooksByParameters(bookYear, bookPages, partBookName).forEach(x -> userInterface.showMessage(x.toString()));
+        historyManager.saveAction(USER + user.getLogin() + " have got a list of books by parameters");
+        return true;
+    }
+
+    private boolean findBookByYearsRange() {
+        try {
+            userInterface.showMessage("Enter fist year of range");
+            int firstYear = userInterface.getIntFromUser();
+            userInterface.showMessage("Enter second year of range");
+            int secondYear = userInterface.getIntFromUser();
+            libraryDAO.findBooksByYearsRange(firstYear, secondYear).forEach(x -> userInterface.showMessage(x.toString()));
+            historyManager.saveAction(USER + user.getLogin() + " have got a list of books in years range");
+            return true;
+        } catch (ConsoleInterfaceException e) {
+            logger.error(e.getMessage());
+            userInterface.showMessage(NOT_A_NUMBER_OF_YEAR_MESSAGE);
+        }
+        return false;
+    }
+
+    private boolean findBookByISBN() {
+        userInterface.showMessage("Enter book ISBN");
+        String numberISBN = userInterface.getStringFromUser();
+        Book book = libraryDAO.findBook(numberISBN);
+        if (book != null) {
+            userInterface.showMessage(book.toString());
+            historyManager.saveAction(USER + user.getLogin() + " have got a list of books by part of author name");
+            return true;
+        } else {
+            userInterface.showMessage("Book wast not found");
+        }
+        return false;
+    }
+
+    private void findBooksByPartAuthorName() {
+        userInterface.showMessage("Enter part of author name");
+        String partAuthorName = userInterface.getStringFromUser();
+        libraryDAO.findBooksByPartAuthorName(partAuthorName).forEach(x -> userInterface.showMessage(x.toString()));
+        historyManager.saveAction(USER + user.getLogin() + " have got a list of books by part of author name");
+    }
+
+    public void findBooksByPartName() {
+        userInterface.showMessage("Enter part of book's name");
+        String partBookName = userInterface.getStringFromUser();
+        libraryDAO.findBooksByPartName(partBookName).forEach(x -> userInterface.showMessage(x.toString()));
+        historyManager.saveAction(USER + user.getLogin() + " have got a list of books by part of name");
     }
 
     public boolean deleteBookMark() {
@@ -225,20 +317,20 @@ public class MenuManagerDialogue {
                 .append("5. Add books to the home library with a list from the catalog file (CSV and JSON) \n")
                 .append("6. Add bookmarks to book \n")
                 .append("7. Delete bookmarks from books \n")
-                .append("8. Search for books by part of the name of the book \n")//todo
-                .append("9. Search for books by part of the author's name \n")//todo
-                .append("10. Search for books by the unique book identifier (ISBN) \n")//todo
-                .append("11. Search for books by the range of years from and to with the occurrence of boundary values \n")//TODO
-                .append("12. Search for books by year, number of pages and part of the title of the book \n")//todo
-                .append("13. See the list of books that have my bookmarks \n");//TODO
+                .append("8. Search for books by part of the name of the book \n")
+                .append("9. Search for books by part of the author's name \n")
+                .append("10. Search for books by the unique book identifier (ISBN) \n")
+                .append("11. Search for books by the range of years \n")
+                .append("12. Search for books by year, number of pages and part of the title of the book \n")
+                .append("13. See the list of books that have my bookmarks \n");
         return stringBuilder;
     }
 
     public StringBuilder returnAdminMenu() {
         return returnUserMenu().
-                append("14. Create a new user \n").
-                append("15. Block user \n").
-                append("16. Unblock user \n").
-                append("17. Shock \n");
+                append("14. Create a new user \n").  //TODO
+                append("15. Block user \n"). //TODO
+                append("16. Unblock user \n"). //TODO
+                append("17. Show history all users \n"); //TODO
     }
 }

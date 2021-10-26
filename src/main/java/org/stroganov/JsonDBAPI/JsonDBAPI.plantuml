@@ -17,11 +17,24 @@ title __JSONDBAPI's Class Diagram__\n
     namespace JsonDBAPI {
       class org.stroganov.JsonDBAPI.JsonDBLoader {
           {static} + DB_EXCEPTIONS : String
-          ~ logger : Logger
+          - logger : Logger
+          - properties : Properties
+          + JsonDBLoader()
           + loadAuthors()
           + loadBookMarks()
           + loadBooks()
           + loadUsers()
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace JsonDBAPI {
+      class org.stroganov.JsonDBAPI.JsonDBSaver {
+          - properties : Properties
+          + JsonDBSaver()
+          + saveEntityListToJsonFormatFile()
       }
     }
   }

@@ -26,14 +26,13 @@ title __DAO's Class Diagram__\n
   namespace org.stroganov {
     namespace dao {
       class org.stroganov.dao.JsonDataSource {
-          ~ authorsList : List<Author>
-          ~ bookList : List<Book>
-          ~ bookMarkListList : List<BookMark>
-          ~ userList : List<User>
+          - authorsList : List<Author>
+          - bookList : List<Book>
+          - bookMarkList : List<BookMark>
           {static} - instance : JsonDataSource
+          - userList : List<User>
           + addAuthor()
           + addBook()
-          + addBookList()
           + addBookMark()
           + addUser()
           + blockUser()
@@ -43,11 +42,16 @@ title __DAO's Class Diagram__\n
           + deleteUser()
           + findAuthor()
           + findBook()
-          + findBooks()
+          + findBooksByParameters()
+          + findBooksByPartAuthorName()
+          + findBooksByPartName()
+          + findBooksByYearsRange()
+          + findBooksWithUserBookMarks()
           + findUser()
           {static} + getInstance()
           + unblockUser()
           - JsonDataSource()
+          - changeBlockingFlagUser()
       }
     }
   }
@@ -67,7 +71,11 @@ title __DAO's Class Diagram__\n
           {abstract} + deleteUser()
           {abstract} + findAuthor()
           {abstract} + findBook()
-          {abstract} + findBooks()
+          {abstract} + findBooksByParameters()
+          {abstract} + findBooksByPartAuthorName()
+          {abstract} + findBooksByPartName()
+          {abstract} + findBooksByYearsRange()
+          {abstract} + findBooksWithUserBookMarks()
           {abstract} + findUser()
           {abstract} + unblockUser()
       }
@@ -76,6 +84,7 @@ title __DAO's Class Diagram__\n
   
 
   org.stroganov.dao.JsonDataSource .up.|> org.stroganov.dao.LibraryDAO
+  org.stroganov.dao.JsonDataSource o-- org.stroganov.JsonDBAPI.JsonDBSaver : jsonDBSaver
 
 
 right footer

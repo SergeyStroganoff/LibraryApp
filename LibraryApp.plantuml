@@ -32,6 +32,14 @@ title __LIBRARYAPP's Class Diagram__\n
 
   namespace org.stroganov {
     namespace JsonDBAPI {
+      class org.stroganov.JsonDBAPI.JsonDBSaver {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace JsonDBAPI {
       class org.stroganov.JsonDBAPI.JsonParser {
       }
     }
@@ -104,7 +112,7 @@ title __LIBRARYAPP's Class Diagram__\n
 
   namespace org.stroganov {
     namespace dialogue {
-      class org.stroganov.dialogue.DialogueManager {
+      class org.stroganov.dialogue.BookMarkGetterDialogue {
       }
     }
   }
@@ -112,7 +120,15 @@ title __LIBRARYAPP's Class Diagram__\n
 
   namespace org.stroganov {
     namespace dialogue {
-      class org.stroganov.dialogue.UserDialogue {
+      class org.stroganov.dialogue.InitialDialogue {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace dialogue {
+      class org.stroganov.dialogue.MenuManagerDialogue {
       }
     }
   }
@@ -248,15 +264,17 @@ title __LIBRARYAPP's Class Diagram__\n
 
   org.stroganov.JsonDBAPI.JsonDBLoader o-- org.stroganov.JsonDBAPI.JsonParser : jsonParser
   org.stroganov.dao.JsonDataSource .up.|> org.stroganov.dao.LibraryDAO
+  org.stroganov.dao.JsonDataSource o-- org.stroganov.JsonDBAPI.JsonDBSaver : jsonDBSaver
   org.stroganov.dialogue.BookGetterDialogue o-- org.stroganov.dialogue.AuthorGetterDialogue : authorGetterDialogue
-  org.stroganov.dialogue.DialogueManager o-- org.stroganov.history.HistoryManager : historyManager
-  org.stroganov.dialogue.DialogueManager o-- org.stroganov.dao.LibraryDAO : libraryDAO
-  org.stroganov.dialogue.DialogueManager o-- org.stroganov.gui.UserInterface : userInterface
-  org.stroganov.dialogue.UserDialogue o-- org.stroganov.dialogue.BookGetterDialogue : bookGetterDialogue
-  org.stroganov.dialogue.UserDialogue o-- org.stroganov.history.HistoryManager : historyManager
-  org.stroganov.dialogue.UserDialogue o-- org.stroganov.dao.LibraryDAO : libraryDAO
-  org.stroganov.dialogue.UserDialogue o-- org.stroganov.entities.User : user
-  org.stroganov.dialogue.UserDialogue o-- org.stroganov.gui.UserInterface : userInterface
+  org.stroganov.dialogue.InitialDialogue o-- org.stroganov.history.HistoryManager : historyManager
+  org.stroganov.dialogue.InitialDialogue o-- org.stroganov.dao.LibraryDAO : libraryDAO
+  org.stroganov.dialogue.InitialDialogue o-- org.stroganov.gui.UserInterface : userInterface
+  org.stroganov.dialogue.MenuManagerDialogue o-- org.stroganov.dialogue.BookGetterDialogue : bookGetterDialogue
+  org.stroganov.dialogue.MenuManagerDialogue o-- org.stroganov.dialogue.BookMarkGetterDialogue : bookMarkGetterDialogue
+  org.stroganov.dialogue.MenuManagerDialogue o-- org.stroganov.history.HistoryManager : historyManager
+  org.stroganov.dialogue.MenuManagerDialogue o-- org.stroganov.dao.LibraryDAO : libraryDAO
+  org.stroganov.dialogue.MenuManagerDialogue o-- org.stroganov.entities.User : user
+  org.stroganov.dialogue.MenuManagerDialogue o-- org.stroganov.gui.UserInterface : userInterface
   org.stroganov.entities.Book o-- org.stroganov.entities.Author : authorName
   org.stroganov.entities.BookMark o-- org.stroganov.entities.Book : book
   org.stroganov.entities.BookMark o-- org.stroganov.entities.User : user

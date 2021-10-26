@@ -9,6 +9,7 @@ import org.stroganov.entities.BookMark;
 import org.stroganov.entities.User;
 import org.stroganov.exceptions.DBExceptions;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,7 +21,6 @@ public class JsonDataSource implements LibraryDAO {
     private final List<User> userList;
     private final List<BookMark> bookMarkList;
     private final List<Author> authorsList;
-    private final JsonDBLoader jsonDBLoader;
     private final JsonDBSaver jsonDBSaver;
 
     public static synchronized JsonDataSource getInstance() throws DBExceptions {
@@ -31,7 +31,7 @@ public class JsonDataSource implements LibraryDAO {
     }
 
     private JsonDataSource() throws DBExceptions {
-        jsonDBLoader = new JsonDBLoader(App.properties);
+        JsonDBLoader jsonDBLoader = new JsonDBLoader(App.properties);
         jsonDBSaver = new JsonDBSaver(App.properties);
         bookList = jsonDBLoader.loadBooks();
         userList = jsonDBLoader.loadUsers();
@@ -180,5 +180,35 @@ public class JsonDataSource implements LibraryDAO {
             return jsonDBSaver.saveEntityListToJsonFormatFile(authorsList) && jsonDBSaver.saveEntityListToJsonFormatFile(bookList);
         }
         return false;
+    }
+
+    @Override
+    public List<Book> findBooksByPartAuthorName(String partAuthorName) {
+        return bookList.stream()
+                .filter(book -> book.getAuthor().getAuthorName().contains(partAuthorName))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Book> findBooksByYearsRange(int firstYear, int secondYear) {
+        return bookList.stream()
+                .filter(book -> book.getYearPublishing() >= firstYear && book.getYearPublishing() <= secondYear)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Book> findBooksByParameters(int bookYear, int bookPages, String partBookName) {
+        return bookList.stream()
+                .filter(book -> book.getYearPublishing() == bookYear && book.getPagesNumber() == bookPages && book.getName().contains(partBookName))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Book> findBooksWithUserBookMarks(User user) {
+        List<Book> book = new ArrayList<>();
+        bookMarkList.stream()
+                .filter(b -> b.getUser().equals(user))
+                .forEach(b -> book.add(b.getBook()));
+        return book;
     }
 }

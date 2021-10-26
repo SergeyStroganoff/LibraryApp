@@ -5,9 +5,13 @@ title __ENTITIES's Class Diagram__\n
   namespace org.stroganov {
     namespace entities {
       class org.stroganov.entities.Author {
-          ~ authorName : String
-          ~ numberID : int
+          - authorName : String
+          - numberID : int
           + Author()
+          + getAuthorName()
+          + getNumberID()
+          + setAuthorName()
+          + setNumberID()
       }
     }
   }
@@ -21,7 +25,7 @@ title __ENTITIES's Class Diagram__\n
           - pagesNumber : int
           - yearPublishing : int
           + Book()
-          + getAuthorName()
+          + getAuthor()
           + getName()
           + getNumberISBN()
           + getPagesNumber()
@@ -34,8 +38,11 @@ title __ENTITIES's Class Diagram__\n
   namespace org.stroganov {
     namespace entities {
       class org.stroganov.entities.BookMark {
-          ~ bookPageNumber : int
+          - bookPageNumber : int
           + BookMark()
+          + getBook()
+          + getBookPageNumber()
+          + getUser()
       }
     }
   }
@@ -59,6 +66,7 @@ title __ENTITIES's Class Diagram__\n
           + isBlocked()
           + setAdmin()
           + setBlocked()
+          + setNumberID()
           + setPasscodeHash()
           + toString()
       }
