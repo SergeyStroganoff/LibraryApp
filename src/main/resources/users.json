@@ -1,0 +1,10 @@
+[
+  {
+    "numberID": 1,
+    "fullName": "Sergey Stroganov",
+    "login": "111sergey90",
+    "passcodeHash": "$31$16$km03t-GHeyq8Eyxx57Hyqkf4StsJ96fvqFM1RjEmWXA",
+    "isBlocked": false,
+    "isAdmin": true
+  }
+]

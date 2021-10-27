@@ -27,7 +27,6 @@ public class BookBuilder {
         }
         int yearPublishing = Integer.parseInt(booksParameters[3]);
         int pagesNumber = Integer.parseInt(booksParameters[4]);
-
         return new Book(numberISBN, name, author, yearPublishing, pagesNumber);
     }
 
@@ -35,7 +34,6 @@ public class BookBuilder {
         List<Book> bookList = new ArrayList<>();
         List<String> stringList = FileUtil.getListOfStringsFile(filePath);
         for (String string : stringList) {
-
             String[] booksParameters = string.split(";");
             bookList.add(buildBook(booksParameters));
         }

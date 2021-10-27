@@ -97,9 +97,16 @@ public class JsonDataSource implements LibraryDAO {
 
     @Override
     public User findUser(String userLogin) {
-        return userList.stream()
-                .filter(user -> user.getLogin().equals(userLogin))
-                .findFirst().orElse(null);
+        // return userList.stream()
+        //         .filter(user -> user.getLogin().equals(userLogin))
+        //         .findFirst().orElse(null);
+
+        for (User user : userList) {
+            if (user.getLogin().equals(userLogin)) {
+                return user;
+            }
+        }
+        return null;
     }
 
     @Override

@@ -58,7 +58,7 @@ public class MenuManagerDialogue {
                 }
                 case "2": {
                     deleteBook();
-                    break;
+                   // break;
                 }
                 case "3": {
                     addNewAuthor();
@@ -143,7 +143,7 @@ public class MenuManagerDialogue {
         }
     }
 
-    private boolean changeUserStatus(boolean blockAction) {
+    public boolean changeUserStatus(boolean blockAction) {
         userInterface.showMessage("Enter user login");
         String userLogin = userInterface.getStringFromUser();
         User user = libraryDAO.findUser(userLogin);
@@ -163,7 +163,7 @@ public class MenuManagerDialogue {
         return false;
     }
 
-    private boolean addNewUser() {
+    public boolean addNewUser() {
         User user = userGetterDialogue.getUserFromDialogue(userInterface);
         if (libraryDAO.addUser(user)) {
             historyManager.saveAction(USER + currentUser.getLogin() + " added a new user: " + user.getLogin());
@@ -174,12 +174,12 @@ public class MenuManagerDialogue {
         return false;
     }
 
-    private void findBookWithBookmarks() {
+    public void findBookWithBookmarks() {
         libraryDAO.findBooksWithUserBookMarks(currentUser).forEach(x -> userInterface.showMessage(x.toString()));
         historyManager.saveAction(USER + currentUser.getLogin() + " have got a list of books with his bookmarks");
     }
 
-    private boolean findBookByParameters() {
+    public boolean findBookByParameters() {
         userInterface.showMessage("Enter book's year publishing");
         int bookYear;
         int bookPages;
@@ -199,7 +199,7 @@ public class MenuManagerDialogue {
         return true;
     }
 
-    private boolean findBookByYearsRange() {
+    public boolean findBookByYearsRange() {
         try {
             userInterface.showMessage("Enter fist year of range");
             int firstYear = userInterface.getIntFromUser();
@@ -215,7 +215,7 @@ public class MenuManagerDialogue {
         return false;
     }
 
-    private boolean findBookByISBN() {
+    public boolean findBookByISBN() {
         userInterface.showMessage("Enter book ISBN");
         String numberISBN = userInterface.getStringFromUser();
         Book book = libraryDAO.findBook(numberISBN);
@@ -229,7 +229,7 @@ public class MenuManagerDialogue {
         return false;
     }
 
-    private void findBooksByPartAuthorName() {
+    public void findBooksByPartAuthorName() {
         userInterface.showMessage("Enter part of author name");
         String partAuthorName = userInterface.getStringFromUser();
         libraryDAO.findBooksByPartAuthorName(partAuthorName).forEach(x -> userInterface.showMessage(x.toString()));
