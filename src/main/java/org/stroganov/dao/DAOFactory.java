@@ -12,7 +12,7 @@ public class DAOFactory {
         LibraryDAO dao = null;
         switch (type) {
             case JSON:
-                dao = JsonDataSource.getInstance();
+                dao = JsonLibraryDAO.getInstance();
                 break;
             case H2DATABASE:
                 throw new IllegalArgumentException(REALIZATION_EXCEPTION_MESSAGE);

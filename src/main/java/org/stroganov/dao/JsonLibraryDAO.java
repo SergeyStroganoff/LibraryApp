@@ -14,23 +14,23 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class JsonDataSource implements LibraryDAO {
+public class JsonLibraryDAO implements LibraryDAO {
 
-    private static JsonDataSource instance;
+    private static JsonLibraryDAO instance;
     private final List<Book> bookList;
     private final List<User> userList;
     private final List<BookMark> bookMarkList;
     private final List<Author> authorsList;
     private final JsonDBSaver jsonDBSaver;
 
-    public static synchronized JsonDataSource getInstance() throws DBExceptions {
+    public static synchronized JsonLibraryDAO getInstance() throws DBExceptions {
         if (instance == null) {
-            instance = new JsonDataSource();
+            instance = new JsonLibraryDAO();
         }
         return instance;
     }
 
-    private JsonDataSource() throws DBExceptions {
+    private JsonLibraryDAO() throws DBExceptions {
         JsonDBLoader jsonDBLoader = new JsonDBLoader(App.properties);
         jsonDBSaver = new JsonDBSaver(App.properties);
         bookList = jsonDBLoader.loadBooks();
@@ -78,7 +78,6 @@ public class JsonDataSource implements LibraryDAO {
 
     @Override
     public boolean addUser(User user) {
-        boolean isSaved = false;
         if (!userList.contains(user)) {
             if (!userList.isEmpty()) {
                 int maxCurrentID = 0;
@@ -90,23 +89,16 @@ public class JsonDataSource implements LibraryDAO {
                 user.setNumberID(++maxCurrentID);
             }
             userList.add(user);
-            isSaved = jsonDBSaver.saveEntityListToJsonFormatFile(userList);
+            return jsonDBSaver.saveEntityListToJsonFormatFile(userList);
         }
-        return isSaved;
+        return false;
     }
 
     @Override
     public User findUser(String userLogin) {
-        // return userList.stream()
-        //         .filter(user -> user.getLogin().equals(userLogin))
-        //         .findFirst().orElse(null);
-
-        for (User user : userList) {
-            if (user.getLogin().equals(userLogin)) {
-                return user;
-            }
-        }
-        return null;
+        return userList.stream()
+                .filter(user -> user.getLogin().equals(userLogin))
+                .findFirst().orElse(null);
     }
 
     @Override
@@ -138,12 +130,12 @@ public class JsonDataSource implements LibraryDAO {
 
     @Override
     public boolean addBookMark(BookMark bookMark) {
-        boolean isSaved = false;
+
         if (!bookMarkList.contains(bookMark)) {
             bookMarkList.add(bookMark);
-            isSaved = jsonDBSaver.saveEntityListToJsonFormatFile(bookMarkList);
+            return jsonDBSaver.saveEntityListToJsonFormatFile(bookMarkList);
         }
-        return isSaved;
+        return false;
     }
 
     @Override
@@ -157,7 +149,6 @@ public class JsonDataSource implements LibraryDAO {
 
     @Override
     public boolean addAuthor(Author author) {
-        boolean isSaved = false;
         if (!authorsList.contains(author)) {
             if (!authorsList.isEmpty()) {
                 int maxCurrentID = authorsList.stream()
@@ -167,9 +158,9 @@ public class JsonDataSource implements LibraryDAO {
                 author.setNumberID(++maxCurrentID);
             }
             authorsList.add(author);
-            isSaved = jsonDBSaver.saveEntityListToJsonFormatFile(authorsList);
+            return jsonDBSaver.saveEntityListToJsonFormatFile(authorsList);
         }
-        return isSaved;
+        return false;
     }
 
     @Override
