@@ -9,6 +9,7 @@ import org.stroganov.entities.BookMark;
 import org.stroganov.entities.User;
 import org.stroganov.exceptions.DBExceptions;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -40,24 +41,22 @@ public class JsonLibraryDAO implements LibraryDAO {
     }
 
     @Override
-    public boolean addBook(Book book) {
-        boolean isSaved;
+    public boolean addBook(Book book) throws IOException {
         if (!bookList.contains(book)) {
             bookList.add(book);
-            isSaved = jsonDBSaver.saveEntityListToJsonFormatFile(bookList);
-            if (!authorsList.contains(book.getAuthor())) {
-                authorsList.add(book.getAuthor());
-                jsonDBSaver.saveEntityListToJsonFormatFile(authorsList);
-            }
-        } else isSaved = false;
-        return isSaved;
+            jsonDBSaver.saveEntityListToJsonFormatFile(bookList);
+            addAuthor(book.getAuthor());
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public boolean deleteBook(Book book) {
+    public boolean deleteBook(Book book) throws IOException {
         if (bookList.contains(book)) {
             bookList.remove(book);
-            return jsonDBSaver.saveEntityListToJsonFormatFile(bookList);
+            jsonDBSaver.saveEntityListToJsonFormatFile(bookList);
+            return true;
         }
         return false;
     }
@@ -77,7 +76,7 @@ public class JsonLibraryDAO implements LibraryDAO {
     }
 
     @Override
-    public boolean addUser(User user) {
+    public boolean addUser(User user) throws IOException {
         if (!userList.contains(user)) {
             if (!userList.isEmpty()) {
                 int maxCurrentID = 0;
@@ -89,7 +88,8 @@ public class JsonLibraryDAO implements LibraryDAO {
                 user.setNumberID(++maxCurrentID);
             }
             userList.add(user);
-            return jsonDBSaver.saveEntityListToJsonFormatFile(userList);
+            jsonDBSaver.saveEntityListToJsonFormatFile(userList);
+            return true;
         }
         return false;
     }
@@ -102,53 +102,56 @@ public class JsonLibraryDAO implements LibraryDAO {
     }
 
     @Override
-    public boolean deleteUser(User user) {
+    public boolean deleteUser(User user) throws IOException {
         if (userList.contains(user)) {
             userList.remove(user);
-            return jsonDBSaver.saveEntityListToJsonFormatFile(userList);
+            jsonDBSaver.saveEntityListToJsonFormatFile(userList);
+            return true;
         }
         return false;
     }
 
     @Override
-    public boolean blockUser(User user) {
+    public boolean blockUser(User user) throws IOException {
         return changeBlockingFlagUser(user, true);
     }
 
     @Override
-    public boolean unblockUser(User user) {
+    public boolean unblockUser(User user) throws IOException {
         return changeBlockingFlagUser(user, false);
     }
 
-    private boolean changeBlockingFlagUser(User user, boolean b) {
+    private boolean changeBlockingFlagUser(User user, boolean b) throws IOException {
         if (userList.contains(user)) {
             userList.get(userList.indexOf(user)).setBlocked(b);
-            return jsonDBSaver.saveEntityListToJsonFormatFile(userList);
+            jsonDBSaver.saveEntityListToJsonFormatFile(userList);
+            return true;
         }
         return false;
     }
 
     @Override
-    public boolean addBookMark(BookMark bookMark) {
-
+    public boolean addBookMark(BookMark bookMark) throws IOException {
         if (!bookMarkList.contains(bookMark)) {
             bookMarkList.add(bookMark);
-            return jsonDBSaver.saveEntityListToJsonFormatFile(bookMarkList);
+            jsonDBSaver.saveEntityListToJsonFormatFile(bookMarkList);
+            return true;
         }
         return false;
     }
 
     @Override
-    public boolean deleteBookMark(BookMark bookMark) {
+    public boolean deleteBookMark(BookMark bookMark) throws IOException {
         if (bookMarkList.contains(bookMark)) {
             bookMarkList.remove(bookMark);
-            return jsonDBSaver.saveEntityListToJsonFormatFile(bookMarkList);
+            jsonDBSaver.saveEntityListToJsonFormatFile(bookMarkList);
+            return true;
         }
         return false;
     }
 
     @Override
-    public boolean addAuthor(Author author) {
+    public boolean addAuthor(Author author) throws IOException {
         if (!authorsList.contains(author)) {
             if (!authorsList.isEmpty()) {
                 int maxCurrentID = authorsList.stream()
@@ -158,7 +161,8 @@ public class JsonLibraryDAO implements LibraryDAO {
                 author.setNumberID(++maxCurrentID);
             }
             authorsList.add(author);
-            return jsonDBSaver.saveEntityListToJsonFormatFile(authorsList);
+            jsonDBSaver.saveEntityListToJsonFormatFile(authorsList);
+            return true;
         }
         return false;
     }
@@ -171,11 +175,13 @@ public class JsonLibraryDAO implements LibraryDAO {
     }
 
     @Override
-    public boolean deleteAuthorWithAllHisBooks(Author author) {
+    public boolean deleteAuthorWithAllHisBooks(Author author) throws IOException {
         if (authorsList.contains(author)) {
             bookList.removeIf(book -> book.getAuthor().equals(author));
             authorsList.remove(author);
-            return jsonDBSaver.saveEntityListToJsonFormatFile(authorsList) && jsonDBSaver.saveEntityListToJsonFormatFile(bookList);
+            jsonDBSaver.saveEntityListToJsonFormatFile(authorsList);
+            jsonDBSaver.saveEntityListToJsonFormatFile(bookList);
+            return true;
         }
         return false;
     }

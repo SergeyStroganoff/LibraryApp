@@ -17,14 +17,13 @@ public class FileUtil {
 
     private static final Logger logger = Logger.getLogger(FileUtil.class);
 
-    public static boolean saveStringToFile(String filePath, String jsonString) {
+    public static void saveStringToFile(String filePath, String jsonString) throws IOException {
         try {
             Files.write(Paths.get(filePath), jsonString.getBytes());
         } catch (IOException e) {
             logger.error(e.getMessage() + filePath);
-            return false;
+            throw e;
         }
-        return true;
     }
 
     public static String readFileAsString(String filePath) throws IOException {

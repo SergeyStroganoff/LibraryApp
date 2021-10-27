@@ -6,6 +6,7 @@ import org.stroganov.entities.User;
 import org.stroganov.util.FileUtil;
 
 import java.awt.print.Book;
+import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 
@@ -16,11 +17,8 @@ public class JsonDBSaver {
         this.properties = properties;
     }
 
-    public boolean saveEntityListToJsonFormatFile(List<?> list) {
+    public void saveEntityListToJsonFormatFile(List<?> list) throws IOException {
         String path = null;
-        if (list.isEmpty()) {
-            return false;
-        }
         Object o = list.get(0);
         if (o instanceof Book) {
             path = properties.getProperty("booksJsonFile");
@@ -34,6 +32,6 @@ public class JsonDBSaver {
         if (o instanceof Author) {
             path = properties.getProperty("authorsJsonFile");
         }
-        return FileUtil.saveStringToFile(path, JsonSerializer.entitySerializer(list));
+        FileUtil.saveStringToFile(path, JsonSerializer.entitySerializer(list));
     }
 }
