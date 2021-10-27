@@ -6,5 +6,21 @@
     "passcodeHash": "$31$16$km03t-GHeyq8Eyxx57Hyqkf4StsJ96fvqFM1RjEmWXA",
     "isBlocked": false,
     "isAdmin": true
+  },
+  {
+    "numberID": 2,
+    "fullName": "Lev Stroganov",
+    "login": "leo",
+    "passcodeHash": "$31$16$BtEmLzgi2HWajWGDs8cSBAProBHBCQc_ErQz5QRXv5s",
+    "isBlocked": false,
+    "isAdmin": true
+  },
+  {
+    "numberID": 2,
+    "fullName": "sever",
+    "login": "sever",
+    "passcodeHash": "$31$16$fJuWhj6HyX4uI7NdXT-JhAzJ8cbT4Y6drjjRS5o-43c",
+    "isBlocked": true,
+    "isAdmin": true
   }
 ]

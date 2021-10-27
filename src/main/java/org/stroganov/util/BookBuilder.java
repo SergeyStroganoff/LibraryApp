@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BookBuilder {
-
     LibraryDAO libraryDAO;
 
     public BookBuilder(LibraryDAO libraryDAO) {
@@ -23,7 +22,6 @@ public class BookBuilder {
         Author author = libraryDAO.findAuthor(authorName);
         if (author == null) {
             author = new Author(1, authorName);
-            libraryDAO.addAuthor(author);
         }
         int yearPublishing = Integer.parseInt(booksParameters[3]);
         int pagesNumber = Integer.parseInt(booksParameters[4]);

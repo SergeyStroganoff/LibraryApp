@@ -1,13 +1,14 @@
 package org.stroganov.dialogue;
 
 import org.apache.log4j.Logger;
+import org.stroganov.JsonDBAPI.JsonDBLoader;
 import org.stroganov.dao.LibraryDAO;
 import org.stroganov.entities.Author;
 import org.stroganov.entities.Book;
 import org.stroganov.entities.BookMark;
 import org.stroganov.entities.User;
 import org.stroganov.exceptions.ConsoleInterfaceException;
-import org.stroganov.exceptions.UnrealizedFunctionalityException;
+import org.stroganov.exceptions.DBExceptions;
 import org.stroganov.gui.UserInterface;
 import org.stroganov.history.HistoryManager;
 import org.stroganov.util.BookBuilder;
@@ -23,6 +24,7 @@ public class MenuManagerDialogue {
     public static final String AUTHOR_WAS_ADDED_SUCCESSFULLY = "New Author was added successfully";
     public static final String USER = "User ";
     public static final String NOT_A_NUMBER_OF_YEAR_MESSAGE = "You entered not a number of year, try again";
+    public static final String AN_ERROR_HAPPEN = "An error happen: ";
     private final LibraryDAO libraryDAO;
     private final HistoryManager historyManager;
     private final UserInterface userInterface;
@@ -39,7 +41,7 @@ public class MenuManagerDialogue {
         this.currentUser = currentUser;
     }
 
-    public void runDialogue() throws UnrealizedFunctionalityException {
+    public void runDialogue() {
         String rights = currentUser.isAdmin() ? "admin" : "user";
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("You have successfully logged in with " + rights + " rights \n").
@@ -58,7 +60,7 @@ public class MenuManagerDialogue {
                 }
                 case "2": {
                     deleteBook();
-                   // break;
+                    break;
                 }
                 case "3": {
                     addNewAuthor();
@@ -130,7 +132,7 @@ public class MenuManagerDialogue {
                     userInterface.showMessage("Incorrect command");
                 }
             }
-        } while ("q".equals(command));
+        } while (!"q".equals(command));
     }
 
     private void getHistory() {
@@ -148,28 +150,37 @@ public class MenuManagerDialogue {
         String userLogin = userInterface.getStringFromUser();
         User user = libraryDAO.findUser(userLogin);
         if (user != null) {
-            if (blockAction) {
-                if (libraryDAO.blockUser(user)) {
-                    historyManager.saveAction(USER + currentUser.getLogin() + "blocked user: " + user.getLogin());
-                    return true;
+            String blockingAction = "unblocked user: ";
+            try {
+                if (blockAction) {
+                    blockingAction = "blocked user: ";
+                    libraryDAO.blockUser(user);
+                } else {
+                    libraryDAO.unblockUser(user);
                 }
-            } else {
-                if (libraryDAO.unblockUser(user)) {
-                    historyManager.saveAction(USER + currentUser.getLogin() + "blocked user: " + user.getLogin());
-                    return true;
-                }
+            } catch (IOException e) {
+                userInterface.showMessage(AN_ERROR_HAPPEN + e.getMessage());
+                return false;
             }
+            historyManager.saveAction(USER + currentUser.getLogin() + blockingAction + user.getLogin());
+            return true;
+        } else {
+            userInterface.showMessage("No user with this login was found");
         }
         return false;
     }
 
     public boolean addNewUser() {
         User user = userGetterDialogue.getUserFromDialogue(userInterface);
-        if (libraryDAO.addUser(user)) {
-            historyManager.saveAction(USER + currentUser.getLogin() + " added a new user: " + user.getLogin());
-            return true;
-        } else {
-            userInterface.showMessage("User wasn't added");
+        try {
+            if (libraryDAO.addUser(user)) {
+                historyManager.saveAction(USER + currentUser.getLogin() + " added a new user: " + user.getLogin());
+                return true;
+            } else {
+                userInterface.showMessage("User already saved");
+            }
+        } catch (IOException e) {
+            userInterface.showMessage(AN_ERROR_HAPPEN + e.getMessage());
         }
         return false;
     }
@@ -248,57 +259,67 @@ public class MenuManagerDialogue {
         if (bookMark == null) {
             return false;
         }
-        if (libraryDAO.deleteBookMark(bookMark)) {
-            historyManager.saveAction(USER + currentUser.getLogin() + " deleted booksMark from book " + bookMark.getBook().getNumberISBN());
-            userInterface.showMessage("You successfully deleted this bookmark");
-            return true;
-        } else {
-            userInterface.showMessage("Bookmark was not deleted");
+        try {
+            if (libraryDAO.deleteBookMark(bookMark)) {
+                historyManager.saveAction(USER + currentUser.getLogin() + " deleted booksMark from book " + bookMark.getBook().getNumberISBN());
+                userInterface.showMessage("You successfully deleted this bookmark");
+                return true;
+            } else {
+                userInterface.showMessage("This book wasn't found");
+            }
+        } catch (IOException e) {
+            userInterface.showMessage(AN_ERROR_HAPPEN + e.getMessage());
         }
         return false;
     }
 
     public boolean addBookMark() {
-
         BookMark bookMark = bookMarkGetterDialogue.getBookMarkFromUser(userInterface, libraryDAO, currentUser);
         if (bookMark == null) {
             return false;
         }
-        if (libraryDAO.addBookMark(bookMark)) {
-            historyManager.saveAction(USER + currentUser.getLogin() + "added booksMark to book " + bookMark.getBook().getNumberISBN());
-            userInterface.showMessage("You successfully added this bookmark");
-            return true;
-        } else {
-            userInterface.showMessage("Bookmark wasn't added");
+        try {
+            if (libraryDAO.addBookMark(bookMark)) {
+                historyManager.saveAction(USER + currentUser.getLogin() + "added booksMark to book " + bookMark.getBook().getNumberISBN());
+                userInterface.showMessage("You successfully added this bookmark");
+                return true;
+            } else {
+                userInterface.showMessage("Bookmark already preset");
+            }
+        } catch (IOException e) {
+            userInterface.showMessage(AN_ERROR_HAPPEN + e.getMessage());
         }
         return false;
     }
 
-    public boolean addBooksFromFile() throws UnrealizedFunctionalityException {
+    public boolean addBooksFromFile() {
         userInterface.showMessage("Enter path of file with books list");
         String filePath = userInterface.getStringFromUser();
+        List<Book> bookList;
         if (StringValidator.isStringFilePath(filePath)) {
-            if (filePath.endsWith(".csv")) {
-                BookBuilder bookBuilder = new BookBuilder(libraryDAO);
-                try {
-                    List<Book> bookList = bookBuilder.getBookListFromTXTFile(filePath);
-                    bookList.forEach(libraryDAO::addBook);
-                } catch (IOException e) {
-                    String errorMessage = "Error IO with file" + filePath + "happen: " + e.getMessage();
-                    logger.error(errorMessage);
-                    userInterface.showMessage(errorMessage);
+            try {
+                if (filePath.endsWith(".csv")) {
+                    BookBuilder bookBuilder = new BookBuilder(libraryDAO);
+                    bookList = bookBuilder.getBookListFromTXTFile(filePath);
+                } else {
+                    if (filePath.endsWith(".json")) {
+                        JsonDBLoader jsonDBLoader = new JsonDBLoader();
+                        bookList = jsonDBLoader.loadBooks(filePath);
+                    } else {
+                        userInterface.showMessage("You enter wrong file format: file can be 'txt' ore 'json'");
+                        return false;
+                    }
                 }
-                historyManager.saveAction(USER + currentUser.getLogin() + "added books from file");
-                return true;
+                libraryDAO.addBook(bookList);
+            } catch (DBExceptions | IOException e) {
+                String errorMessage = "Error IO happen: " + e.getMessage();
+                logger.error(errorMessage);
+                userInterface.showMessage(errorMessage);
+                return false;
             }
-            if (filePath.endsWith(".json")) {
-                //TODO
-                throw new UnrealizedFunctionalityException("filePath.endsWith(\".json\" not realized");
-            }
-        } else {
-            userInterface.showMessage("You enter wrong path format");
+            historyManager.saveAction(USER + currentUser.getLogin() + "added books from file");
         }
-        return false;
+        return true;
     }
 
     public boolean deleteAuthor() {
@@ -306,7 +327,12 @@ public class MenuManagerDialogue {
         String authorName = userInterface.getStringFromUser();
         Author author = libraryDAO.findAuthor(authorName);
         if (author != null) {
-            libraryDAO.deleteAuthorWithAllHisBooks(author);
+            try {
+                libraryDAO.deleteAuthorWithAllHisBooks(author);
+            } catch (IOException e) {
+                userInterface.showMessage("An error happen:" + e.getMessage());
+                return false;
+            }
             String successMessage = "Author " + authorName + "was successfully deleted with all his books";
             historyManager.saveAction(successMessage + " by User " + currentUser.getLogin());
             userInterface.showMessage(successMessage);
@@ -317,13 +343,19 @@ public class MenuManagerDialogue {
         return false;
     }
 
-    public void addNewAuthor() {
-        if (libraryDAO.addAuthor(bookGetterDialogue.getAuthorGetterDialogue().getAuthorFromUser(userInterface))) {
-            historyManager.saveAction(AUTHOR_WAS_ADDED_SUCCESSFULLY + " by user:" + currentUser.getLogin());
-            userInterface.showMessage(AUTHOR_WAS_ADDED_SUCCESSFULLY);
-        } else {
-            userInterface.showMessage("Unable to add new author");
+    public boolean addNewAuthor() {
+        try {
+            if (!libraryDAO.addAuthor(bookGetterDialogue.getAuthorGetterDialogue().getAuthorFromUser(userInterface))) {
+                userInterface.showMessage("This author is exist already");
+                return false;
+            }
+        } catch (IOException e) {
+            userInterface.showMessage(AN_ERROR_HAPPEN + e.getMessage());
+            return false;
         }
+        historyManager.saveAction(AUTHOR_WAS_ADDED_SUCCESSFULLY + " by user:" + currentUser.getLogin());
+        userInterface.showMessage(AUTHOR_WAS_ADDED_SUCCESSFULLY);
+        return true;
     }
 
     public boolean deleteBook() {
@@ -332,11 +364,16 @@ public class MenuManagerDialogue {
         String numberISBN = userInterface.getStringFromUser();
         oldBook = libraryDAO.findBook(numberISBN);
         if (oldBook != null) {
-            if (libraryDAO.deleteBook(oldBook)) {
-                historyManager.saveAction(USER + currentUser.getLogin() + " deleted book " + oldBook.getNumberISBN());
-                userInterface.showMessage("You successfully deleted book");
-                return true;
+            try {
+                libraryDAO.deleteBook(oldBook);
+            } catch (IOException e) {
+                userInterface.showMessage(AN_ERROR_HAPPEN + e.getMessage());
+                return false;
             }
+            historyManager.saveAction(USER + currentUser.getLogin() + " deleted book " + oldBook.getNumberISBN());
+            userInterface.showMessage("You successfully deleted book");
+            return true;
+
         } else {
             userInterface.showMessage(NO_BOOK_WITH_SUCH_DATA_MESSAGE);
         }
@@ -345,12 +382,16 @@ public class MenuManagerDialogue {
 
     public boolean addNewBook() {
         Book newBook = bookGetterDialogue.getBookFromUser(userInterface);
-        if (libraryDAO.addBook(newBook)) {
-            historyManager.saveAction("User added book" + newBook.getName() + " ISBN " + newBook.getNumberISBN());
-            userInterface.showMessage(ADDED_SUCCESSFUL_MESSAGE);
-            return true;
-        } else {
-            userInterface.showMessage("Book was not added");
+        try {
+            if (libraryDAO.addBook(newBook)) {
+                historyManager.saveAction("User added book" + newBook.getName() + " ISBN " + newBook.getNumberISBN());
+                userInterface.showMessage(ADDED_SUCCESSFUL_MESSAGE);
+                return true;
+            } else {
+                userInterface.showMessage("This book already saved in library");
+            }
+        } catch (IOException e) {
+            userInterface.showMessage(AN_ERROR_HAPPEN + e.getMessage());
         }
         return false;
     }

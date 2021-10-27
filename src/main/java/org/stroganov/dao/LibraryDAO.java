@@ -14,6 +14,8 @@ import java.util.List;
 public interface LibraryDAO {
     boolean addBook(Book book) throws IOException;
 
+    boolean addBook(List<Book> bookList) throws IOException;
+
     boolean deleteBook(Book book) throws IOException;
 
     Book findBook(String numberISBN);

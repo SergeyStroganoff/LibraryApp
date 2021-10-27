@@ -32,12 +32,12 @@ public class JsonLibraryDAO implements LibraryDAO {
     }
 
     private JsonLibraryDAO() throws DBExceptions {
-        JsonDBLoader jsonDBLoader = new JsonDBLoader(App.properties);
+        JsonDBLoader jsonDBLoader = new JsonDBLoader();
         jsonDBSaver = new JsonDBSaver(App.properties);
-        bookList = jsonDBLoader.loadBooks();
-        userList = jsonDBLoader.loadUsers();
-        bookMarkList = jsonDBLoader.loadBookMarks();
-        authorsList = jsonDBLoader.loadAuthors();
+        bookList = jsonDBLoader.loadBooks(App.properties.getProperty("booksJsonFile"));
+        userList = jsonDBLoader.loadUsers(App.properties.getProperty("usersJsonFile"));
+        bookMarkList = jsonDBLoader.loadBookMarks(App.properties.getProperty("bookMarksJsonFile"));
+        authorsList = jsonDBLoader.loadAuthors(App.properties.getProperty("authorsJsonFile"));
     }
 
     @Override
@@ -49,6 +49,20 @@ public class JsonLibraryDAO implements LibraryDAO {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean addBook(List<Book> bookList) throws IOException {
+        boolean isSomeBookAdded = false;
+        for (Book nextBook : bookList) {
+            if (!bookList.contains(nextBook)) {
+                bookList.add(nextBook);
+                addAuthor(nextBook.getAuthor());
+                isSomeBookAdded = true;
+            }
+            jsonDBSaver.saveEntityListToJsonFormatFile(bookList);
+        }
+        return isSomeBookAdded;
     }
 
     @Override
