@@ -135,7 +135,7 @@ public class MenuManagerDialogue {
 
     private void getHistory() {
         try {
-            historyManager.getHistoryEventsList().forEach(userInterface::showMessage);
+            historyManager.getHistoryEventsList().forEach(historyEvent -> userInterface.showMessage(historyEvent.toString()));
             historyManager.saveAction(USER + currentUser.getLogin() + "have got a list of history events");
         } catch (IOException e) {
             logger.error(e.getMessage());
