@@ -35,13 +35,8 @@ public class App {
             userInterface.showMessage(PROGRAM_WILL_BE_CLOSED);
             System.exit(1);
         }
-        HistoryManager historyManager = null;
-        try {
-            historyManager = new HistoryManager();
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage());
-        }
-        InitialDialogue initialDialogue = new InitialDialogue(historyManager, userInterface);
+
+        InitialDialogue initialDialogue = new InitialDialogue(userInterface);
         initialDialogue.runDialogue();
 
     }

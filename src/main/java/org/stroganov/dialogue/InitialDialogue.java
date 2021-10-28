@@ -6,10 +6,11 @@ import org.stroganov.dao.DAOType;
 import org.stroganov.dao.LibraryDAO;
 import org.stroganov.entities.User;
 import org.stroganov.exceptions.DBExceptions;
-import org.stroganov.exceptions.UnrealizedFunctionalityException;
 import org.stroganov.gui.UserInterface;
 import org.stroganov.history.HistoryManager;
 import org.stroganov.util.PasswordAuthentication;
+
+import java.io.IOException;
 
 public class InitialDialogue {
 
@@ -18,11 +19,10 @@ public class InitialDialogue {
     public static final String ATTEMPTS_MESSAGE = "You have only 3 attempts";
     private final Logger logger = Logger.getLogger(InitialDialogue.class);
     private LibraryDAO libraryDAO = null;
-    private final HistoryManager historyManager;
+    private HistoryManager historyManager;
     private final UserInterface userInterface;
 
-    public InitialDialogue(HistoryManager historyManager, UserInterface userInterface) {
-        this.historyManager = historyManager;
+    public InitialDialogue(UserInterface userInterface) {
         this.userInterface = userInterface;
         try {
             libraryDAO = DAOFactory.getLibraryDAO(DAOType.JSON);
@@ -30,9 +30,15 @@ public class InitialDialogue {
             userInterface.showMessage(e.getMessage());
             System.exit(1);
         }
+        try {
+            historyManager = new HistoryManager();
+        } catch (
+                IOException e) {
+            logger.error(e.getMessage());
+        }
     }
 
-    public void runDialogue() throws UnrealizedFunctionalityException {
+    public void runDialogue() {
         User user = null;
         // ask login pass
         userInterface.showMessage(INPUT_LOGIN_MESSAGE);
