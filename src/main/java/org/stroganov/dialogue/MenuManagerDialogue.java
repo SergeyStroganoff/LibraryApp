@@ -303,8 +303,7 @@ public class MenuManagerDialogue {
                     bookList = bookBuilder.getBookListFromTXTFile(filePath);
                 } else {
                     if (filePath.endsWith(".json")) {
-                        JsonDBLoader jsonDBLoader = new JsonDBLoader();
-                        bookList = jsonDBLoader.loadEntities(filePath, Book.class);
+                        bookList = JsonDBLoader.loadEntities(filePath, Book.class);
                     } else {
                         userInterface.showMessage("You enter wrong file format: file can be 'txt' ore 'json'");
                         return false;
