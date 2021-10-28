@@ -1,10 +1,6 @@
 package org.stroganov.JsonDBAPI;
 
 import org.apache.log4j.Logger;
-import org.stroganov.entities.Author;
-import org.stroganov.entities.Book;
-import org.stroganov.entities.BookMark;
-import org.stroganov.entities.User;
 import org.stroganov.exceptions.DBExceptions;
 import org.stroganov.util.FileUtil;
 
@@ -16,8 +12,7 @@ public class JsonDBLoader {
     private final Logger logger = org.apache.log4j.Logger.getLogger(JsonDBLoader.class);
     private final JsonParser jsonParser = new JsonParser();
 
-
-    public List<Book> loadBooks(String filePath) throws DBExceptions {
+    public <T> List<T> loadEntities(String filePath, Class<T> tClass) throws DBExceptions {
         String jsonString;
         try {
             jsonString = FileUtil.readFileAsString(filePath);
@@ -25,39 +20,6 @@ public class JsonDBLoader {
             logger.error(e);
             throw new DBExceptions(DB_EXCEPTIONS + e.getMessage());
         }
-        return jsonParser.getListEntitiesFromDB(jsonString, Book.class);
-    }
-
-    public List<User> loadUsers(String filePath) throws DBExceptions {
-        String jsonString;
-        try {
-            jsonString = FileUtil.readFileAsString(filePath);
-        } catch (IOException e) {
-            logger.error(e);
-            throw new DBExceptions(DB_EXCEPTIONS + e.getMessage());
-        }
-        return jsonParser.getListEntitiesFromDB(jsonString, User.class);
-    }
-
-    public List<BookMark> loadBookMarks(String filePath) throws DBExceptions {
-        String jsonString;
-        try {
-            jsonString = FileUtil.readFileAsString(filePath);
-        } catch (IOException e) {
-            logger.error(e);
-            throw new DBExceptions(DB_EXCEPTIONS + e.getMessage());
-        }
-        return jsonParser.getListEntitiesFromDB(jsonString, BookMark.class);
-    }
-
-    public List<Author> loadAuthors(String filePath) throws DBExceptions {
-        String jsonString;
-        try {
-            jsonString = FileUtil.readFileAsString(filePath);
-        } catch (IOException e) {
-            logger.error(e);
-            throw new DBExceptions(DB_EXCEPTIONS + e.getMessage());
-        }
-        return jsonParser.getListEntitiesFromDB(jsonString, Author.class);
+        return jsonParser.getListEntitiesFromDB(jsonString, tClass);
     }
 }

@@ -34,10 +34,10 @@ public class JsonLibraryDAO implements LibraryDAO {
     private JsonLibraryDAO() throws DBExceptions {
         JsonDBLoader jsonDBLoader = new JsonDBLoader();
         jsonDBSaver = new JsonDBSaver(App.properties);
-        bookList = jsonDBLoader.loadBooks(App.properties.getProperty("booksJsonFile"));
-        userList = jsonDBLoader.loadUsers(App.properties.getProperty("usersJsonFile"));
-        bookMarkList = jsonDBLoader.loadBookMarks(App.properties.getProperty("bookMarksJsonFile"));
-        authorsList = jsonDBLoader.loadAuthors(App.properties.getProperty("authorsJsonFile"));
+        bookList = jsonDBLoader.loadEntities(App.properties.getProperty("booksJsonFile"), Book.class);
+        userList = jsonDBLoader.loadEntities(App.properties.getProperty("usersJsonFile"), User.class);
+        bookMarkList = jsonDBLoader.loadEntities(App.properties.getProperty("bookMarksJsonFile"), BookMark.class);
+        authorsList = jsonDBLoader.loadEntities(App.properties.getProperty("authorsJsonFile"), Author.class);
     }
 
     @Override
