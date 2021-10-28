@@ -7,11 +7,11 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JsonParser {
+public interface JsonParser {
 
-    Gson gson = new Gson();
 
-    public <T> List<T> getListEntitiesFromDB(String jsonString, Class<T> tClass) {
+    static <T> List<T> getListEntitiesFromDB(String jsonString, Class<T> tClass) {
+        Gson gson = new Gson();
         Type itemsListType = TypeToken.getParameterized(ArrayList.class, tClass).getType();
         List<T> entityList = gson.fromJson(jsonString, itemsListType);
         if (entityList == null) {

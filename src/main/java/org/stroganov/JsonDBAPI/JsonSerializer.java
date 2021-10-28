@@ -2,9 +2,9 @@ package org.stroganov.JsonDBAPI;
 
 import com.google.gson.Gson;
 
-public class JsonSerializer {
+public interface JsonSerializer {
 
-    public static <T> String entitySerializer(T o) {
+    static <T> String entitySerializer(T o) {
         Gson gson = new Gson();
         return gson.toJson(o);
     }

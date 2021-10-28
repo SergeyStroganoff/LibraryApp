@@ -79,7 +79,6 @@ public final class PasswordAuthentication {
         int zero = 0;
         for (int idx = 0; idx < check.length; ++idx)
             zero |= hash[salt.length + idx] ^ check[idx];
-        System.out.println(zero);
         return zero == 0;
     }
 
