@@ -25,7 +25,7 @@ public class JsonDBLoader {
             logger.error(e);
             throw new DBExceptions(DB_EXCEPTIONS + e.getMessage());
         }
-        return jsonParser.getListBooksFromDB(jsonString);
+        return jsonParser.getListEntitiesFromDB(jsonString, Book.class);
     }
 
     public List<User> loadUsers(String filePath) throws DBExceptions {
@@ -36,7 +36,7 @@ public class JsonDBLoader {
             logger.error(e);
             throw new DBExceptions(DB_EXCEPTIONS + e.getMessage());
         }
-        return jsonParser.getListUsersFromDB(jsonString);
+        return jsonParser.getListEntitiesFromDB(jsonString, User.class);
     }
 
     public List<BookMark> loadBookMarks(String filePath) throws DBExceptions {
@@ -47,7 +47,7 @@ public class JsonDBLoader {
             logger.error(e);
             throw new DBExceptions(DB_EXCEPTIONS + e.getMessage());
         }
-        return jsonParser.getListBookMarkFromDB(jsonString);
+        return jsonParser.getListEntitiesFromDB(jsonString, BookMark.class);
     }
 
     public List<Author> loadAuthors(String filePath) throws DBExceptions {
@@ -58,6 +58,6 @@ public class JsonDBLoader {
             logger.error(e);
             throw new DBExceptions(DB_EXCEPTIONS + e.getMessage());
         }
-        return jsonParser.getListAuthorsFromDB(jsonString);
+        return jsonParser.getListEntitiesFromDB(jsonString, Author.class);
     }
 }
