@@ -1,0 +1,292 @@
+@startuml
+
+title __LIBRARYAPP's Class Diagram__\n
+
+  namespace org.stroganov {
+    class org.stroganov.App {
+    }
+  }
+  
+
+  namespace org.stroganov {
+    class org.stroganov.ConfigLoader {
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace JsonDBAPI {
+      class org.stroganov.JsonDBAPI.BookBuilder {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace JsonDBAPI {
+      class org.stroganov.JsonDBAPI.JsonDBLoader {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace JsonDBAPI {
+      class org.stroganov.JsonDBAPI.JsonDBSaver {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace JsonDBAPI {
+      class org.stroganov.JsonDBAPI.JsonParser {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace JsonDBAPI {
+      class org.stroganov.JsonDBAPI.JsonSerializer {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace JsonDBAPI {
+      class org.stroganov.JsonDBAPI.UserBuilder {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace dao {
+      class org.stroganov.dao.DAOFactory {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace dao {
+      enum DAOType {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace dao {
+      class org.stroganov.dao.JsonDataSource {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace dao {
+      interface org.stroganov.dao.LibraryDAO {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace dialogue {
+      class org.stroganov.dialogue.AuthorGetterDialogue {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace dialogue {
+      class org.stroganov.dialogue.BookGetterDialogue {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace dialogue {
+      class org.stroganov.dialogue.BookMarkGetterDialogue {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace dialogue {
+      class org.stroganov.dialogue.InitialDialogue {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace dialogue {
+      class org.stroganov.dialogue.MenuManagerDialogue {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace entities {
+      class org.stroganov.entities.Author {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace entities {
+      class org.stroganov.entities.Book {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace entities {
+      class org.stroganov.entities.BookMark {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace entities {
+      class org.stroganov.entities.User {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace exceptions {
+      class org.stroganov.exceptions.ConsoleInterfaceException {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace exceptions {
+      class org.stroganov.exceptions.DBExceptions {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace exceptions {
+      class org.stroganov.exceptions.PropertiesException {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace exceptions {
+      class org.stroganov.exceptions.UnrealizedFunctionalityException {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace gui {
+      class org.stroganov.gui.UserConsoleInterface {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace gui {
+      interface org.stroganov.gui.UserInterface {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace gui {
+      class org.stroganov.gui.UserInterfaceFactory {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace history {
+      class org.stroganov.history.HistoryManager {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace util {
+      class org.stroganov.util.BookBuilder {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace util {
+      class org.stroganov.util.FileUtil {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace util {
+      class org.stroganov.util.PasswordAuthentication {
+      }
+    }
+  }
+  
+
+  namespace org.stroganov {
+    namespace util {
+      class org.stroganov.util.StringValidator {
+      }
+    }
+  }
+  
+
+  org.stroganov.JsonDBAPI.JsonDBLoader o-- org.stroganov.JsonDBAPI.JsonParser : jsonParser
+  org.stroganov.dao.JsonDataSource .up.|> org.stroganov.dao.LibraryDAO
+  org.stroganov.dao.JsonDataSource o-- org.stroganov.JsonDBAPI.JsonDBSaver : jsonDBSaver
+  org.stroganov.dialogue.BookGetterDialogue o-- org.stroganov.dialogue.AuthorGetterDialogue : authorGetterDialogue
+  org.stroganov.dialogue.InitialDialogue o-- org.stroganov.history.HistoryManager : historyManager
+  org.stroganov.dialogue.InitialDialogue o-- org.stroganov.dao.LibraryDAO : libraryDAO
+  org.stroganov.dialogue.InitialDialogue o-- org.stroganov.gui.UserInterface : userInterface
+  org.stroganov.dialogue.MenuManagerDialogue o-- org.stroganov.dialogue.BookGetterDialogue : bookGetterDialogue
+  org.stroganov.dialogue.MenuManagerDialogue o-- org.stroganov.dialogue.BookMarkGetterDialogue : bookMarkGetterDialogue
+  org.stroganov.dialogue.MenuManagerDialogue o-- org.stroganov.history.HistoryManager : historyManager
+  org.stroganov.dialogue.MenuManagerDialogue o-- org.stroganov.dao.LibraryDAO : libraryDAO
+  org.stroganov.dialogue.MenuManagerDialogue o-- org.stroganov.entities.User : user
+  org.stroganov.dialogue.MenuManagerDialogue o-- org.stroganov.gui.UserInterface : userInterface
+  org.stroganov.entities.Book o-- org.stroganov.entities.Author : authorName
+  org.stroganov.entities.BookMark o-- org.stroganov.entities.Book : book
+  org.stroganov.entities.BookMark o-- org.stroganov.entities.User : user
+  org.stroganov.gui.UserConsoleInterface .up.|> org.stroganov.gui.UserInterface
+  org.stroganov.util.BookBuilder o-- org.stroganov.dao.LibraryDAO : libraryDAO
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml
