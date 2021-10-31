@@ -23,7 +23,7 @@ public class App {
     private static final String PROGRAM_WILL_BE_CLOSED = "Program will be closed";
     public static Properties properties;
 
-    public static void main(String[] args) throws UnrealizedFunctionalityException {
+    public static void main(String[] args) {
 
         UserInterface userInterface = UserInterfaceFactory.getUserInterface("ConsoleInterface");
         ConfigLoader configLoader = new ConfigLoader();

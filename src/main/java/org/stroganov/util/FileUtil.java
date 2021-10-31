@@ -14,7 +14,6 @@ public class FileUtil {
 
     private FileUtil() {
     }
-
     private static final Logger logger = Logger.getLogger(FileUtil.class);
 
     public static void saveStringToFile(String filePath, String jsonString) throws IOException {
@@ -34,11 +33,8 @@ public class FileUtil {
             throw e;
         }
     }
-
     public static List<String> getListOfStringsFile(String filePath) throws IOException {
         Path path = Path.of(filePath);
         return Files.readAllLines(path);
     }
-
-
 }

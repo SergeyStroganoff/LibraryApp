@@ -11,7 +11,7 @@ public interface JsonDBLoader {
     String DB_EXCEPTIONS = "DB files was not founded ore read :";
     Logger logger = org.apache.log4j.Logger.getLogger(JsonDBLoader.class);
 
-    public static <T> List<T> loadEntities(String filePath, Class<T> tClass) throws DBExceptions {
+    static <T> List<T> loadEntities(String filePath, Class<T> tClass) throws DBExceptions {
         String jsonString;
         try {
             jsonString = FileUtil.readFileAsString(filePath);

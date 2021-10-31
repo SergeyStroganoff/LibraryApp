@@ -40,7 +40,7 @@ public class InitialDialogue {
 
     public void runDialogue() {
         User user = null;
-        // ask login pass
+        // ask login pass //
         userInterface.showMessage(INPUT_LOGIN_MESSAGE);
         userInterface.showMessage(ATTEMPTS_MESSAGE);
         byte countAttempt = 3;
