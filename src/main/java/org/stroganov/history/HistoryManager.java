@@ -47,7 +47,7 @@ public class HistoryManager {
         Gson gson = new Gson();
         List<HistoryEvent> historyEvents = new ArrayList<>();
         List<String> stringList = FileUtil.getListOfStringsFile(historyFileName);
-        stringList.stream().forEach(o -> historyEvents.add(gson.fromJson(o, HistoryEvent.class)));
+        stringList.forEach(o -> historyEvents.add(gson.fromJson(o, HistoryEvent.class)));
         return historyEvents;
     }
 }

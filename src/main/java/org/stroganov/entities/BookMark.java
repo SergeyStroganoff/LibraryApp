@@ -1,9 +1,9 @@
 package org.stroganov.entities;
 
 public class BookMark {
-    private Book book;
-    private User user;
-    private int bookPageNumber;
+    private final Book book;
+    private final User user;
+    private final int bookPageNumber;
 
     public BookMark(Book book, User user, int pageNumber) {
         this.book = book;

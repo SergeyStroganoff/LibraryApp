@@ -9,7 +9,7 @@ public class DAOFactory {
 
 
     public static LibraryDAO getLibraryDAO(DAOType type) throws DBExceptions {
-        LibraryDAO dao = null;
+        LibraryDAO dao;
         switch (type) {
             case JSON:
                 dao = JsonLibraryDAO.getInstance();
