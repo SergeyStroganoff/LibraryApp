@@ -84,7 +84,7 @@ public class JsonLibraryDAO implements LibraryDAO {
     @Override
     public List<Book> findBooksByPartName(String partOfName) {
         return bookList.stream()
-                .filter(book -> book.getName().contains(partOfName))
+                .filter(book -> book.getBookName().contains(partOfName))
                 .collect(Collectors.toList());
     }
 
@@ -94,11 +94,11 @@ public class JsonLibraryDAO implements LibraryDAO {
             if (!userList.isEmpty()) {
                 int maxCurrentID = 0;
                 for (User currentUser : userList) {
-                    if (currentUser.getNumberID() > maxCurrentID) {
-                        maxCurrentID = user.getNumberID();
+                    if (currentUser.getUserID() > maxCurrentID) {
+                        maxCurrentID = user.getUserID();
                     }
                 }
-                user.setNumberID(++maxCurrentID);
+                user.setUserID(++maxCurrentID);
             }
             userList.add(user);
             jsonDBSaver.saveEntityListToJsonFormatFile(userList);
@@ -216,7 +216,7 @@ public class JsonLibraryDAO implements LibraryDAO {
     @Override
     public List<Book> findBooksByParameters(int bookYear, int bookPages, String partBookName) {
         return bookList.stream()
-                .filter(book -> book.getYearPublishing() == bookYear && book.getPagesNumber() == bookPages && book.getName().contains(partBookName))
+                .filter(book -> book.getYearPublishing() == bookYear && book.getPagesNumber() == bookPages && book.getBookName().contains(partBookName))
                 .collect(Collectors.toList());
     }
 

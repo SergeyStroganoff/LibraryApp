@@ -383,7 +383,7 @@ public class MenuManagerDialogue {
         Book newBook = bookGetterDialogue.getBookFromUser(userInterface);
         try {
             if (libraryDAO.addBook(newBook)) {
-                historyManager.saveAction("User added book" + newBook.getName() + " ISBN " + newBook.getNumberISBN());
+                historyManager.saveAction("User added book" + newBook.getBookName() + " ISBN " + newBook.getNumberISBN());
                 userInterface.showMessage(ADDED_SUCCESSFUL_MESSAGE);
                 return true;
             } else {
