@@ -3,16 +3,16 @@ package org.stroganov.entities;
 import org.stroganov.util.PasswordAuthentication;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = ("users"))
-public class User {
-
+public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private int userID;
-    @Column(name = "full_name")
+    @Column(name = "full_name", unique = true, nullable = false)
     private String fullName;
     @Column(name = "login")
     private String login;

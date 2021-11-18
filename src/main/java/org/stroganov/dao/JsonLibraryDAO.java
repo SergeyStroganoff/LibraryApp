@@ -168,10 +168,10 @@ public class JsonLibraryDAO implements LibraryDAO {
         if (!authorsList.contains(author)) {
             if (!authorsList.isEmpty()) {
                 int maxCurrentID = authorsList.stream()
-                        .max(Comparator.comparing(Author::getNumberID))
+                        .max(Comparator.comparing(Author::getAuthorID))
                         .get()
-                        .getNumberID();
-                author.setNumberID(++maxCurrentID);
+                        .getAuthorID();
+                author.setAuthorID(++maxCurrentID);
             }
             authorsList.add(author);
             jsonDBSaver.saveEntityListToJsonFormatFile(authorsList);

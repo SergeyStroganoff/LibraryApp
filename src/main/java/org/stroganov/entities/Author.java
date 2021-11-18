@@ -1,35 +1,36 @@
 package org.stroganov.entities;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = ("authors"))
-public class Author {
+public class Author implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "author_id")
-    private int numberID;
+    private int authorID;
     @Column(name = "author_name")
     private String authorName;
 
     public Author(int numberID, String authorName) {
-        this.numberID = numberID;
+        this.authorID = numberID;
         this.authorName = authorName;
     }
 
     public Author() {
     }
 
-    public int getNumberID() {
-        return numberID;
+    public int getAuthorID() {
+        return authorID;
     }
 
     public String getAuthorName() {
         return authorName;
     }
 
-    public void setNumberID(int numberID) {
-        this.numberID = numberID;
+    public void setAuthorID(int numberID) {
+        this.authorID = numberID;
     }
 
     public void setAuthorName(String authorName) {
@@ -43,13 +44,13 @@ public class Author {
 
         Author author = (Author) o;
 
-        if (numberID != author.numberID) return false;
+        if (authorID != author.authorID) return false;
         return authorName.equals(author.authorName);
     }
 
     @Override
     public int hashCode() {
-        int result = numberID;
+        int result = authorID;
         result = 31 * result + authorName.hashCode();
         return result;
     }

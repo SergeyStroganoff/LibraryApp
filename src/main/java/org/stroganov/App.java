@@ -36,6 +36,5 @@ public class App {
 
         InitialDialogue initialDialogue = new InitialDialogue(userInterface);
         initialDialogue.runDialogue();
-
     }
 }
