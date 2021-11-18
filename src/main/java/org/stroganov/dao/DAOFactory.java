@@ -1,10 +1,12 @@
 package org.stroganov.dao;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.stroganov.exceptions.DBExceptions;
+import org.stroganov.util.HibernateUtil;
 
 public class DAOFactory {
 
-    private static final String REALIZATION_EXCEPTION_MESSAGE = "Взаимодействие с БД - не реализовано";
     private static final String ERROR_PARAMETER_MESSAGE = "Тип подключения к базе указан неверно";
 
 
@@ -15,7 +17,9 @@ public class DAOFactory {
                 dao = JsonLibraryDAO.getInstance();
                 break;
             case MYSQL:
-                throw new IllegalArgumentException(REALIZATION_EXCEPTION_MESSAGE);
+                SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+                dao = MySQLLibraryDAO.getInstance(sessionFactory);
+                break;
             default:
                 throw new IllegalArgumentException(ERROR_PARAMETER_MESSAGE);
         }

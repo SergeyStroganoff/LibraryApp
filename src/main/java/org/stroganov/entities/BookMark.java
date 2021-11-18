@@ -1,17 +1,15 @@
 package org.stroganov.entities;
 
-import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = ("bookmarks"))
-public class BookMark {
+public class BookMark implements Serializable {
 
     @Id
-    @GenericGenerator(name = "auto_inc", strategy = "increment")
-    @GeneratedValue(generator = "auto_inc")
-    @Column(name = "book_mark_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
     @OneToOne(cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
@@ -19,7 +17,7 @@ public class BookMark {
     @OneToOne(cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private User user;
-    @Column(name = "book_page_number")
+    @Column(name = "bookpagenumber")
     private int bookPageNumber;
 
     public BookMark(Book book, User user, int pageNumber) {

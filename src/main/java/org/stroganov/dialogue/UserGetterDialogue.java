@@ -12,7 +12,7 @@ public class UserGetterDialogue {
     public static final String BE_ADMIN_MESSAGE = "Will user be admin?";
 
     public User getUserFromDialogue(UserInterface userInterface) {
-        int numberID = 1;
+        int numberID = 0;
         userInterface.showMessage(ENTER_FULL_NAME_MESSAGE);
         String fullName = userInterface.getStringFromUser();
         userInterface.showMessage(ENTER_USER_LOGIN);

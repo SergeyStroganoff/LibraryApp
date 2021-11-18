@@ -125,7 +125,6 @@ public class MenuManagerDialogue {
                 case "17":
                     if (currentUser.isAdmin()) {
                         getHistory();
-
                     }
                     break;
                 default: {
