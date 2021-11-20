@@ -43,11 +43,10 @@ public class MenuManagerDialogue {
 
     public void runDialogue() {
         String rights = currentUser.isAdmin() ? "admin" : "user";
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("You have successfully logged in with " + rights + " rights \n").
-                append("The following actions are available to you: \n").
-                append("Enter number of menu");
-        userInterface.showMessage(stringBuilder.toString());
+        String welcomeMessage = "You have successfully logged in with " + rights + " rights \n" +
+                "The following actions are available to you: \n" +
+                "Enter number of menu";
+        userInterface.showMessage(welcomeMessage);
         String command;
         String menu = currentUser.isAdmin() ? returnAdminMenu().toString() : returnUserMenu().toString();
         do {
@@ -129,6 +128,7 @@ public class MenuManagerDialogue {
                     break;
                 default: {
                     userInterface.showMessage("Incorrect command");
+                    break;
                 }
             }
         } while (!"q".equals(command));
@@ -174,6 +174,7 @@ public class MenuManagerDialogue {
         try {
             if (libraryDAO.addUser(user)) {
                 historyManager.saveAction(USER + currentUser.getLogin() + " added a new user: " + user.getLogin());
+                userInterface.showMessage("User saved successfully");
                 return true;
             } else {
                 userInterface.showMessage("User already saved");

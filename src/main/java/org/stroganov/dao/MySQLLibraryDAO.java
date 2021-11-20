@@ -10,18 +10,21 @@ import org.stroganov.entities.Author;
 import org.stroganov.entities.Book;
 import org.stroganov.entities.BookMark;
 import org.stroganov.entities.User;
-import org.stroganov.exceptions.DBExceptions;
 
-import java.io.IOException;
+import javax.persistence.TypedQuery;
+import java.util.Collections;
 import java.util.List;
 
 public class MySQLLibraryDAO implements LibraryDAO {
 
+    public static final String HIBERNATE_ERROR_MESSAGE = "Hibernate error when ";
+    public static final String AUTHOR_NAME = "authorName";
     private final SessionFactory sessionFactory;
     private static MySQLLibraryDAO instance;
-    private final Logger LOGGER = Logger.getLogger(MySQLLibraryDAO.class);
+    private final Logger logger = Logger.getLogger(MySQLLibraryDAO.class);
 
-    public static synchronized MySQLLibraryDAO getInstance(SessionFactory sessionFactory) throws DBExceptions {
+
+    public static synchronized MySQLLibraryDAO getInstance(SessionFactory sessionFactory) {
         if (instance == null) {
             instance = new MySQLLibraryDAO(sessionFactory);
         }
@@ -32,112 +35,246 @@ public class MySQLLibraryDAO implements LibraryDAO {
         this.sessionFactory = sessionFactory;
     }
 
+
     @Override
-    public boolean addBook(Book book) throws IOException {
-        return false;
+    public boolean addBook(Book book) {
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()) {
+            transaction = session.beginTransaction();
+            if (session.get(Book.class, book.getNumberISBN()) == null) {
+                Query<Author> query = session.createQuery("FROM Author WHERE authorName=:authorName", Author.class)
+                        .setParameter(AUTHOR_NAME, book.getAuthor().getAuthorName());
+                Author author = query.uniqueResult();
+                if (author == null) {
+                    session.save(book.getAuthor());
+                }
+                session.save(book);
+                transaction.commit();
+                return true;
+            } else {
+                return false;
+            }
+        } catch (HibernateException e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            logger.error(HIBERNATE_ERROR_MESSAGE + "addBook with number:" + book.getNumberISBN(), e);
+            return false;
+        }
     }
 
     @Override
-    public boolean addBook(List<Book> bookList) throws IOException {
-        return false;
+    public boolean addBook(List<Book> bookList) {
+        boolean isAllBooksWasAdded = true;
+        for (Book book : bookList) {
+            if (!addBook(book)) {
+                isAllBooksWasAdded = false;
+            }
+        }
+        return isAllBooksWasAdded;
     }
 
     @Override
-    public boolean deleteBook(Book book) throws IOException {
-        return false;
+    public boolean deleteBook(Book book) {
+        return deleteEntity(book, "deleteBook");
     }
 
     @Override
     public Book findBook(String numberISBN) {
-        return null;
+        try (Session session = sessionFactory.openSession()) {
+            return session.get(Book.class, numberISBN);
+        } catch (HibernateException e) {
+            logger.error(HIBERNATE_ERROR_MESSAGE + "findBook with numberISBN: " + numberISBN, e);
+            return null;
+        }
     }
+
 
     @Override
     public List<Book> findBooksByPartName(String partOfName) {
-        return null;
+        try (Session session = sessionFactory.openSession()) {
+            Query<Book> query = session.createQuery("FROM Book WHERE bookName like :partOfName", Book.class)
+                    .setParameter("partOfName", "%" + partOfName + "%");
+            return query.getResultList();
+        } catch (HibernateException e) {
+            logger.error(HIBERNATE_ERROR_MESSAGE + "findBooksByPartName: " + partOfName, e);
+        }
+        return Collections.emptyList();
     }
 
     @Override
-    public boolean addUser(User user) throws IOException {
-        user = new User(0, "Иванов Григорий", "admin", "12345", false, true);
-        Session session = sessionFactory.openSession();
-        session.saveOrUpdate(user);
-        session.close();
-        sessionFactory.close();
-        return false;
+    public List<Book> findBooksByPartAuthorName(String partAuthorName) {
+        try (Session session = sessionFactory.openSession()) {
+            TypedQuery<Book> query = session.createQuery("FROM Book b  WHERE b.authorName.authorName like :partOfAuthorName", Book.class)
+                    .setParameter("partOfAuthorName", "%" + partAuthorName + "%");
+            return query.getResultList();
+        } catch (HibernateException e) {
+            logger.error(HIBERNATE_ERROR_MESSAGE + "findBooksByPartAuthorName: " + partAuthorName, e);
+        }
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<Book> findBooksByYearsRange(int firstYear, int secondYear) {
+        try (Session session = sessionFactory.openSession()) {
+            TypedQuery<Book> query = session.createQuery("FROM Book b  WHERE b.yearPublishing >= :firstYear and  b.yearPublishing <= :secondYear", Book.class)
+                    .setParameter("firstYear", firstYear)
+                    .setParameter("secondYear", secondYear);
+            return query.getResultList();
+        } catch (HibernateException e) {
+            logger.error(HIBERNATE_ERROR_MESSAGE + "findBooksByYearsRange", e);
+        }
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<Book> findBooksByParameters(int bookYear, int bookPages, String partBookName) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Book> query = session.createQuery("FROM Book b WHERE b.yearPublishing = :bookYear and " +
+                            "b.pagesNumber = :bookPages and b.bookName  like :partOfName", Book.class)
+                    .setParameter("bookYear", bookYear)
+                    .setParameter("bookPages", bookPages)
+                    .setParameter("partOfName", "%" + partBookName + "%");
+            return query.getResultList();
+        } catch (HibernateException e) {
+            logger.error(HIBERNATE_ERROR_MESSAGE + "findBooksByParameters ", e);
+        }
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<Book> findBooksWithUserBookMarks(User user) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Book> query = session.createQuery(" SELECT b FROM BookMark bm" +
+                            " LEFT JOIN Book b on bm.book=b" +
+                            " LEFT JOIN User u on bm.user=u" +
+                            " WHERE u.login = :login", Book.class)
+                    .setParameter("login", user.getLogin());
+            return query.getResultList();
+        } catch (HibernateException e) {
+            logger.error(HIBERNATE_ERROR_MESSAGE + "findBooksByPartAuthorName: " + user.getLogin(), e);
+        }
+        return Collections.emptyList();
+    }
+
+    @Override
+    public boolean addUser(User user) {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            if (session.get(User.class, user.getLogin()) == null) {
+                session.save(user);
+                transaction.commit();
+                return true;
+            } else {
+                return false;
+            }
+        } catch (HibernateException e) {
+            logger.error(HIBERNATE_ERROR_MESSAGE + "addUser with login:" + user.getLogin(), e);
+            return false;
+        }
     }
 
     @Override
     public User findUser(String userLogin) {
         try (Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery("FROM User WHERE login = :userLogin");
-            query.setParameter("userLogin", userLogin);
-            transaction.commit();
-            return (User) query.uniqueResult();
+            return session.get(User.class, userLogin);
         } catch (HibernateException e) {
-            LOGGER.error("Hibernate query error when 'findUser' tried", e);
+            logger.error(HIBERNATE_ERROR_MESSAGE + "findUser: " + userLogin, e);
+            return null;
         }
-        return null;
     }
 
     @Override
-    public boolean deleteUser(User user) throws IOException {
+    public boolean deleteUser(User user) {
+        return deleteEntity(user, "eleteUser");
+    }
+
+    @Override
+    public boolean blockUser(User user) {
+        return changeUserStatus(user, false);
+    }
+
+    @Override
+    public boolean unblockUser(User user) {
+        return changeUserStatus(user, false);
+    }
+
+    public boolean changeUserStatus(User user, boolean blockStatus) {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            user.setBlocked(blockStatus);
+            session.update(user);
+            transaction.commit();
+            return true;
+        } catch (HibernateException e) {
+            logger.error(HIBERNATE_ERROR_MESSAGE + "changeUserStatus user: " + user.getLogin());
+        }
         return false;
     }
 
     @Override
-    public boolean blockUser(User user) throws IOException {
-        return false;
+    public boolean addBookMark(BookMark bookMark) {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            session.save(bookMark);
+            transaction.commit();
+            return true;
+        } catch (HibernateException e) {
+            logger.error(HIBERNATE_ERROR_MESSAGE + "addBookMark" + bookMark, e);
+            return false;
+        }
     }
 
     @Override
-    public boolean unblockUser(User user) throws IOException {
-        return false;
+    public boolean deleteBookMark(BookMark bookMark) {
+        return deleteEntity(bookMark, "deleteBookMark");
     }
 
     @Override
-    public boolean addBookMark(BookMark bookMark) throws IOException {
-        return false;
-    }
-
-    @Override
-    public boolean deleteBookMark(BookMark bookMark) throws IOException {
-        return false;
-    }
-
-    @Override
-    public boolean addAuthor(Author author) throws IOException {
+    public boolean addAuthor(Author author) {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            Query<Author> query = session.createQuery("FROM Author WHERE authorName=:authorName", Author.class)
+                    .setParameter("authorName", author.getAuthorName());
+            Author authorFromDB = query.uniqueResult();
+            if (authorFromDB == null) {
+                session.save(author);
+                transaction.commit();
+                return true;
+            }
+        } catch (HibernateException e) {
+            logger.error(HIBERNATE_ERROR_MESSAGE + "addAuthor with name:" + author.getAuthorName(), e);
+        }
         return false;
     }
 
     @Override
     public Author findAuthor(String authorName) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Author> query = session.createQuery("FROM Author WHERE authorName = :authorName", Author.class)
+                    .setParameter("authorName", authorName);
+            return query.uniqueResult();
+        } catch (HibernateException e) {
+            logger.error(HIBERNATE_ERROR_MESSAGE + "findAuthor:  " + authorName, e);
+        }
         return null;
     }
 
     @Override
-    public boolean deleteAuthorWithAllHisBooks(Author author) throws IOException {
+    public boolean deleteAuthorWithAllHisBooks(Author author) {
+        findBooksByPartAuthorName(author.getAuthorName()).forEach(this::deleteBook);
+        return deleteEntity(author, "deleteAuthorWithAllHisBooks");
+    }
+
+    public <T> boolean deleteEntity(T t, String actionType) {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            session.delete(t);
+            transaction.commit();
+            return true;
+        } catch (HibernateException e) {
+            logger.error(HIBERNATE_ERROR_MESSAGE + actionType);
+        }
         return false;
-    }
-
-    @Override
-    public List<Book> findBooksByPartAuthorName(String partAuthorName) {
-        return null;
-    }
-
-    @Override
-    public List<Book> findBooksByYearsRange(int firstYear, int secondYear) {
-        return null;
-    }
-
-    @Override
-    public List<Book> findBooksByParameters(int bookYear, int bookPages, String partBookName) {
-        return null;
-    }
-
-    @Override
-    public List<Book> findBooksWithUserBookMarks(User user) {
-        return null;
     }
 }

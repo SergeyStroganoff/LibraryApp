@@ -11,7 +11,7 @@ public class Book implements Serializable {
     private String numberISBN;
     @Column(name = "book_name")
     private String bookName;
-    @ManyToOne
+    @ManyToOne()
     private Author authorName;
     @Column(name = "year_publishing")
     private int yearPublishing;
@@ -71,5 +71,16 @@ public class Book implements Serializable {
         result = 31 * result + yearPublishing;
         result = 31 * result + pagesNumber;
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "numberISBN='" + numberISBN + '\'' +
+                ", bookName='" + bookName + '\'' +
+                ", authorName=" + authorName +
+                ", yearPublishing=" + yearPublishing +
+                ", pagesNumber=" + pagesNumber +
+                '}';
     }
 }
