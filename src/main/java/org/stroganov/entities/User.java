@@ -8,12 +8,13 @@ import java.io.Serializable;
 @Entity
 @Table(name = ("users"))
 public class User implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+
+    @Transient
     private int userID;
     @Column(name = "full_name", unique = true, nullable = false)
     private String fullName;
+
+    @Id
     @Column(name = "login")
     private String login;
     @Column(name = "pass_code")

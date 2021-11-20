@@ -12,10 +12,8 @@ public class BookMark implements Serializable {
     @Column(name = "id")
     private int id;
     @OneToOne(cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
     private Book book;
     @OneToOne(cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
     private User user;
     @Column(name = "bookpagenumber")
     private int bookPageNumber;
