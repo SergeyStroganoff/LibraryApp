@@ -11,9 +11,9 @@ public class BookMark implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     private Book book;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     private User user;
     @Column(name = "bookpagenumber")
     private int bookPageNumber;

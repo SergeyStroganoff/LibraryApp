@@ -186,7 +186,12 @@ public class MenuManagerDialogue {
     }
 
     public void findBookWithBookmarks() {
-        libraryDAO.findBooksWithUserBookMarks(currentUser).forEach(x -> userInterface.showMessage(x.toString()));
+        List<Book> bookList = libraryDAO.findBooksWithUserBookMarks(currentUser);
+        if (bookList != null && !bookList.isEmpty()) {
+            bookList.forEach(System.out::println);
+        } else {
+            userInterface.showMessage("No books with bookMarks");
+        }
         historyManager.saveAction(USER + currentUser.getLogin() + " have got a list of books with his bookmarks");
     }
 

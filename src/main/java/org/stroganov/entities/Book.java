@@ -9,13 +9,13 @@ public class Book implements Serializable {
     @Id
     @Column(name = "id")
     private String numberISBN;
-    @Column(name = "book_name")
+    @Column(name = "bookname")
     private String bookName;
     @ManyToOne()
     private Author authorName;
-    @Column(name = "year_publishing")
+    @Column(name = "yearpublishing")
     private int yearPublishing;
-    @Column(name = "pages_number")
+    @Column(name = "pagesnumber")
     private int pagesNumber;
 
     public Book(String numberISBN, String bookName, Author authorName, int yearPublishing, int pagesNumber) {
@@ -47,6 +47,10 @@ public class Book implements Serializable {
 
     public int getPagesNumber() {
         return pagesNumber;
+    }
+
+    public void setAuthor(Author authorName) {
+        this.authorName = authorName;
     }
 
     @Override

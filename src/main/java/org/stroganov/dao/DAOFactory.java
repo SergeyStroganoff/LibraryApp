@@ -1,6 +1,5 @@
 package org.stroganov.dao;
 
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.stroganov.exceptions.DBExceptions;
 import org.stroganov.util.HibernateUtil;
@@ -9,6 +8,8 @@ public class DAOFactory {
 
     private static final String ERROR_PARAMETER_MESSAGE = "Тип подключения к базе указан неверно";
 
+    private DAOFactory() {
+    }
 
     public static LibraryDAO getLibraryDAO(DAOType type) throws DBExceptions {
         LibraryDAO dao;
@@ -25,7 +26,6 @@ public class DAOFactory {
         }
         return dao;
     }
-
 }
 
 
