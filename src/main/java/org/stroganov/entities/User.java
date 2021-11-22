@@ -11,17 +11,16 @@ public class User implements Serializable {
 
     @Transient
     private int userID;
-    @Column(name = "full_name", unique = true, nullable = false)
+    @Column(name = "fullname", unique = false, nullable = false)
     private String fullName;
-
     @Id
     @Column(name = "login")
     private String login;
-    @Column(name = "pass_code")
+    @Column(name = "passcode")
     private String passcodeHash;
-    @Column(name = "is_blocked")
+    @Column(name = "isblocked")
     private boolean isBlocked;
-    @Column(name = "is_admin")
+    @Column(name = "isadmin")
     private boolean isAdmin;
 
     public User(int userID, String fullName, String login, String passcodeHash, boolean isBlocked, boolean isAdmin) {

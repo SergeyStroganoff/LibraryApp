@@ -23,7 +23,6 @@ public class MySQLLibraryDAO implements LibraryDAO {
     private static MySQLLibraryDAO instance;
     private final Logger logger = Logger.getLogger(MySQLLibraryDAO.class);
 
-
     public static synchronized MySQLLibraryDAO getInstance(SessionFactory sessionFactory) {
         if (instance == null) {
             instance = new MySQLLibraryDAO(sessionFactory);
@@ -34,7 +33,6 @@ public class MySQLLibraryDAO implements LibraryDAO {
     public MySQLLibraryDAO(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
-
 
     @Override
     public boolean addBook(Book book) {
@@ -47,8 +45,10 @@ public class MySQLLibraryDAO implements LibraryDAO {
                 Author author = query.uniqueResult();
                 if (author == null) {
                     session.save(book.getAuthor());
+                } else {
+                    book.setAuthor(author);
                 }
-                session.save(book);
+                session.saveOrUpdate(book);
                 transaction.commit();
                 return true;
             } else {
@@ -76,8 +76,10 @@ public class MySQLLibraryDAO implements LibraryDAO {
 
     @Override
     public boolean deleteBook(Book book) {
+        findAllBookMarksInBook(book).forEach(this::deleteBookMark);
         return deleteEntity(book, "deleteBook");
     }
+
 
     @Override
     public Book findBook(String numberISBN) {
@@ -151,8 +153,9 @@ public class MySQLLibraryDAO implements LibraryDAO {
                             " WHERE u.login = :login", Book.class)
                     .setParameter("login", user.getLogin());
             return query.getResultList();
+
         } catch (HibernateException e) {
-            logger.error(HIBERNATE_ERROR_MESSAGE + "findBooksByPartAuthorName: " + user.getLogin(), e);
+            logger.error(HIBERNATE_ERROR_MESSAGE + "findBooksWithUserBookMarks: " + user.getLogin(), e);
         }
         return Collections.emptyList();
     }
@@ -186,12 +189,13 @@ public class MySQLLibraryDAO implements LibraryDAO {
 
     @Override
     public boolean deleteUser(User user) {
-        return deleteEntity(user, "eleteUser");
+        findUserBookMarks(user).forEach(this::deleteBookMark);
+        return deleteEntity(user, "deleteUser");
     }
 
     @Override
     public boolean blockUser(User user) {
-        return changeUserStatus(user, false);
+        return changeUserStatus(user, true);
     }
 
     @Override
@@ -235,7 +239,7 @@ public class MySQLLibraryDAO implements LibraryDAO {
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
             Query<Author> query = session.createQuery("FROM Author WHERE authorName=:authorName", Author.class)
-                    .setParameter("authorName", author.getAuthorName());
+                    .setParameter(AUTHOR_NAME, author.getAuthorName());
             Author authorFromDB = query.uniqueResult();
             if (authorFromDB == null) {
                 session.save(author);
@@ -252,7 +256,7 @@ public class MySQLLibraryDAO implements LibraryDAO {
     public Author findAuthor(String authorName) {
         try (Session session = sessionFactory.openSession()) {
             Query<Author> query = session.createQuery("FROM Author WHERE authorName = :authorName", Author.class)
-                    .setParameter("authorName", authorName);
+                    .setParameter(AUTHOR_NAME, authorName);
             return query.uniqueResult();
         } catch (HibernateException e) {
             logger.error(HIBERNATE_ERROR_MESSAGE + "findAuthor:  " + authorName, e);
@@ -266,7 +270,7 @@ public class MySQLLibraryDAO implements LibraryDAO {
         return deleteEntity(author, "deleteAuthorWithAllHisBooks");
     }
 
-    public <T> boolean deleteEntity(T t, String actionType) {
+    private <T> boolean deleteEntity(T t, String actionType) {
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
             session.delete(t);
@@ -276,5 +280,34 @@ public class MySQLLibraryDAO implements LibraryDAO {
             logger.error(HIBERNATE_ERROR_MESSAGE + actionType);
         }
         return false;
+    }
+
+    private List<BookMark> findUserBookMarks(User user) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<BookMark> query = session.createQuery(" SELECT bm FROM BookMark bm" +
+                            " LEFT JOIN Book b on bm.book=b" +
+                            " LEFT JOIN User u on bm.user=u" +
+                            " WHERE u.login = :login", BookMark.class)
+                    .setParameter("login", user.getLogin());
+            return query.getResultList();
+        } catch (HibernateException e) {
+            logger.error(HIBERNATE_ERROR_MESSAGE + "findUserBookMarks: " + user.getLogin(), e);
+        }
+        return Collections.emptyList();
+    }
+
+    private List<BookMark> findAllBookMarksInBook(Book book) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<BookMark> query = session.createQuery(" SELECT bm FROM BookMark bm" +
+                            " LEFT JOIN Book b on bm.book=b" +
+                            " LEFT JOIN User u on bm.user=u" +
+                            " WHERE b.numberISBN = :numberISBN", BookMark.class)
+                    .setParameter("numberISBN", book.getNumberISBN());
+            return query.getResultList();
+        } catch (HibernateException e) {
+            logger.error(HIBERNATE_ERROR_MESSAGE + "findAllBookMarksInBook: ", e);
+        }
+        return Collections.emptyList();
+
     }
 }

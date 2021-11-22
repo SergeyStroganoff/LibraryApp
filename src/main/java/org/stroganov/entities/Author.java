@@ -8,9 +8,9 @@ import java.io.Serializable;
 public class Author implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "author_id")
+    @Column(name = "authorid")
     private int authorID;
-    @Column(name = "author_name")
+    @Column(name = "authorname")
     private String authorName;
 
     public Author(int numberID, String authorName) {
