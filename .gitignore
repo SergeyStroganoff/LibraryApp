@@ -16,7 +16,6 @@
 *.log*
 *.docx
 *.csv
-*.log
 *.xls
 *.xlsx
 *.png
