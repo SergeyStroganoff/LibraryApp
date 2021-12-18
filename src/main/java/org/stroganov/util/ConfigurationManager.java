@@ -1,4 +1,4 @@
-package org.stroganov.servlets;
+package org.stroganov.util;
 
 import org.stroganov.ConfigLoader;
 import org.stroganov.exceptions.PropertiesException;
@@ -9,16 +9,21 @@ import java.util.Properties;
 public class ConfigurationManager {
     private static Properties properties;
 
+    static {
+        try {
+            init();
+        } catch (PropertiesException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private ConfigurationManager() {
     }
 
-    public static void init() {
+    public static void init() throws PropertiesException, IOException {
         ConfigLoader configLoader = new ConfigLoader();
-        try {
-            properties = configLoader.getAppProp();
-        } catch (IOException | PropertiesException e) {
-            System.exit(1);
-        }
+        properties = configLoader.getAppProp();
+
     }
 
     public static String getProperties(String key) {

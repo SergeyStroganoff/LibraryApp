@@ -1,10 +1,11 @@
-package org.stroganov.servlets.commands;
+package org.stroganov.controllers.commands;
 
-import org.stroganov.servlets.ActionCommand;
+
+import org.stroganov.controllers.actions.ActionCommand;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class LogoutCommand implements ActionCommand {
+public class LoginCommand implements ActionCommand {
     @Override
     public String execute(HttpServletRequest servletRequest) {
         return null;

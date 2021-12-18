@@ -1,6 +1,6 @@
-package org.stroganov.servlets.commands;
+package org.stroganov.controllers.commands;
 
-import org.stroganov.servlets.ActionCommand;
+import org.stroganov.controllers.actions.ActionCommand;
 
 import javax.servlet.http.HttpServletRequest;
 

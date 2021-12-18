@@ -1,19 +1,19 @@
-package org.stroganov.servlets;
+package org.stroganov.controllers;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
+import org.stroganov.controllers.actions.ActionCommand;
+import org.stroganov.controllers.actions.ActionFactory;
+import org.stroganov.util.ConfigurationManager;
+
+import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import org.stroganov.servlets.actions.ActionCommand;
-import org.stroganov.servlets.actions.ActionFactory;
-
 @WebServlet("/controller")
-public class ServletController extends HttpServlet {
+public class LibraryServlet extends HttpServlet {
+    public static final String ERROR_CONFIGURATION_LOADING = "Error configuration loading";
     private final ServletConfig servletConfig = this.getServletConfig();
 
     @Override

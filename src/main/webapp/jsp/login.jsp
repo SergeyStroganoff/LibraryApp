@@ -5,7 +5,7 @@
   Time: 9:40
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" buffer="none" isThreadSafe="true" errorPage="/error.jsp" %>
+<%@ page contentType="text/html;charset=UTF-8" buffer="none" isThreadSafe="true" errorPage="/jsp/error.jsp" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
@@ -18,8 +18,8 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-    <link rel="icon" href="img/books-library-logo.png" type="image/x-icon">
-    <link rel="shortcut icon" href="img/books-library-logo.png" type="image/x-icon">
+    <link rel="icon" href="${pageContext.request.contextPath}/img/books-library-logo.png" type="image/x-icon">
+    <link rel="shortcut icon" href="${pageContext.request.contextPath}/img/books-library-logo.png" type="image/x-icon">
 
     <title>Login form</title>
     <!-- Custom styles for this template -->
@@ -28,7 +28,8 @@
 <body class="text-center">
 <form class="form-signin" name="loginForm" method="POST" action="controller">
     <input type="hidden" name="command" value="login"/>
-    <img class="mb-4" src="img/books-library-logo.png" alt="logo library" width="72" height="72">
+    <img class="mb-4" src="${pageContext.request.contextPath}/img/books-library-logo.png" alt="logo library" width="72"
+         height="72">
     <h1 class="h3 mb-3 font-weight-normal">Пожалуйста войдите</h1>
     <label for="inputLogin" class="sr-only">Логин</label>
     <input type="text" id="inputLogin" class="form-control" placeholder="Логин" required="" autofocus="" value="">

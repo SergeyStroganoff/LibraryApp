@@ -1,4 +1,4 @@
-package org.stroganov.servlets;
+package org.stroganov.controllers;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;

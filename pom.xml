@@ -20,7 +20,7 @@
             <id>id1</id>
             <name>My Repository</name>
             <url>file:M:/PROGRAMMING/Soft/Servlets/apache-tomcat-9.0.56/webapps</url>
-            <layout>legacy</layout>
+            <layout>default</layout>
         </repository>
     </distributionManagement>
 
@@ -149,7 +149,7 @@
                     <artifactId>maven-war-plugin</artifactId>
                     <version>2.1.1</version>
                     <configuration>
-                        <failOnMissingWebXml>false</failOnMissingWebXml>
+                        <failOnMissingWebXml>true</failOnMissingWebXml>
                     </configuration>
                 </plugin>
 
