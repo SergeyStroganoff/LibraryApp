@@ -25,7 +25,7 @@ public class InitialDialogue {
     public InitialDialogue(UserInterface userInterface) {
         this.userInterface = userInterface;
         try {
-            libraryDAO = DAOFactory.getLibraryDAO(DAOType.JSON);
+            libraryDAO = DAOFactory.getLibraryDAO(DAOType.MYSQL);
         } catch (DBExceptions e) {
             userInterface.showMessage(e.getMessage());
             System.exit(1);

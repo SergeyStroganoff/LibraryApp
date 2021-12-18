@@ -2,17 +2,29 @@ package org.stroganov.entities;
 
 import org.stroganov.util.PasswordAuthentication;
 
-public class User {
+import javax.persistence.*;
+import java.io.Serializable;
 
-    private int numberID;
-    private final String fullName;
-    private final String login;
+@Entity
+@Table(name = ("users"))
+public class User implements Serializable {
+
+    @Transient
+    private int userID;
+    @Column(name = "fullname", unique = false, nullable = false)
+    private String fullName;
+    @Id
+    @Column(name = "login")
+    private String login;
+    @Column(name = "passcode")
     private String passcodeHash;
+    @Column(name = "isblocked")
     private boolean isBlocked;
+    @Column(name = "isadmin")
     private boolean isAdmin;
 
-    public User(int numberID, String fullName, String login, String passcodeHash, boolean isBlocked, boolean isAdmin) {
-        this.numberID = numberID;
+    public User(int userID, String fullName, String login, String passcodeHash, boolean isBlocked, boolean isAdmin) {
+        this.userID = userID;
         this.fullName = fullName;
         this.login = login;
         this.passcodeHash = PasswordAuthentication.hash(passcodeHash.toCharArray());
@@ -20,8 +32,12 @@ public class User {
         this.isAdmin = isAdmin;
     }
 
-    public int getNumberID() {
-        return numberID;
+    public User() {
+
+    }
+
+    public int getUserID() {
+        return userID;
     }
 
     public String getFullName() {
@@ -56,14 +72,41 @@ public class User {
         isAdmin = admin;
     }
 
-    public void setNumberID(int numberID) {
-        this.numberID = numberID;
+    public void setUserID(int numberID) {
+        this.userID = numberID;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (userID != user.userID) return false;
+        if (isBlocked != user.isBlocked) return false;
+        if (isAdmin != user.isAdmin) return false;
+        if (!fullName.equals(user.fullName)) return false;
+        if (!login.equals(user.login)) return false;
+        return passcodeHash.equals(user.passcodeHash);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = userID;
+        result = 31 * result + fullName.hashCode();
+        result = 31 * result + login.hashCode();
+        result = 31 * result + passcodeHash.hashCode();
+        result = 31 * result + (isBlocked ? 1 : 0);
+        result = 31 * result + (isAdmin ? 1 : 0);
+        return result;
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "numberID=" + numberID +
+                "numberID=" + userID +
                 ", fullName='" + fullName + '\'' +
                 ", login='" + login + '\'' +
                 ", passcodeHash='" + passcodeHash + '\'' +
@@ -71,4 +114,6 @@ public class User {
                 ", isAdmin=" + isAdmin +
                 '}';
     }
+
+
 }

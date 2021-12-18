@@ -12,14 +12,13 @@ public class UserGetterDialogue {
     public static final String BE_ADMIN_MESSAGE = "Will user be admin?";
 
     public User getUserFromDialogue(UserInterface userInterface) {
-        int numberID = 1;
+        int numberID = 0;
         userInterface.showMessage(ENTER_FULL_NAME_MESSAGE);
         String fullName = userInterface.getStringFromUser();
         userInterface.showMessage(ENTER_USER_LOGIN);
         String login = userInterface.getStringFromUser();
         userInterface.showMessage(ENTER_USER_PASSWORD);
-        String password = userInterface.getStringFromUser();
-        String passcodeHash = PasswordAuthentication.hash(password.toCharArray());
+        String passcodeHash = userInterface.getStringFromUser();
         userInterface.showMessage(BE_ADMIN_MESSAGE);
         String isAdminString = userInterface.getStringFromUser();
         boolean isAdmin = isAdminString.equalsIgnoreCase("yes") || isAdminString.equalsIgnoreCase("y");
