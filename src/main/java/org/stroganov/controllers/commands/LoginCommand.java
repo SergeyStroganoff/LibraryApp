@@ -7,6 +7,7 @@ import org.stroganov.util.ConfigurationManager;
 import org.stroganov.util.MessageManager;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 public class LoginCommand implements ActionCommand {
     private static final String PARAM_NAME_LOGIN = "login";
@@ -14,14 +15,18 @@ public class LoginCommand implements ActionCommand {
 
     @Override
     public String execute(HttpServletRequest servletRequest) {
-        String page = null;
+        String page;
 // извлечение из запроса логина и пароля
         String login = servletRequest.getParameter(PARAM_NAME_LOGIN);
         String pass = servletRequest.getParameter(PARAM_NAME_PASSWORD);
 // проверка логина и пароля
         LoginLogic loginLogic = new LoginLogic();
         if (loginLogic.checkLogin(login, pass)) {
-            servletRequest.setAttribute("user", login);
+            servletRequest.setAttribute("userLogin", login);
+            HttpSession session = servletRequest.getSession(true);
+            if (session.getAttribute("role") == null) {
+                session.setAttribute("role", "user");
+            }
 // определение пути к main.jsp
             page = ConfigurationManager.getProperties("path.page.main");
         } else {

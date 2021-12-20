@@ -3,7 +3,7 @@ package org.stroganov.util;
 import java.util.ResourceBundle;
 
 public class MessageManager {
-    private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.messages");
+    private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("messages");
 
     // класс извлекает информацию из файла messages.properties
     private MessageManager() {

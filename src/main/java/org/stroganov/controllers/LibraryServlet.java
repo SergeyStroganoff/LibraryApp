@@ -4,7 +4,8 @@ import org.stroganov.controllers.actions.ActionCommand;
 import org.stroganov.controllers.actions.ActionFactory;
 import org.stroganov.util.ConfigurationManager;
 
-import javax.servlet.*;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -37,11 +38,10 @@ public class LibraryServlet extends HttpServlet {
          * классу-обработчику конкретной команды*/
         pagePath = command.execute(request);
 // метод возвращает страницу ответа
-// page = null; // поэксперементировать!
+// page = null; // поэкспериментировать!
         if (pagePath != null) {
-            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(pagePath);
 // вызов страницы ответа на запрос
-            dispatcher.forward(request, response);
+            request.getRequestDispatcher(pagePath).forward(request, response);
         } else {
 // установка страницы c cообщением об ошибке
             pagePath = ConfigurationManager.getProperties("path.page.index");

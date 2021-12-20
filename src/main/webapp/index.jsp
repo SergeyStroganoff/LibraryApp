@@ -11,7 +11,7 @@
     <title>Library index page</title>
 </head>
 <body>
-<jsp:forward page="login.jsp"/>
+<jsp:forward page="/controller?command=cookie"/>
 </body>
 </html>
 
