@@ -273,6 +273,7 @@ public class MySQLLibraryDAO implements LibraryDAO {
     private <T> boolean deleteEntity(T t, String actionType) {
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
+           // session.refresh(t); //to
             session.delete(t);
             transaction.commit();
             return true;

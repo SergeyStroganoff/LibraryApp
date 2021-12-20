@@ -32,9 +32,11 @@
          height="72">
     <h1 class="h3 mb-3 font-weight-normal">Пожалуйста войдите</h1>
     <label for="inputLogin" class="sr-only">Логин</label>
-    <input type="text" id="inputLogin" class="form-control" placeholder="Логин" required="" autofocus="" value="">
+    <input type="text" name="login" id="inputLogin" class="form-control" placeholder="Логин" required="" autofocus=""
+           value="">
     <label for="inputPassword" class="sr-only">Пароль</label>
-    <input type="password" id="inputPassword" class="form-control" placeholder="Пароль" required="" value="">
+    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Пароль" required=""
+           value="">
     <div class="checkbox mb-3">
         <label>
             <input type="checkbox" value="remember-me"> Запомнить меня
