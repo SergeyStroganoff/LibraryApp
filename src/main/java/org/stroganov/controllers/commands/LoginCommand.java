@@ -3,10 +3,13 @@ package org.stroganov.controllers.commands;
 
 import org.stroganov.controllers.actions.ActionCommand;
 import org.stroganov.controllers.logic.LoginLogic;
+import org.stroganov.entities.User;
 import org.stroganov.util.ConfigurationManager;
+import org.stroganov.util.CookieUtil;
 import org.stroganov.util.MessageManager;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class LoginCommand implements ActionCommand {
@@ -14,18 +17,22 @@ public class LoginCommand implements ActionCommand {
     private static final String PARAM_NAME_PASSWORD = "password";
 
     @Override
-    public String execute(HttpServletRequest servletRequest) {
+    public String execute(HttpServletRequest servletRequest, HttpServletResponse response) {
         String page;
 // извлечение из запроса логина и пароля
         String login = servletRequest.getParameter(PARAM_NAME_LOGIN);
         String pass = servletRequest.getParameter(PARAM_NAME_PASSWORD);
 // проверка логина и пароля
         LoginLogic loginLogic = new LoginLogic();
-        if (loginLogic.checkLogin(login, pass)) {
-            servletRequest.setAttribute("userLogin", login);
+        User user = loginLogic.getUserByLoginPassword(login, pass);
+        if (user != null) {
+            servletRequest.setAttribute("userLogin", user.getLogin());
             HttpSession session = servletRequest.getSession(true);
+            CookieUtil.setCookie(response, user.getLogin());
             if (session.getAttribute("role") == null) {
-                session.setAttribute("role", "user");
+                String userRole = user.isAdmin() ? "admin" : "user";
+                session.setAttribute("role", userRole);
+                //servletRequest.setAttribute("role", userRole);
             }
 // определение пути к main.jsp
             page = ConfigurationManager.getProperties("path.page.main");

@@ -6,16 +6,16 @@ import org.stroganov.util.DataManager;
 import org.stroganov.util.PasswordAuthentication;
 
 public class LoginLogic {
-    public boolean checkLogin(String login, String password) {
+    public User getUserByLoginPassword(String login, String password) {
         if ("".equals(login) && "".equals(password)) {
-            return false;
+            return null;
         }
         LibraryDAO libraryDAO = DataManager.getLibraryDAO();
         User user = libraryDAO.findUser(login);
-        if (user != null) {
-            return PasswordAuthentication.authenticate(password.toCharArray(), user.getPasscodeHash());
+        if (user != null && PasswordAuthentication.authenticate(password.toCharArray(), user.getPasscodeHash())) {
+            return user;
         } else {
-            return false;
+            return null;
         }
     }
 

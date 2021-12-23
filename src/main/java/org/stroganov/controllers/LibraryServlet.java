@@ -31,19 +31,14 @@ public class LibraryServlet extends HttpServlet {
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String pagePath = null;
-// определение команды, пришедшей из JSP
+        String pagePath;
         ActionCommand command = ActionFactory.defineCommand(request);
-        /* вызов реализованного метода execute() и передача параметров
-         * классу-обработчику конкретной команды*/
-        pagePath = command.execute(request);
-// метод возвращает страницу ответа
-// page = null; // поэкспериментировать!
+        pagePath = command.execute(request, response);
         if (pagePath != null) {
 // вызов страницы ответа на запрос
             request.getRequestDispatcher(pagePath).forward(request, response);
         } else {
-// установка страницы c cообщением об ошибке
+// установка страницы об ошибке
             pagePath = ConfigurationManager.getProperties("path.page.index");
             request.getSession().setAttribute("nullPage", "Server Error. Empty page was received");
             response.sendRedirect(request.getContextPath() + pagePath);
