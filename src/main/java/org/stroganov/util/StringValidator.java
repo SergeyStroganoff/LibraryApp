@@ -10,6 +10,16 @@ public class StringValidator {
         return isStringValidPattern(directoryPath, regexp);
     }
 
+    public static boolean isStringYear(String year) {
+        String regexp = "^(19|20)\\d{2}$";
+        return isStringValidPattern(year, regexp);
+    }
+
+    public static boolean isStringNumberPage(String year) {
+        String regexp = "^\\d{1,4}";
+        return isStringValidPattern(year, regexp);
+    }
+
     private static boolean isStringValidPattern(String string, String regexp) {
         Pattern pattern = Pattern.compile(regexp);
         Matcher matcher = pattern.matcher(string);

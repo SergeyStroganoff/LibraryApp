@@ -20,14 +20,15 @@ public class App {
     private static final String ERROR_LOADING_CONFIGURATION_FILE_MESSAGE = "Error loading configuration file: ";
     private static final String PROGRAM_WILL_BE_CLOSED = "Program will be closed";
     public static Properties properties;
+    public static final String APP_PROPERTIES = "/app.properties";
 
     public static void main(String[] args) {
 
         UserInterface userInterface = UserInterfaceFactory.getUserInterface("ConsoleInterface");
         ConfigLoader configLoader = new ConfigLoader();
         try {
-            properties = configLoader.getAppProp();
-        } catch (IOException | PropertiesException e) {
+            properties = configLoader.getAppProp(APP_PROPERTIES);
+        } catch (PropertiesException | IOException e) {
             LOGGER.error(ERROR_LOADING_CONFIGURATION_FILE_MESSAGE + e.getMessage());
             userInterface.showMessage(ERROR_LOADING_CONFIGURATION_FILE_MESSAGE + e.getMessage());
             userInterface.showMessage(PROGRAM_WILL_BE_CLOSED);

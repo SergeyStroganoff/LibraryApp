@@ -32,7 +32,7 @@ public class LoginCommand implements ActionCommand {
             if (session.getAttribute("role") == null) {
                 String userRole = user.isAdmin() ? "admin" : "user";
                 session.setAttribute("role", userRole);
-                //servletRequest.setAttribute("role", userRole);
+                servletRequest.setAttribute("role", userRole);
             }
 // определение пути к main.jsp
             page = ConfigurationManager.getProperties("path.page.main");

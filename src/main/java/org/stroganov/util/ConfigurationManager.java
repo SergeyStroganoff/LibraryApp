@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class ConfigurationManager {
+
+    public static final String APP_PROPERTIES = "/app.properties";
     private static Properties properties;
 
     static {
@@ -22,7 +24,7 @@ public class ConfigurationManager {
 
     public static void init() throws PropertiesException, IOException {
         ConfigLoader configLoader = new ConfigLoader();
-        properties = configLoader.getAppProp();
+        properties = configLoader.getAppProp(APP_PROPERTIES);
 
     }
 

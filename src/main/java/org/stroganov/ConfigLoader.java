@@ -8,28 +8,15 @@ import java.util.Properties;
 
 public class ConfigLoader {
 
-    public static final String FILE_HAS_INCORRECT_FORMAT = "configuration file has incorrect format";
     public static final String FILE_WAS_NOT_FOUND = "configuration file wasn't found";
-    public static final String APP_PROPERTIES = "/app.properties";
 
-    public Properties getAppProp() throws IOException, PropertiesException {
+    public Properties getAppProp(String propertyPath) throws PropertiesException, IOException {
         Properties properties = new Properties();
-        InputStream inputStream = ConfigLoader.class.getResourceAsStream(APP_PROPERTIES);
+        InputStream inputStream = ConfigLoader.class.getResourceAsStream(propertyPath);
         if (inputStream == null) {
             throw new PropertiesException(FILE_WAS_NOT_FOUND);
         }
         properties.load(inputStream);
-        if (!propertyVerify(properties)) {
-            throw new PropertiesException(FILE_HAS_INCORRECT_FORMAT);
-        }
         return properties;
-    }
-
-    public boolean propertyVerify(Properties properties) {
-        String historyLogFileName = properties.getProperty("historyLogFileName");
-        if (!historyLogFileName.matches("^\\w+.json")) {
-            return false;
-        }
-        return true;
     }
 }

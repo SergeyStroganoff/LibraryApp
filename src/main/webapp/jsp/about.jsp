@@ -47,7 +47,6 @@
     </div>
 </div>
 
-
 <!-- Modal menu exit  -->
 <%@ include file="/jsp/modalMenuExit.jsp" %>
 
