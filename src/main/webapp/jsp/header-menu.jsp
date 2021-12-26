@@ -22,13 +22,15 @@
                         <li><a class="dropdown-item" href="${pageContext.request.contextPath}/jsp/addBook.jsp">Добавить
                             новую книгу</a></li>
                         <li><a class="dropdown-item" href="#">Удалить книгу</a></li>
-                        <li><a class="dropdown-item" href="#">Добавить закладку в книгу</a></li>
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/jsp/addBookMark.jsp">Добавить
+                            закладку в книгу</a></li>
                         <li><a class="dropdown-item" href="#">Удалить закладку</a></li>
                         <li><a class="dropdown-item" href="#">Добавить книги из файла</a></li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li><a class="dropdown-item" href="#">Добавить автора</a></li>
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/jsp/addAuthor.jsp">Добавить
+                            автора</a></li>
                         <li><a class="dropdown-item" href="#">Удалить автора и его книги</a></li>
                         <li>
                             <hr class="dropdown-divider">
@@ -58,7 +60,7 @@
                 </li>
             </ul>
             <form class="d-flex">
-                <p>Пользователь: ${userLogin}</p>
+                <p>Пользователь: ${sessionScope.userLogin}</p>
             </form>
         </div>
     </div>

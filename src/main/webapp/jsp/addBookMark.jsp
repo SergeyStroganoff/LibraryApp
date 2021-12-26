@@ -35,7 +35,7 @@
 
 <div class="container mt-lg-5">
     <form class="row" name="addBookForm" method="POST"
-          action="${pageContext.request.contextPath}/controller?command=addbookmark">
+          action="${pageContext.request.contextPath}/controller?command=add_book_mark">
         <input type="hidden" name="command" value="add_book_mark"/>
         <div class="col-md-4">
             <label for="inputISBN" class="form-label">Book ISBN</label>
@@ -59,7 +59,7 @@
 
 
 <input class="hidden-role-value" type="hidden" name="role" value="admin"/>
-<input class="add-book-status" type="hidden" name="add-book-status" value="${status}"/>
+<input class="operation-status" type="hidden" name="add-book-status" value="${status}"/>
 </body>
 <script src=${pageContext.request.contextPath}/js/main.js></script>
 <script src=${pageContext.request.contextPath}/js/modalMenuAction.js></script>

@@ -14,7 +14,6 @@ public class CookeCommand implements ActionCommand {
         String userLogin = CookieUtil.getUserFromCookie(servletRequest);
         if (userLogin != null) {
             servletRequest.getSession().setAttribute("userLogin", userLogin);
-            servletRequest.setAttribute("userLogin", userLogin);
             return ConfigurationManager.getProperties("path.page.main");
         }
         return ConfigurationManager.getProperties("path.page.login");

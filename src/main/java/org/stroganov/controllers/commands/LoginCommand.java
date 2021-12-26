@@ -26,7 +26,6 @@ public class LoginCommand implements ActionCommand {
         LoginLogic loginLogic = new LoginLogic();
         User user = loginLogic.getUserByLoginPassword(login, pass);
         if (user != null) {
-            servletRequest.setAttribute("userLogin", user.getLogin());
             HttpSession session = servletRequest.getSession(true);
             CookieUtil.setCookie(response, user.getLogin());
             if (session.getAttribute("role") == null) {
@@ -34,6 +33,7 @@ public class LoginCommand implements ActionCommand {
                 session.setAttribute("role", userRole);
                 servletRequest.setAttribute("role", userRole);
             }
+            session.setAttribute("userLogin", user.getLogin());
 // определение пути к main.jsp
             page = ConfigurationManager.getProperties("path.page.main");
         } else {

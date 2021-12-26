@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class AddNewBookCommand implements ActionCommand {
-    public static final String RESULT_MESSAGE = "resultMessage";
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {

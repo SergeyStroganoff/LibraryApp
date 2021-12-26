@@ -1,13 +1,10 @@
 package org.stroganov.controllers.actions;
 
-import org.stroganov.controllers.commands.AddNewBookCommand;
-import org.stroganov.controllers.commands.CookeCommand;
-import org.stroganov.controllers.commands.LoginCommand;
-import org.stroganov.controllers.commands.LogoutCommand;
+import org.stroganov.controllers.commands.*;
 
 public enum CommandEnum {
     LOGIN(new LoginCommand()), LOGOUT(new LogoutCommand()), COOKIE(new CookeCommand()),
-    ADDBOOK(new AddNewBookCommand());
+    ADD_BOOK(new AddNewBookCommand()), ADD_BOOK_MARK(new AddBookMarkCommand()), ADD_AUTHOR(new AddAuthorCommand());
 
     ActionCommand actionCommand;
 
