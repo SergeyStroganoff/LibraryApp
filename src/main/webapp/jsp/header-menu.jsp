@@ -45,7 +45,9 @@
                         <li class="admin-menu">
                             <hr class="dropdown-divider">
                         </li>
-                        <li class="admin-menu"><a class="dropdown-item" href="#">Создать пользователя</a></li>
+                        <li class="admin-menu"><a class="dropdown-item"
+                                                  href="${pageContext.request.contextPath}/jsp/addUser.jsp">Создать
+                            пользователя</a></li>
                         <li class="admin-menu"><a class="dropdown-item" href="#">Заблокировать пользователя</a></li>
                         <li class="admin-menu"><a class="dropdown-item" href="#">Разблокировать пользователя</a></li>
                         <li class="admin-menu"><a class="dropdown-item" href="#">Посмотреть историю всех

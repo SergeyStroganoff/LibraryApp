@@ -26,54 +26,57 @@
     <link rel="icon" href="${pageContext.request.contextPath}/img/books-library-logo.png" type="image/x-icon">
     <link rel="shortcut icon" href="${pageContext.request.contextPath}/img/books-library-logo.png" type="image/x-icon">
 
-    <title>Add new book page</title>
+    <title>Добавить нового автора</title>
 </head>
 <body>
 
 <%@ include file="/jsp/header-menu.jsp" %>
 
+
 <div class="container mt-lg-5">
-    <form class="row" name="addBookForm" method="POST"
-          action="${pageContext.request.contextPath}/controller?command=add_book">
-        <input type="hidden" name="command" value="add_new_book"/>
-        <div class="col-md-4">
-            <label for="inputISBN" class="form-label">Book ISBN</label>
-            <input type="text" class="form-control" id="inputISBN" name="ISBN">
-        </div>
+    <form class="row" name="addUSerForm" method="POST"
+          action="${pageContext.request.contextPath}/controller?command=add_user">
+        <input type="hidden" name="command" value="add_user"/>
         <div class="col-md-8">
-            <label for="inputAuthor" class="form-label">Имя Автора</label>
-            <input type="text" class="form-control" id="inputAuthor" name="authorName">
+            <label for="inputFullName" class="form-label">Имя пользователя</label>
+            <input type="text" class="form-control" id="inputFullName" name="inputFullName">
         </div>
-        <div class="col-12">
-            <label for="bookName" class="form-label">Название книги</label>
-            <input type="text" class="form-control" id="bookName" placeholder="" name="bookName">
+        <div class="col-md-5">
+            <label for="inputLogin" class="form-label">Логин</label>
+            <input type="text" class="form-control" id="inputLogin" name="inputLogin">
         </div>
-        <div class="col-md-3">
-            <label for="inputPublishingYear" class="form-label">Год публикации</label>
-            <input type="text" class="form-control" id="inputPublishingYear" name="publishingYear">
+        <div class="col-md-5">
+            <label for="inputPassword" class="form-label">Пароль пользователя</label>
+            <input type="text" class="form-control" id="inputPassword" name="inputPassword">
         </div>
-        <div class="col-md-3">
-            <label for="inputPageNumbers" class="form-label">Количество страниц</label>
-            <input type="text" class="form-control" id="inputPageNumbers" name="pagesNumber">
+        <div class="col-md-5 mt-lg-3">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="false" id="inputAdminStatusBox"
+                       name="inputAdminStatusBox">
+                <label class="form-check-label" for="inputAdminStatusBox">
+                    Является администратором
+                </label>
+            </div>
         </div>
+
         <div class="col-12 mt-lg-5">
-            <button type="submit" class="btn btn-primary">Добавить книгу</button>
+            <button type="submit" class="btn btn-primary">Добавить пользователя</button>
         </div>
     </form>
 </div>
+
 
 <!-- Modal menu exit  -->
 <%@ include file="/jsp/modalMenuExit.jsp" %>
 
 <%@ include file="/jsp/modalMenuOperationResult.jsp" %>
 
+
 <input class="hidden-role-value" type="hidden" name="role" value="${role}"/>
-<input class="operation-status" type="hidden" name="add-book-status" value="${status}"/>
+<input class="operation-status" type="hidden" name="operation-status" value="${status}"/>
 </body>
 <script src=${pageContext.request.contextPath}/js/main.js></script>
+<script src=${pageContext.request.contextPath}/js/addUser.js></script>
 <script src=${pageContext.request.contextPath}/js/modalMenuAction.js></script>
 </html>
-
-
-
 

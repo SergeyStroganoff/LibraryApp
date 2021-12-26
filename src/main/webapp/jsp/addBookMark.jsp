@@ -58,7 +58,7 @@
 <%@ include file="/jsp/modalMenuOperationResult.jsp" %>
 
 
-<input class="hidden-role-value" type="hidden" name="role" value="admin"/>
+<input class="hidden-role-value" type="hidden" name="role" value="${role}"/>
 <input class="operation-status" type="hidden" name="add-book-status" value="${status}"/>
 </body>
 <script src=${pageContext.request.contextPath}/js/main.js></script>

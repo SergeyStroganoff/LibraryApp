@@ -26,5 +26,6 @@
 <%@ include file="/jsp/header-menu.jsp" %>
 <h2>Вы ввели пустую команду</h2>
 <p><a href="${pageContext.request.contextPath}/index.jsp">Вернуться в начало</a></p>
+<input class="hidden-role-value" type="hidden" name="role" value="${role}"/>
 </body>
 </html>
