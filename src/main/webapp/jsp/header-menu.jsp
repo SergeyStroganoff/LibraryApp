@@ -21,10 +21,12 @@
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="${pageContext.request.contextPath}/jsp/addBook.jsp">Добавить
                             новую книгу</a></li>
-                        <li><a class="dropdown-item" href="#">Удалить книгу</a></li>
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/jsp/deleteBook.jsp">Удалить
+                            книгу</a></li>
                         <li><a class="dropdown-item" href="${pageContext.request.contextPath}/jsp/addBookMark.jsp">Добавить
                             закладку в книгу</a></li>
-                        <li><a class="dropdown-item" href="#">Удалить закладку</a></li>
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/jsp/deleteBookMark.jsp">Удалить
+                            закладку</a></li>
                         <li><a class="dropdown-item" href="${pageContext.request.contextPath}/jsp/addBooksFromFile.jsp">Добавить
                             книги из файла</a></li>
                         <li>
