@@ -38,12 +38,15 @@
             <label for="inputBookISBN" class="form-label">ISBN Книги</label>
             <input type="text" class="form-control" id="inputBookISBN" name="inputBookISBN">
         </div>
+        <div class="col-md-4">
+            <label for="inputBookPage" class="form-label">Номер страницы книги</label>
+            <input type="text" class="form-control" id="inputBookPage" name="inputBookPage">
+        </div>
         <div class="col-12 mt-lg-5">
-            <button type="submit" class="btn btn-primary">Удалить книгу</button>
+            <button type="submit" class="btn btn-primary">Удалить закладку</button>
         </div>
     </form>
 </div>
-
 
 <!-- Modal menu exit  -->
 <%@ include file="/jsp/modalMenuExit.jsp" %>

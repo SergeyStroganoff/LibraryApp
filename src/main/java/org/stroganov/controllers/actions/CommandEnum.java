@@ -7,7 +7,7 @@ import org.stroganov.controllers.commands.DeleteBookCommand;
 public enum CommandEnum {
     LOGIN(new LoginCommand()), LOGOUT(new LogoutCommand()), COOKIE(new CookeCommand()),
     ADD_BOOK(new AddNewBookCommand()), ADD_BOOK_MARK(new AddBookMarkCommand()), ADD_AUTHOR(new AddAuthorCommand()),
-    ADD_USER(new AddUserCommand()), DELETE_BOOK(new DeleteBookCommand());
+    ADD_USER(new AddUserCommand()), DELETE_BOOK(new DeleteBookCommand()), DELETE_BOOK_MARK(new DeleteBookMarkCommand());
 
     ActionCommand actionCommand;
 

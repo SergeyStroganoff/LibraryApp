@@ -25,7 +25,8 @@ public class DeleteBookLogic {
                 message = MessageManager.getProperty("message.deleteBook.deletingError");
             }
         } catch (IOException e) {
-            logger.error(message = MessageManager.getProperty("message.deleteBook.IOError") + " " + e.getMessage());
+            logger.error(MessageManager.getProperty("message.deleteBook.IOError") + " " + e.getMessage());
+            message = MessageManager.getProperty("message.deleteBook.IOError") + " " + e.getMessage();
         }
         return message;
     }
