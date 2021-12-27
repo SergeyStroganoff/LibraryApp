@@ -228,4 +228,11 @@ public class JsonLibraryDAO implements LibraryDAO {
                 .forEach(b -> book.add(b.getBook()));
         return book;
     }
+
+    @Override
+    public List<BookMark> findUserBookMarks(User user) {
+        return bookMarkList.stream()
+                .filter(b -> b.getUser().equals(user))
+                .collect(Collectors.toList());
+    }
 }

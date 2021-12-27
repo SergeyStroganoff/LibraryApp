@@ -273,7 +273,7 @@ public class MySQLLibraryDAO implements LibraryDAO {
     private <T> boolean deleteEntity(T t, String actionType) {
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
-           // session.refresh(t); //to
+            // session.refresh(t); //to
             session.delete(t);
             transaction.commit();
             return true;
@@ -283,7 +283,8 @@ public class MySQLLibraryDAO implements LibraryDAO {
         return false;
     }
 
-    private List<BookMark> findUserBookMarks(User user) {
+    @Override
+    public List<BookMark> findUserBookMarks(User user) {
         try (Session session = sessionFactory.openSession()) {
             Query<BookMark> query = session.createQuery(" SELECT bm FROM BookMark bm" +
                             " LEFT JOIN Book b on bm.book=b" +

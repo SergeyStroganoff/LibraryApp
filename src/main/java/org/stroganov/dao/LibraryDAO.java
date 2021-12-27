@@ -50,4 +50,5 @@ public interface LibraryDAO {
 
     List<Book> findBooksWithUserBookMarks(User user);
 
+    List<BookMark> findUserBookMarks(User user);
 }
