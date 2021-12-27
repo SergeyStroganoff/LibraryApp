@@ -35,7 +35,7 @@
 
 <div class="container mt-lg-5">
     <form class="row" name="addAuthorForm" method="POST"
-          action="${pageContext.request.contextPath}/controller?command=add_author">
+          action="${pageContext.request.contextPath}/controller">
         <input type="hidden" name="command" value="add_author"/>
         <div class="col-md-4">
             <label for="inputAuthorName" class="form-label">Имя автора книг</label>

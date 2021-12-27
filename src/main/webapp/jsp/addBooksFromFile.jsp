@@ -26,42 +26,46 @@
     <link rel="icon" href="${pageContext.request.contextPath}/img/books-library-logo.png" type="image/x-icon">
     <link rel="shortcut icon" href="${pageContext.request.contextPath}/img/books-library-logo.png" type="image/x-icon">
 
-    <title>Добавить закладку в книгу</title>
+    <title>Добавить нового автора</title>
 </head>
 <body>
 
 <%@ include file="/jsp/header-menu.jsp" %>
 
-
 <div class="container mt-lg-5">
-    <form class="row" name="addBookForm" method="POST"
-          action="${pageContext.request.contextPath}/controller">
-        <input type="hidden" name="command" value="add_book_mark"/>
-        <div class="col-md-4">
-            <label for="inputISBN" class="form-label">Book ISBN</label>
-            <input type="text" class="form-control" id="inputISBN" name="ISBN">
+    <form class="row" enctype="multipart/form-data" name="addBookForm" method="POST"
+          action="${pageContext.request.contextPath}/fileloader">
+        <input type="hidden" name="command" value="add_file_book"/>
+
+        <div class="col-md-6">
+            <input type="file" class="custom-file-input" id="inputGroupFile" name="inputFile">
+            <label class="custom-file-label" for="inputGroupFile">Выбрать файл</label>
         </div>
-        <div class="col-md-3">
-            <label for="inputPageNumbers" class="form-label">Номер страницы</label>
-            <input type="text" class="form-control" id="inputPageNumbers" name="pagesNumber">
-        </div>
-        <div class="col-12 mt-lg-5">
-            <button type="submit" class="btn btn-primary">Добавить закладку</button>
+        <div class="col-3">
+            <button type="submit" class="btn btn-primary">Загрузить</button>
         </div>
     </form>
 </div>
 
+<script>
+    $('#inputGroupFile').on('change', function () {
+        //get the file name
+        var fileName = $(this).val();
+        //replace the "Choose a file" label
+        $(this).next('.custom-file-label').html(fileName);
+    })
+</script>
 
 <!-- Modal menu exit  -->
 <%@ include file="/jsp/modalMenuExit.jsp" %>
 
 <%@ include file="/jsp/modalMenuOperationResult.jsp" %>
 
-
 <input class="hidden-role-value" type="hidden" name="role" value="${role}"/>
-<input class="operation-status" type="hidden" name="add-book-status" value="${status}"/>
+<input class="operation-status" type="hidden" name="operation-status" value="${status}"/>
 </body>
 <script src=${pageContext.request.contextPath}/js/main.js></script>
 <script src=${pageContext.request.contextPath}/js/modalMenuAction.js></script>
 </html>
+
 

@@ -34,7 +34,7 @@
 
 <div class="container mt-lg-5">
     <form class="row" name="addBookForm" method="POST"
-          action="${pageContext.request.contextPath}/controller?command=add_book">
+          action="${pageContext.request.contextPath}/controller">
         <input type="hidden" name="command" value="add_new_book"/>
         <div class="col-md-4">
             <label for="inputISBN" class="form-label">Book ISBN</label>

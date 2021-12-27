@@ -14,8 +14,6 @@ import java.io.IOException;
 
 @WebServlet("/controller")
 public class LibraryServlet extends HttpServlet {
-    public static final String ERROR_CONFIGURATION_LOADING = "Error configuration loading";
-    private final ServletConfig servletConfig = this.getServletConfig();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -46,5 +44,3 @@ public class LibraryServlet extends HttpServlet {
     }
 }
 
-//  request.setAttribute("name", this.getServletContext().getServletContextName());
-//  request.getRequestDispatcher("login.jsp").forward(request, response);

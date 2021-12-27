@@ -20,6 +20,7 @@ public class AddUserCommand implements ActionCommand {
         request.setAttribute("messageTitle", MessageManager.getProperty("message.addUserMessage.title"));
         if (userLogin == null || userLogin.equals("")) {
             request.setAttribute(RESULT_MESSAGE, MessageManager.getProperty("message.addUserMessage.userDataError"));
+            return page;
         }
         AddUserLogic addUserLogic = new AddUserLogic();
         String resultMessage = addUserLogic.addNewUser(userName, userLogin, userPassword, adminStatus);

@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 public class StringValidator {
 
     public static boolean isStringFilePath(String directoryPath) {
-        String regexp = "[A-Z]:\\\\[^&<>|#:;*?^\\/]**.(csv|json)";
+        String regexp = "[A-Z]:\\\\[^&<>|#:;*?^\\/]*.(csv|json)";
         return isStringValidPattern(directoryPath, regexp);
     }
 

@@ -35,7 +35,7 @@
 
 <div class="container mt-lg-5">
     <form class="row" name="addUSerForm" method="POST"
-          action="${pageContext.request.contextPath}/controller?command=add_user">
+          action="${pageContext.request.contextPath}/controller">
         <input type="hidden" name="command" value="add_user"/>
         <div class="col-md-8">
             <label for="inputFullName" class="form-label">Имя пользователя</label>

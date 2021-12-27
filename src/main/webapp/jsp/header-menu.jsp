@@ -25,7 +25,8 @@
                         <li><a class="dropdown-item" href="${pageContext.request.contextPath}/jsp/addBookMark.jsp">Добавить
                             закладку в книгу</a></li>
                         <li><a class="dropdown-item" href="#">Удалить закладку</a></li>
-                        <li><a class="dropdown-item" href="#">Добавить книги из файла</a></li>
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/jsp/addBooksFromFile.jsp">Добавить
+                            книги из файла</a></li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
