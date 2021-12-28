@@ -55,7 +55,9 @@
                         <li class="admin-menu"><a class="dropdown-item"
                                                   href="${pageContext.request.contextPath}/jsp/blockUser.jsp">Заблокировать
                             пользователя</a></li>
-                        <li class="admin-menu"><a class="dropdown-item" href="#">Разблокировать пользователя</a></li>
+                        <li class="admin-menu"><a class="dropdown-item"
+                                                  href="${pageContext.request.contextPath}/jsp/unblockUser.jsp">Разблокировать
+                            пользователя</a></li>
                         <li class="admin-menu"><a class="dropdown-item" href="#">Посмотреть историю всех
                             пользователей</a></li>
                     </ul>

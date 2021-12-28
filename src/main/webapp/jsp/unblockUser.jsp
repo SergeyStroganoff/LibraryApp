@@ -31,15 +31,15 @@
 <%@ include file="/jsp/header-menu.jsp" %>
 
 <div class="container mt-lg-5">
-    <form class="row" name="blockUserForm" method="POST"
+    <form class="row" name="unblockUserForm" method="POST"
           action="${pageContext.request.contextPath}/controller">
-        <input type="hidden" name="command" value="block_user"/>
+        <input type="hidden" name="command" value="unblock_user"/>
         <div class="col-md-4">
             <label for="inputUserLogin" class="form-label">Логин пользователя</label>
             <input type="text" class="form-control" id="inputUserLogin" name="inputUserLogin">
         </div>
         <div class="col-12 mt-lg-5">
-            <button type="submit" class="btn btn-primary">Заблокировать пользователя</button>
+            <button type="submit" class="btn btn-primary">Разблокировать пользователя</button>
         </div>
     </form>
 </div>
@@ -56,5 +56,4 @@
 <script src=${pageContext.request.contextPath}/js/main.js></script>
 <script src=${pageContext.request.contextPath}/js/modalMenuAction.js></script>
 </html>
-
 
