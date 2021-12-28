@@ -2,6 +2,7 @@ package org.stroganov.controllers.commands;
 
 import org.stroganov.controllers.actions.ActionCommand;
 import org.stroganov.controllers.logic.AddBookMarkLogic;
+import org.stroganov.history.WEBHistoryManager;
 import org.stroganov.util.ConfigurationManager;
 import org.stroganov.util.MessageManager;
 import org.stroganov.util.StringValidator;
@@ -24,6 +25,7 @@ public class AddBookMarkCommand implements ActionCommand {
         AddBookMarkLogic addBookMarkLogic = new AddBookMarkLogic();
         String resultMessage = addBookMarkLogic.addNewBookMark(ISBN, (String) request.getSession().getAttribute("userLogin"), bookMarkPageNumber);
         request.setAttribute(RESULT_MESSAGE, resultMessage);
+        WEBHistoryManager.saveAction((String) request.getSession().getAttribute("userLogin"), resultMessage);
         return page;
     }
 }

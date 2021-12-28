@@ -4,6 +4,7 @@ package org.stroganov.controllers.commands;
 import org.stroganov.controllers.actions.ActionCommand;
 import org.stroganov.controllers.logic.LoginLogic;
 import org.stroganov.entities.User;
+import org.stroganov.history.WEBHistoryManager;
 import org.stroganov.util.ConfigurationManager;
 import org.stroganov.util.CookieUtil;
 import org.stroganov.util.MessageManager;
@@ -34,8 +35,8 @@ public class LoginCommand implements ActionCommand {
                 servletRequest.setAttribute("role", userRole);
             }
             session.setAttribute("userLogin", user.getLogin());
-// определение пути к main.jsp
             page = ConfigurationManager.getProperties("path.page.main");
+            WEBHistoryManager.saveAction(user.getLogin(), MessageManager.getProperty("message.history.login"));
         } else {
             servletRequest.setAttribute("errorLoginPassMessage",
                     MessageManager.getProperty("message.loginerror"));

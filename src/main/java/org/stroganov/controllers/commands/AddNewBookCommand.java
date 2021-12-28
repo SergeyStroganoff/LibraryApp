@@ -2,6 +2,7 @@ package org.stroganov.controllers.commands;
 
 import org.stroganov.controllers.actions.ActionCommand;
 import org.stroganov.controllers.logic.AddBookLogic;
+import org.stroganov.history.WEBHistoryManager;
 import org.stroganov.util.ConfigurationManager;
 import org.stroganov.util.MessageManager;
 import org.stroganov.util.StringValidator;
@@ -38,11 +39,13 @@ public class AddNewBookCommand implements ActionCommand {
             return page;
         }
 
-        if (wasBookAdd) {
-            request.setAttribute(RESULT_MESSAGE, MessageManager.getProperty("message.addNewBookMessage.successful"));
-        } else {
-            request.setAttribute(RESULT_MESSAGE, MessageManager.getProperty("message.addNewBookMessage.notSuccessful"));
+        String resultMessage = MessageManager.getProperty("message.addNewBookMessage.successful");
+        if (!wasBookAdd) {
+            resultMessage = MessageManager.getProperty("message.addNewBookMessage.notSuccessful");
         }
+
+        request.setAttribute(RESULT_MESSAGE, resultMessage);
+        WEBHistoryManager.saveAction((String) request.getSession().getAttribute("userLogin"), resultMessage);
         return page;
     }
 }

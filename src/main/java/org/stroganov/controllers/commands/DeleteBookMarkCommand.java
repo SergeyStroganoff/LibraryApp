@@ -3,6 +3,7 @@ package org.stroganov.controllers.commands;
 import org.stroganov.controllers.actions.ActionCommand;
 import org.stroganov.controllers.logic.DeleteBookLogic;
 import org.stroganov.controllers.logic.DeleteBookMarkLogic;
+import org.stroganov.history.WEBHistoryManager;
 import org.stroganov.util.ConfigurationManager;
 import org.stroganov.util.MessageManager;
 
@@ -21,6 +22,7 @@ public class DeleteBookMarkCommand implements ActionCommand {
         DeleteBookMarkLogic deleteBookMarkLogic = new DeleteBookMarkLogic();
         String resultMessage = deleteBookMarkLogic.deleteBookMark(bookISBN, bookPageNumber, userLogin);
         request.setAttribute(RESULT_MESSAGE, resultMessage);
+        WEBHistoryManager.saveAction((String) request.getSession().getAttribute("userLogin"), resultMessage);
         return page;
     }
 }

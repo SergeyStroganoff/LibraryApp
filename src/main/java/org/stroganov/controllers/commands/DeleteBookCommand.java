@@ -2,6 +2,7 @@ package org.stroganov.controllers.commands;
 
 import org.stroganov.controllers.actions.ActionCommand;
 import org.stroganov.controllers.logic.DeleteBookLogic;
+import org.stroganov.history.WEBHistoryManager;
 import org.stroganov.util.ConfigurationManager;
 import org.stroganov.util.MessageManager;
 
@@ -20,6 +21,7 @@ public class DeleteBookCommand implements ActionCommand {
         DeleteBookLogic deleteBookLogic = new DeleteBookLogic();
         String resultMessage = deleteBookLogic.deleteBook(bookISBN);
         request.setAttribute(RESULT_MESSAGE, resultMessage);
+        WEBHistoryManager.saveAction((String) request.getSession().getAttribute("userLogin"), resultMessage);
         return page;
     }
 }

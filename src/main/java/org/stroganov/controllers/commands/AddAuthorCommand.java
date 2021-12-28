@@ -2,6 +2,7 @@ package org.stroganov.controllers.commands;
 
 import org.stroganov.controllers.actions.ActionCommand;
 import org.stroganov.controllers.logic.AddAuthorLogic;
+import org.stroganov.history.WEBHistoryManager;
 import org.stroganov.util.ConfigurationManager;
 import org.stroganov.util.MessageManager;
 
@@ -18,6 +19,7 @@ public class AddAuthorCommand implements ActionCommand {
         AddAuthorLogic addAuthorLogic = new AddAuthorLogic();
         String resultMessage = addAuthorLogic.addNewAuthor(authorName);
         request.setAttribute(RESULT_MESSAGE, resultMessage);
+        WEBHistoryManager.saveAction((String) request.getSession().getAttribute("userLogin"), resultMessage);
         return page;
     }
 }
