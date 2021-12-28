@@ -34,7 +34,8 @@
                         </li>
                         <li><a class="dropdown-item" href="${pageContext.request.contextPath}/jsp/addAuthor.jsp">Добавить
                             автора</a></li>
-                        <li><a class="dropdown-item" href="#">Удалить автора и его книги</a></li>
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/jsp/deleteAuthor.jsp">Удалить
+                            автора и его книги</a></li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
@@ -51,7 +52,9 @@
                         <li class="admin-menu"><a class="dropdown-item"
                                                   href="${pageContext.request.contextPath}/jsp/addUser.jsp">Создать
                             пользователя</a></li>
-                        <li class="admin-menu"><a class="dropdown-item" href="#">Заблокировать пользователя</a></li>
+                        <li class="admin-menu"><a class="dropdown-item"
+                                                  href="${pageContext.request.contextPath}/jsp/blockUser.jsp">Заблокировать
+                            пользователя</a></li>
                         <li class="admin-menu"><a class="dropdown-item" href="#">Разблокировать пользователя</a></li>
                         <li class="admin-menu"><a class="dropdown-item" href="#">Посмотреть историю всех
                             пользователей</a></li>
