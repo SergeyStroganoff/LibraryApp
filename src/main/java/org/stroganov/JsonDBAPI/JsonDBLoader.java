@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface JsonDBLoader {
     String DB_EXCEPTIONS = "DB files was not founded ore read :";
-    Logger logger = org.apache.log4j.Logger.getLogger(JsonDBLoader.class);
+    Logger logger = Logger.getLogger(JsonDBLoader.class);
 
     static <T> List<T> loadEntities(String filePath, Class<T> tClass) throws DBExceptions {
         String jsonString;

@@ -11,7 +11,7 @@ public class User implements Serializable {
 
     @Transient
     private int userID;
-    @Column(name = "fullname", unique = false, nullable = false)
+    @Column(name = "fullname", nullable = false)
     private String fullName;
     @Id
     @Column(name = "login")

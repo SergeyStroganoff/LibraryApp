@@ -12,6 +12,7 @@ public class Book implements Serializable {
     @Column(name = "bookname")
     private String bookName;
     @ManyToOne()
+    @JoinColumn(name = "authorName_authorid")
     private Author authorName;
     @Column(name = "yearpublishing")
     private int yearPublishing;

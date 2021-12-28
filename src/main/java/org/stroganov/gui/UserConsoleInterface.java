@@ -10,7 +10,7 @@ import java.io.IOException;
 public class UserConsoleInterface implements UserInterface {
 
     private static final Logger logger = Logger.getLogger(App.class);
-    BufferedReader reader;
+    final BufferedReader reader;
 
     public UserConsoleInterface(BufferedReader reader) {
         this.reader = reader;

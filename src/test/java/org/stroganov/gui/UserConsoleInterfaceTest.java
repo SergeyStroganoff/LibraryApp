@@ -20,8 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ExtendWith(MockitoExtension.class)
 class UserConsoleInterfaceTest {
 
-    String OUTPUT_MESSAGE = "Test string";
-
+    private final String OUTPUT_MESSAGE = "Test string";
 
     @ParameterizedTest
     @ValueSource(strings = {"fgh12", "67!12", "dfgdfguu"})

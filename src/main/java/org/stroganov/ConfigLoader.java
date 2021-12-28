@@ -27,9 +27,6 @@ public class ConfigLoader {
 
     public boolean propertyVerify(Properties properties) {
         String historyLogFileName = properties.getProperty("historyLogFileName");
-        if (!historyLogFileName.matches("^\\w+.json")) {
-            return false;
-        }
-        return true;
+        return historyLogFileName.matches("^\\w+.json");
     }
 }
