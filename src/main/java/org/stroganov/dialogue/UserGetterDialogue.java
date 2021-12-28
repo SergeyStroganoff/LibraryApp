@@ -2,7 +2,6 @@ package org.stroganov.dialogue;
 
 import org.stroganov.entities.User;
 import org.stroganov.gui.UserInterface;
-import org.stroganov.util.PasswordAuthentication;
 
 public class UserGetterDialogue {
 

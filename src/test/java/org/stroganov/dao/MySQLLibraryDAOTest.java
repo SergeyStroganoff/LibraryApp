@@ -4,6 +4,7 @@ import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
 import org.stroganov.entities.Author;
 import org.stroganov.entities.Book;
 import org.stroganov.entities.BookMark;
@@ -33,65 +34,81 @@ class MySQLLibraryDAOTest {
     }
 
     @Test
-    void findBook() {
+    void findBook() throws IOException {
         // GIVEN
         Book testBook = new Book("99-99", "TEST BOOK", new Author(1, "Test Author"), 2021, 1);
+        libraryDAO.addBook(testBook);
         // WHEN
         Book bookFromDB = libraryDAO.findBook("99-99");
+        libraryDAO.deleteBook(libraryDAO.findBook(testBook.getNumberISBN()));
         // THEN
         Assertions.assertEquals(testBook.getBookName(), bookFromDB.getBookName());
     }
 
 
     @Test
-    void findBooksByPartName() {
+    void findBooksByPartName() throws IOException {
         // GIVEN
+        Book testBook = new Book("99-99", "TEST BOOK", new Author(1, "Test Author"), 2021, 1);
+        libraryDAO.addBook(testBook);
         String partOfBookName = "OO";
         // WHEN
         List<Book> bookList = libraryDAO.findBooksByPartName("OO");
+        libraryDAO.deleteBook(libraryDAO.findBook(testBook.getNumberISBN()));
         // THEN
         Assertions.assertTrue(bookList.get(0).getBookName().contains(partOfBookName));
     }
 
     @Test
-    void findBooksByPartAuthorName_ReturnBook() {
+    void findBooksByPartAuthorName_ReturnBook() throws IOException {
         // GIVEN
         String partOfAuthorName = "est";
         // WHEN
+        Book testBook = new Book("99-99", "TEST BOOK", new Author(1, "Test Author"), 2021, 1);
+        libraryDAO.addBook(testBook);
         List<Book> bookList = libraryDAO.findBooksByPartAuthorName(partOfAuthorName);
+        libraryDAO.deleteBook(libraryDAO.findBook(testBook.getNumberISBN()));
         // THEN
         Assertions.assertFalse(bookList.isEmpty());
         Assertions.assertTrue(bookList.get(0).getAuthor().getAuthorName().toLowerCase().contains(partOfAuthorName));
     }
 
     @Test
-    void findBooksByYearsRange_Return_Not_Empty_ListOfBook() {
+    void findBooksByYearsRange_Return_Not_Empty_ListOfBook() throws IOException {
         // GIVEN
-        String bookName = "TEST BOOK";
+        Book testBook = new Book("99-99", "TEST BOOK", new Author(1, "Test Author"), 21, 1);
+        libraryDAO.addBook(testBook);
         // WHEN
-        List<Book> bookList = libraryDAO.findBooksByYearsRange(2020, 2021);
+        List<Book> bookList = libraryDAO.findBooksByYearsRange(20, 21);
+        libraryDAO.deleteBook(libraryDAO.findBook(testBook.getNumberISBN()));
         // THEN
         Assertions.assertFalse(bookList.isEmpty());
-        Assertions.assertEquals(bookList.get(0).getBookName(), bookName);
+        Assertions.assertEquals(bookList.get(0).getBookName(), testBook.getBookName());
     }
 
     @Test
-    void findBooksByParameters_Return_Not_Empty_ListOfBook() {
+    void findBooksByParameters_Return_Not_Empty_ListOfBook() throws IOException {
         // GIVEN
-        String bookName = "TEST BOOK";
+        Book testBook = new Book("99-99", "TEST BOOK", new Author(1, "Test Author"), 21, 1);
+        libraryDAO.addBook(testBook);
         // WHEN
-        List<Book> bookList = libraryDAO.findBooksByParameters(2021, 1, "T");
+        List<Book> bookList = libraryDAO.findBooksByParameters(21, 1, "T");
+        libraryDAO.deleteBook(libraryDAO.findBook(testBook.getNumberISBN()));
         // THEN
         Assertions.assertFalse(bookList.isEmpty());
-        Assertions.assertEquals(bookList.get(0).getBookName(), bookName);
+        Assertions.assertEquals(bookList.get(0).getBookName(), testBook.getBookName());
     }
 
     @Test
-    void findBooksWithUserBookMarks_Return_Not_Empty_ListOfBook() {
+    void findBooksWithUserBookMarks_Return_Not_Empty_ListOfBook() throws IOException {
         // GIVEN
-        User user = libraryDAO.findUser("newadmin");
+        User testUser = new User(1, "SMM", "user11", "123", false, true);
         // WHEN
-        List<Book> bookList = libraryDAO.findBooksWithUserBookMarks(user);
+        libraryDAO.addUser(testUser);
+        User userFromDB = libraryDAO.findUser(testUser.getLogin());
+        // WHEN
+        List<Book> bookList = libraryDAO.findBooksWithUserBookMarks(userFromDB);
+        libraryDAO.deleteUser(userFromDB);
         // THEN
         Assertions.assertFalse(bookList.isEmpty());
     }
@@ -113,21 +130,27 @@ class MySQLLibraryDAOTest {
         // GIVEN
         User testUser = new User(1, "SMM", "user11", "123", false, true);
         // WHEN
+        libraryDAO.deleteUser(testUser);
         boolean isAdded = libraryDAO.addUser(testUser);
-        User userFromDB = libraryDAO.findUser("test");
+        User userFromDB = libraryDAO.findUser(testUser.getLogin());
+        libraryDAO.deleteUser(userFromDB);
         // THEN
         Assertions.assertTrue(isAdded);
         Assertions.assertNotNull(userFromDB);
     }
 
     @Test
-    void findUser_Return_TestUser() {
-        // GIVEN
-        String userName = "TEST USER";
+    void findUser_Return_TestUser() throws IOException {
+
+        User testUser = new User(1, "SMM", "user11", "123", false, true);
         // WHEN
-        User userFromDB = libraryDAO.findUser("test");
-        // THEN
-        Assertions.assertEquals(userFromDB.getFullName(), userName);
+        libraryDAO.deleteUser(testUser);
+        boolean isAdded = libraryDAO.addUser(testUser);
+        User userFromDB = libraryDAO.findUser(testUser.getLogin());
+        if (isAdded) {
+            libraryDAO.deleteUser(userFromDB);
+        }
+        Assertions.assertEquals(userFromDB.getFullName(), testUser.getFullName());
     }
 
     @Test
@@ -135,8 +158,10 @@ class MySQLLibraryDAOTest {
         // GIVEN
         User testUser = new User(1, "TEST USER", "test", "sdfsdf4", false, false);
         // WHEN
+        libraryDAO.addUser(testUser);
         boolean isUserWasBlocked = libraryDAO.blockUser(testUser);
-        User userFromDB = libraryDAO.findUser("test");
+        User userFromDB = libraryDAO.findUser(testUser.getLogin());
+        libraryDAO.deleteUser(testUser);
         // THEN
         Assertions.assertTrue(isUserWasBlocked);
         Assertions.assertTrue(userFromDB.isBlocked());
@@ -146,6 +171,8 @@ class MySQLLibraryDAOTest {
     void unblockUser_Return_True() throws IOException {
         // GIVEN
         User testUser = new User(1, "TEST USER", "test", "sdfsdf4", false, false);
+        libraryDAO.addUser(testUser);
+        libraryDAO.blockUser(testUser);
         // WHEN
         boolean isUserWasUnBlocked = libraryDAO.unblockUser(testUser);
         User userFromDB = libraryDAO.findUser("test");
@@ -159,7 +186,6 @@ class MySQLLibraryDAOTest {
         // GIVEN
         User testUser = new User(1, "TEST USER", "test", "sdfsdf4", false, false);
         // WHEN
-
         boolean isUserWasDeleted = libraryDAO.deleteUser(testUser);
         User userFromDB = libraryDAO.findUser("test");
         // THEN
@@ -177,12 +203,12 @@ class MySQLLibraryDAOTest {
         libraryDAO.addUser(testUser);
         libraryDAO.addBook(testBook);
         // WHEN
+        libraryDAO.deleteBookMark(bookMark);
         boolean isAdded = libraryDAO.addBookMark(bookMark);
         // THEN
         Assertions.assertTrue(isAdded);
         libraryDAO.deleteUser(testUser);
         libraryDAO.deleteBook(testBook);
-        libraryDAO.deleteBookMark(bookMark);
     }
 
     @Test
@@ -203,7 +229,8 @@ class MySQLLibraryDAOTest {
     @Test
     void addAuthor() throws IOException {
         // GIVEN
-        Author author = new Author(1, "Test Author");
+        Author author = new Author(1, "Author");
+        libraryDAO.deleteAuthorWithAllHisBooks(libraryDAO.findAuthor(author.getAuthorName()));
         // WHEN
         boolean isAdded = libraryDAO.addAuthor(author);
         // THEN
@@ -211,13 +238,17 @@ class MySQLLibraryDAOTest {
     }
 
     @Test
-    void findAuthor_Then_Return_True() {
+    void findAuthor_Then_Return_True() throws IOException {
         // GIVEN
-        String authorName = "Test Author";
+        Author testAuthor = new Author(1, "Author");
+        boolean isAdded = libraryDAO.addAuthor(testAuthor);
         // WHEN
-        Author author = libraryDAO.findAuthor(authorName);
+        Author author = libraryDAO.findAuthor(testAuthor.getAuthorName());
+        if (isAdded) {
+            libraryDAO.deleteAuthorWithAllHisBooks(author);
+        }
         // THEN
-        Assertions.assertEquals(author.getAuthorName(), authorName);
+        Assertions.assertEquals(author.getAuthorName(), testAuthor.getAuthorName());
     }
 
     @Test

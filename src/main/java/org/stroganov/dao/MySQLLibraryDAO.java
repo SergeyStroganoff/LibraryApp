@@ -6,10 +6,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-import org.stroganov.entities.Author;
-import org.stroganov.entities.Book;
-import org.stroganov.entities.BookMark;
-import org.stroganov.entities.User;
+import org.stroganov.entities.*;
 
 import javax.persistence.TypedQuery;
 import java.util.Collections;
@@ -273,6 +270,7 @@ public class MySQLLibraryDAO implements LibraryDAO {
     private <T> boolean deleteEntity(T t, String actionType) {
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
+            // session.refresh(t); //to
             session.delete(t);
             transaction.commit();
             return true;
@@ -282,7 +280,8 @@ public class MySQLLibraryDAO implements LibraryDAO {
         return false;
     }
 
-    private List<BookMark> findUserBookMarks(User user) {
+    @Override
+    public List<BookMark> findUserBookMarks(User user) {
         try (Session session = sessionFactory.openSession()) {
             Query<BookMark> query = session.createQuery(" SELECT bm FROM BookMark bm" +
                             " LEFT JOIN Book b on bm.book=b" +
@@ -308,6 +307,30 @@ public class MySQLLibraryDAO implements LibraryDAO {
             logger.error(HIBERNATE_ERROR_MESSAGE + "findAllBookMarksInBook: ", e);
         }
         return Collections.emptyList();
-
     }
+
+    @Override
+    public boolean addHistoryEvent(History history) {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            session.save(history);
+            transaction.commit();
+            return true;
+        } catch (HibernateException e) {
+            logger.error(HIBERNATE_ERROR_MESSAGE + "addHistory", e);
+            return false;
+        }
+    }
+
+    @Override
+    public List<History> getAllHistory() {
+        try (Session session = sessionFactory.openSession()) {
+            Query<History> query = session.createQuery("FROM History", History.class);
+            return query.getResultList();
+        } catch (HibernateException e) {
+            logger.error(HIBERNATE_ERROR_MESSAGE + "getHistory: ", e);
+        }
+        return Collections.emptyList();
+    }
+
 }

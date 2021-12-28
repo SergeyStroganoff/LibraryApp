@@ -14,7 +14,7 @@ public class BookMarkGetterDialogue {
     public static final String NOT_A_NUMBER_OF_PAGE_MESSAGE = "You entered not a number of page";
     public static final String NO_SUCH_PAGE_MESSAGE = "Book doesn't have such page";
     public static final String NO_SUCH_BOOK_MESSAGE = "No such book founded";
-    Logger logger = Logger.getLogger(BookMarkGetterDialogue.class);
+    private final Logger logger = Logger.getLogger(BookMarkGetterDialogue.class);
 
     public BookMark getBookMarkFromUser(UserInterface userInterface, LibraryDAO libraryDAO, User user) {
         BookMark bookMark = null;

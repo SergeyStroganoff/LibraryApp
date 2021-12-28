@@ -1,9 +1,6 @@
 package org.stroganov.dao;
 
-import org.stroganov.entities.Author;
-import org.stroganov.entities.Book;
-import org.stroganov.entities.BookMark;
-import org.stroganov.entities.User;
+import org.stroganov.entities.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -50,4 +47,9 @@ public interface LibraryDAO {
 
     List<Book> findBooksWithUserBookMarks(User user);
 
+    List<BookMark> findUserBookMarks(User user);
+
+    boolean addHistoryEvent(History history);
+
+    List<History> getAllHistory();
 }
