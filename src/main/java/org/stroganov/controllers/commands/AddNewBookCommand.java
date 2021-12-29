@@ -24,12 +24,10 @@ public class AddNewBookCommand implements ActionCommand {
         AddBookLogic addBookLogic = new AddBookLogic();
         request.setAttribute("status", "executed");
         request.setAttribute("messageTitle", MessageManager.getProperty("message.addNewBookMessage.title"));
-
         if (!StringValidator.isStringYear(bookPublishingYear) || !StringValidator.isStringNumberPage(bookPagesNumber)) {
             request.setAttribute(RESULT_MESSAGE, MessageManager.getProperty("message.addNewBookMessage.wrongInputData"));
             return page;
         }
-
         boolean wasBookAdd;
         try {
             wasBookAdd = addBookLogic.addNewBook(ISBN, bookName, bookAuthorName, bookPublishingYear, bookPagesNumber);
@@ -38,12 +36,10 @@ public class AddNewBookCommand implements ActionCommand {
                     MessageManager.getProperty("message.addNewBookMessage.error") + e.getMessage());
             return page;
         }
-
         String resultMessage = MessageManager.getProperty("message.addNewBookMessage.successful");
         if (!wasBookAdd) {
             resultMessage = MessageManager.getProperty("message.addNewBookMessage.notSuccessful");
         }
-
         request.setAttribute(RESULT_MESSAGE, resultMessage);
         WEBHistoryManager.saveAction((String) request.getSession().getAttribute("userLogin"), resultMessage);
         return page;
