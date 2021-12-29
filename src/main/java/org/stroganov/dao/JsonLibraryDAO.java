@@ -3,10 +3,7 @@ package org.stroganov.dao;
 import org.stroganov.App;
 import org.stroganov.JsonDBAPI.JsonDBLoader;
 import org.stroganov.JsonDBAPI.JsonDBSaver;
-import org.stroganov.entities.Author;
-import org.stroganov.entities.Book;
-import org.stroganov.entities.BookMark;
-import org.stroganov.entities.User;
+import org.stroganov.entities.*;
 import org.stroganov.exceptions.DBExceptions;
 
 import java.io.IOException;
@@ -234,5 +231,15 @@ public class JsonLibraryDAO implements LibraryDAO {
         return bookMarkList.stream()
                 .filter(b -> b.getUser().equals(user))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean addHistoryEvent(History history) {
+        throw new UnsupportedOperationException(" addHistoryEvent do not realized");
+    }
+
+    @Override
+    public List<History> getAllHistory() {
+        throw new UnsupportedOperationException("getAllHistory do not realized");
     }
 }

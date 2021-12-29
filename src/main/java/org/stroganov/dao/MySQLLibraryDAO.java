@@ -6,12 +6,10 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-import org.stroganov.entities.Author;
-import org.stroganov.entities.Book;
-import org.stroganov.entities.BookMark;
-import org.stroganov.entities.User;
+import org.stroganov.entities.*;
 
 import javax.persistence.TypedQuery;
+import javax.swing.text.Highlighter;
 import java.util.Collections;
 import java.util.List;
 
@@ -310,6 +308,30 @@ public class MySQLLibraryDAO implements LibraryDAO {
             logger.error(HIBERNATE_ERROR_MESSAGE + "findAllBookMarksInBook: ", e);
         }
         return Collections.emptyList();
-
     }
+
+    @Override
+    public boolean addHistoryEvent(History history) {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            session.save(history);
+            transaction.commit();
+            return true;
+        } catch (HibernateException e) {
+            logger.error(HIBERNATE_ERROR_MESSAGE + "addHistory", e);
+            return false;
+        }
+    }
+
+    @Override
+    public List<History> getAllHistory() {
+        try (Session session = sessionFactory.openSession()) {
+            Query<History> query = session.createQuery("FROM History", History.class);
+            return query.getResultList();
+        } catch (HibernateException e) {
+            logger.error(HIBERNATE_ERROR_MESSAGE + "getHistory: ", e);
+        }
+        return Collections.emptyList();
+    }
+
 }
