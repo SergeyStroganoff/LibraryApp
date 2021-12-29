@@ -14,25 +14,27 @@ import java.util.List;
 
 public class WEBHistoryManager {
 
-    private static final Logger logger = Logger.getLogger(WEBHistoryManager.class);
-    private static final String HISTORY_FILE_NAME = ConfigurationManager.getProperties("historyLogFileName");
+    private static final Logger HISTORY_LOGGER = Logger.getLogger(WEBHistoryManager.class);
 
     static {
         try {
-            logger.addAppender(new FileAppender(new JSONEventLayoutV1(), HISTORY_FILE_NAME));
+            HISTORY_LOGGER.addAppender(new FileAppender(new JSONEventLayoutV1(), ConfigurationManager.getProperties("historyLogFileName")));
         } catch (IOException e) {
-            logger.error("Error when change logger appender " + e.getMessage());
+            HISTORY_LOGGER.error("Error when change logger appender " + e.getMessage());
         }
     }
 
+    private WEBHistoryManager() {
+    }
+
     public static void saveAction(String userLogin, String stringAction) {
-        logger.info("UserLogin: " + userLogin + ". Action: " + stringAction);
+        HISTORY_LOGGER.info("UserLogin: " + userLogin + ". Action: " + stringAction);
     }
 
     public static List<HistoryEvent> getHistoryEventsList() throws IOException {
         Gson gson = new Gson();
         List<HistoryEvent> historyEvents = new ArrayList<>();
-        List<String> stringList = FileUtil.getListOfStringsFile(HISTORY_FILE_NAME);
+        List<String> stringList = FileUtil.getListOfStringsFile(ConfigurationManager.getProperties("historyLogFileName"));
         stringList.forEach(o -> historyEvents.add(gson.fromJson(o, HistoryEvent.class)));
         return historyEvents;
     }
