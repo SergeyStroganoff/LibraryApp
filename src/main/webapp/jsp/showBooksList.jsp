@@ -1,5 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" buffer="none" isThreadSafe="true" errorPage="/jsp/error.jsp" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE html>
@@ -26,29 +25,39 @@
     <link rel="icon" href="${pageContext.request.contextPath}/img/books-library-logo.png" type="image/x-icon">
     <link rel="shortcut icon" href="${pageContext.request.contextPath}/img/books-library-logo.png" type="image/x-icon">
 
-    <title>Добавить закладку в книгу</title>
+    <title>Список книг</title>
 </head>
 <body>
 
 <%@ include file="/jsp/header-menu.jsp" %>
 
-
 <div class="container mt-lg-5">
-    <form class="row" name="addBookForm" method="POST"
-          action="${pageContext.request.contextPath}/controller">
-        <input type="hidden" name="command" value="add_book_mark"/>
-        <div class="col-md-4">
-            <label for="inputISBN" class="form-label">Book ISBN</label>
-            <input type="text" class="form-control" id="inputISBN" name="ISBN">
-        </div>
-        <div class="col-md-3">
-            <label for="inputPageNumbers" class="form-label">Номер страницы</label>
-            <input type="text" class="form-control" id="inputPageNumbers" name="pagesNumber">
-        </div>
-        <div class="col-12 mt-lg-5">
-            <button type="submit" class="btn btn-primary">Добавить закладку</button>
-        </div>
-    </form>
+    <h5 class="text-center">Список запрошенных книг</h5>
+</div>
+
+<div class=" container table-responsive">
+    <table class="table">
+        <thead class="bg-light">
+        <tr>
+            <th scope="col">ISBN номер</th>
+            <th scope="col">Наименование</th>
+            <th scope="col">Имя Автора</th>
+            <th scope="col">Год публикации</th>
+            <th scope="col">Количество страниц</th>
+        </tr>
+        </thead>
+        <tbody class="table-striped">
+        <c:forEach var="book" items="${books}">
+            <tr>
+                <td>${book.numberISBN}</td>
+                <td>${book.bookName}</td>
+                <td>${book.author.authorName}</td>
+                <td>${book.yearPublishing}</td>
+                <td>${book.pagesNumber}</td>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
 </div>
 
 
@@ -57,11 +66,12 @@
 
 <%@ include file="/jsp/modalMenuOperationResult.jsp" %>
 
-
 <input class="hidden-role-value" type="hidden" name="role" value="${sessionScope.role}"/>
-<input class="operation-status" type="hidden" name="add-book-status" value="${status}"/>
 </body>
 <script src=${pageContext.request.contextPath}/js/main.js></script>
 <script src=${pageContext.request.contextPath}/js/modalMenuAction.js></script>
 </html>
+
+
+
 

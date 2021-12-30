@@ -23,10 +23,7 @@ public class StringValidator {
     private static boolean isStringValidPattern(String string, String regexp) {
         Pattern pattern = Pattern.compile(regexp);
         Matcher matcher = pattern.matcher(string);
-        if (!matcher.matches()) {
-            return false;
-        }
-        return true;
+        return matcher.matches();
     }
 
 }

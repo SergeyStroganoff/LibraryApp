@@ -5,7 +5,7 @@ import org.stroganov.util.PasswordAuthentication;
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Entity(name = "user")
+@Entity
 @Table(name = ("users"))
 public class User implements Serializable {
 

@@ -15,7 +15,8 @@ const AppClass = class {
 
     init() {
         this.btnLogoutElement.addEventListener('click', () => {
-            document.location.href = "../controller?command=LOGOUT";
+            let currentPath = document.location.host + "/LibraryApp-1.0-SNAPSHOT";
+            document.href = currentPath + "/controller?command=LOGOUT";
         });
         if (this.roleElement.getAttribute('value') === 'user') {
             this.changeDisplayStyleElements(this.adminMenuElements, "none");

@@ -54,8 +54,8 @@
 <%@ include file="/jsp/modalMenuOperationResult.jsp" %>
 
 
-<input class="hidden-role-value" type="hidden" name="role" value="${role}"/>
-<input class="operation-status" type="hidden" name="operation-status" value="${status}"/>
+<input class="hidden-role-value" type="hidden" name="role" value="${sessionScope.role}"/>
+<input class="operation-status" type="hidden" name="operation-status" value="${requestScope.status}"/>
 </body>
 <script src=${pageContext.request.contextPath}/js/main.js></script>
 <script src=${pageContext.request.contextPath}/js/modalMenuAction.js></script>

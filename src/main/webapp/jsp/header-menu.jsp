@@ -39,13 +39,22 @@
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li><a class="dropdown-item" href="#">Искать книги по части названия</a></li>
-                        <li><a class="dropdown-item" href="#">Искать книги по номеру ISBN</a></li>
-                        <li><a class="dropdown-item" href="#">Искать книги по части имени автора</a></li>
-                        <li><a class="dropdown-item" href="#">Искать книги в интервале дат выпуска</a></li>
-                        <li><a class="dropdown-item" href="#">Искать книгу по дате выпуска, количеству страниц и части
-                            названия </a></li>
-                        <li><a class="dropdown-item" href="#">Искать книги с моими закладками</a></li>
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/jsp/searchBookByName.jsp">Искать
+                            книги по части названия</a></li>
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/jsp/searchBookByISBN.jsp">Искать
+                            книги по номеру ISBN</a></li>
+                        <li><a class="dropdown-item"
+                               href="${pageContext.request.contextPath}/jsp/searchBookByAuthor.jsp">Искать книги по
+                            части имени автора</a></li>
+                        <li><a class="dropdown-item"
+                               href="${pageContext.request.contextPath}/jsp/searchBookInRange.jsp">Искать книги в
+                            интервале дат выпуска</a></li>
+                        <li><a class="dropdown-item"
+                               href="${pageContext.request.contextPath}/jsp/searchBookByParameters.jsp">Искать книгу по
+                            дате публикации, количеству страниц и части названия </a></li>
+                        <li><a class="dropdown-item"
+                               href="${pageContext.request.contextPath}/controller?command=show_my_book">Искать книги с
+                            моими закладками</a></li>
                         <li class="admin-menu">
                             <hr class="dropdown-divider">
                         </li>

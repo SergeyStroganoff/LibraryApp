@@ -32,7 +32,7 @@
 
 <%@ include file="/jsp/header-menu.jsp" %>
 
-<input class="hidden-role-value" type="hidden" name="role" value="${role}"/>
+<input class="hidden-role-value" type="hidden" name="role" value="${sessionScope.role}"/>
 
 
 <div id="about-text" class="visible">

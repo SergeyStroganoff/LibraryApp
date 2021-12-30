@@ -26,37 +26,39 @@
     <link rel="icon" href="${pageContext.request.contextPath}/img/books-library-logo.png" type="image/x-icon">
     <link rel="shortcut icon" href="${pageContext.request.contextPath}/img/books-library-logo.png" type="image/x-icon">
 
-    <title>Добавить закладку в книгу</title>
+    <title>Поиск книги</title>
 </head>
 <body>
 
 <%@ include file="/jsp/header-menu.jsp" %>
 
-
 <div class="container mt-lg-5">
-    <form class="row" name="addBookForm" method="POST"
+    <form class="row" name="searchBookForm" method="POST"
           action="${pageContext.request.contextPath}/controller">
-        <input type="hidden" name="command" value="add_book_mark"/>
-        <div class="col-md-4">
-            <label for="inputISBN" class="form-label">Book ISBN</label>
-            <input type="text" class="form-control" id="inputISBN" name="ISBN">
+        <input type="hidden" name="command" value="search_book"/>
+        <input type="hidden" name="pagePath" value="jsp/searchBookByParameters.jsp"/>
+        <div class="col-12">
+            <label for="bookName" class="form-label">Название книги</label>
+            <input type="text" class="form-control" id="bookName" placeholder="" name="bookName">
         </div>
         <div class="col-md-3">
-            <label for="inputPageNumbers" class="form-label">Номер страницы</label>
+            <label for="inputPublishingYear" class="form-label">Год публикации</label>
+            <input type="text" class="form-control" id="inputPublishingYear" name="publishingYear">
+        </div>
+        <div class="col-md-3">
+            <label for="inputPageNumbers" class="form-label">Количество страниц</label>
             <input type="text" class="form-control" id="inputPageNumbers" name="pagesNumber">
         </div>
         <div class="col-12 mt-lg-5">
-            <button type="submit" class="btn btn-primary">Добавить закладку</button>
+            <button type="submit" class="btn btn-primary">Искать книгу</button>
         </div>
     </form>
 </div>
-
 
 <!-- Modal menu exit  -->
 <%@ include file="/jsp/modalMenuExit.jsp" %>
 
 <%@ include file="/jsp/modalMenuOperationResult.jsp" %>
-
 
 <input class="hidden-role-value" type="hidden" name="role" value="${sessionScope.role}"/>
 <input class="operation-status" type="hidden" name="add-book-status" value="${status}"/>
@@ -64,4 +66,3 @@
 <script src=${pageContext.request.contextPath}/js/main.js></script>
 <script src=${pageContext.request.contextPath}/js/modalMenuAction.js></script>
 </html>
-
