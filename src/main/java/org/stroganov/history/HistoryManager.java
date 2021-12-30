@@ -1,7 +1,6 @@
 package org.stroganov.history;
 
 import com.google.gson.Gson;
-import net.logstash.log4j.JSONEventLayoutV0;
 import net.logstash.log4j.JSONEventLayoutV1;
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.Logger;
@@ -33,7 +32,7 @@ import java.util.List;
 public class HistoryManager {
 
     private final Logger logger = Logger.getLogger(HistoryManager.class);
-    String historyFileName = App.properties.getProperty("historyLogFileName");
+    private final String historyFileName = App.properties.getProperty("historyLogFileName");
 
     public HistoryManager() throws IOException {
         logger.addAppender(new FileAppender(new JSONEventLayoutV1(), historyFileName));

@@ -2,12 +2,12 @@ package org.stroganov.controllers.actions;
 
 import org.apache.log4j.Logger;
 import org.stroganov.controllers.commands.EmptyCommand;
-import org.stroganov.util.FileUtil;
 
 import javax.servlet.http.HttpServletRequest;
 
 public class ActionFactory {
     private static final Logger logger = Logger.getLogger(ActionFactory.class);
+
     private ActionFactory() {
     }
 

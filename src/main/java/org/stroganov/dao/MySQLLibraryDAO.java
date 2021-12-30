@@ -9,7 +9,6 @@ import org.hibernate.query.Query;
 import org.stroganov.entities.*;
 
 import javax.persistence.TypedQuery;
-import javax.swing.text.Highlighter;
 import java.util.Collections;
 import java.util.List;
 

@@ -32,7 +32,7 @@ public class MenuManagerDialogue {
     private final BookGetterDialogue bookGetterDialogue = new BookGetterDialogue();
     private final BookMarkGetterDialogue bookMarkGetterDialogue = new BookMarkGetterDialogue();
     private final UserGetterDialogue userGetterDialogue = new UserGetterDialogue();
-    Logger logger = Logger.getLogger(MenuManagerDialogue.class);
+    private final Logger logger = Logger.getLogger(MenuManagerDialogue.class);
 
     public MenuManagerDialogue(LibraryDAO libraryDAO, HistoryManager historyManager, UserInterface userInterface, User currentUser) {
         this.libraryDAO = libraryDAO;

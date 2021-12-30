@@ -29,7 +29,7 @@ public class FileUploadHandler extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String resultMessage = "resultMessage";
-        String fileName = null;
+        String fullFilePath = null;
         //process only if its multipart content
         request.setAttribute("status", "executed");
         request.setAttribute("messageTitle", MessageManager.getProperty("message.addNewAuthorMessage.title"));
@@ -42,22 +42,23 @@ public class FileUploadHandler extends HttpServlet {
                 for (FileItem item : multipart) {
                     if (!item.isFormField()) {
                         String name = new File(item.getName()).getName();
-                        fileName = DIRECTORY + File.separator + name;
-                        item.write(new File(fileName));
+                        String path = new File(".").getCanonicalPath();
+                        fullFilePath = path + DIRECTORY + File.separator + name;
+                        item.write(new File(fullFilePath));
                     }
                 }
                 //File uploaded successfully
                 String message;
-                if (fileName != null) {
+                if (fullFilePath != null) {
                     AddBooksFromFileLogic addBooksFromFileLogic = new AddBooksFromFileLogic();
-                    message = addBooksFromFileLogic.addBookFromFile(fileName);
+                    message = addBooksFromFileLogic.addBookFromFile(fullFilePath);
                 } else {
                     message = "Ошибка - файл не был инициализирован";
                 }
                 request.setAttribute(resultMessage, message);
 
             } catch (Exception ex) {
-                request.setAttribute(resultMessage, "Ошибка. Файл не загружен: " + ex.getMessage() + fileName);
+                request.setAttribute(resultMessage, "Ошибка. Файл не загружен: " + ex.getMessage() + fullFilePath);
             }
         } else {
             request.setAttribute(resultMessage, "Sorry this Servlet only handles file upload request");

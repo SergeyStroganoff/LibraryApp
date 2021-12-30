@@ -1,7 +1,6 @@
 package org.stroganov.controllers.logic;
 
 import org.stroganov.dao.LibraryDAO;
-import org.stroganov.entities.Book;
 import org.stroganov.entities.BookMark;
 import org.stroganov.entities.User;
 import org.stroganov.util.DataManager;

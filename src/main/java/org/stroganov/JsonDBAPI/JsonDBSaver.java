@@ -14,7 +14,7 @@ import java.util.Properties;
 public class JsonDBSaver {
     public static final String ERROR_EMPTY_NULL_INPUT_LIST_MESSAGE = "Input in 'saveEntityListToJsonFormatFile method'  List of saved entities mustn't be null ore empty";
     private final Properties properties;
-    Logger logger = Logger.getLogger(JsonDBSaver.class);
+    private final Logger logger = Logger.getLogger(JsonDBSaver.class);
 
     public JsonDBSaver(Properties properties) {
         this.properties = properties;

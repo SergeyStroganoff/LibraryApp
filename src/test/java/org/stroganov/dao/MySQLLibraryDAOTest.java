@@ -104,14 +104,13 @@ class MySQLLibraryDAOTest {
         // GIVEN
         User testUser = new User(1, "SMM", "user11", "123", false, true);
         // WHEN
-        boolean isAdded = libraryDAO.addUser(testUser);
-
+        libraryDAO.addUser(testUser);
         User userFromDB = libraryDAO.findUser(testUser.getLogin());
         // WHEN
         List<Book> bookList = libraryDAO.findBooksWithUserBookMarks(userFromDB);
         libraryDAO.deleteUser(userFromDB);
         // THEN
-        Assertions.assertNotNull(bookList.isEmpty());
+        Assertions.assertFalse(bookList.isEmpty());
     }
 
     @Test

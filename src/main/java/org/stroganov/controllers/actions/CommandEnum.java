@@ -1,8 +1,6 @@
 package org.stroganov.controllers.actions;
 
 import org.stroganov.controllers.commands.*;
-import org.stroganov.controllers.commands.AddUserCommand;
-import org.stroganov.controllers.commands.DeleteBookCommand;
 
 public enum CommandEnum {
     LOGIN(new LoginCommand()), LOGOUT(new LogoutCommand()), COOKIE(new CookeCommand()),
@@ -11,7 +9,7 @@ public enum CommandEnum {
     DELETE_AUTHOR(new DeleteAuthorCommand()), BLOCK_USER(new BlockUserCommand()), UNBLOCK_USER(new UnblockUserCommand()),
     SHOW_HISTORY(new ShowHistoryCommand()), SHOW_MY_BOOK(new ShowUserBooksCommand()), SEARCH_BOOK(new SearchBookCommand());
 
-    ActionCommand actionCommand;
+    private final ActionCommand actionCommand;
 
     CommandEnum(ActionCommand actionCommand) {
         this.actionCommand = actionCommand;

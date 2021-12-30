@@ -4,7 +4,6 @@ import org.apache.log4j.Logger;
 import org.stroganov.dao.DAOFactory;
 import org.stroganov.dao.DAOType;
 import org.stroganov.dao.LibraryDAO;
-import org.stroganov.entities.History;
 import org.stroganov.entities.User;
 import org.stroganov.exceptions.DBExceptions;
 import org.stroganov.gui.UserInterface;

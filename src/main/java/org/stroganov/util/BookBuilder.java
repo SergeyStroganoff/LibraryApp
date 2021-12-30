@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BookBuilder {
-    LibraryDAO libraryDAO;
+    private final LibraryDAO libraryDAO;
 
     public BookBuilder(LibraryDAO libraryDAO) {
         this.libraryDAO = libraryDAO;

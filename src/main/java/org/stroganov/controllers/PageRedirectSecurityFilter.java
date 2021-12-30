@@ -12,7 +12,7 @@ public class PageRedirectSecurityFilter implements Filter {
     private String indexPath;
 
     @Override
-    public void init(FilterConfig fConfig) throws ServletException {
+    public void init(FilterConfig fConfig) {
         indexPath = fConfig.getInitParameter("INDEX_PATH");
     }
 

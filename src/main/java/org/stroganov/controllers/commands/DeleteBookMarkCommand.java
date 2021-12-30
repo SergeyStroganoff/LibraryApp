@@ -1,7 +1,6 @@
 package org.stroganov.controllers.commands;
 
 import org.stroganov.controllers.actions.ActionCommand;
-import org.stroganov.controllers.logic.DeleteBookLogic;
 import org.stroganov.controllers.logic.DeleteBookMarkLogic;
 import org.stroganov.history.WEBHistoryManager;
 import org.stroganov.util.ConfigurationManager;

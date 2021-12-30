@@ -20,17 +20,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ExtendWith(MockitoExtension.class)
 class UserConsoleInterfaceTest {
 
-    String OUTPUT_MESSAGE = "Test string";
-
+    private final String OUTPUT_MESSAGE = "Test string";
 
     @ParameterizedTest
     @ValueSource(strings = {"fgh12", "67!12", "dfgdfguu"})
     void When_get_notNumber_fromUser_ThenError(String argument) throws IOException {
         // GIVEN
-        String testString = argument;
         //WHEN
         BufferedReader reader = Mockito.mock(BufferedReader.class);
-        Mockito.when(reader.readLine()).thenReturn(testString);
+        Mockito.when(reader.readLine()).thenReturn(argument);
         UserInterface userTestInterface = new UserConsoleInterface(reader);
         // THEN
         Assertions.assertThrows(ConsoleInterfaceException.class, userTestInterface::getIntFromUser);

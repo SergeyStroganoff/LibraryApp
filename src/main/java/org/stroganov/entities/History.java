@@ -2,6 +2,7 @@ package org.stroganov.entities;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = ("history"))
@@ -44,10 +45,10 @@ public class History {
         History history = (History) o;
 
         if (id != history.id) return false;
-        if (user != null ? !user.equals(history.user) : history.user != null) return false;
-        if (localDateTime != null ? !localDateTime.equals(history.localDateTime) : history.localDateTime != null)
+        if (!Objects.equals(user, history.user)) return false;
+        if (!Objects.equals(localDateTime, history.localDateTime))
             return false;
-        return event != null ? event.equals(history.event) : history.event == null;
+        return Objects.equals(event, history.event);
     }
 
     @Override
