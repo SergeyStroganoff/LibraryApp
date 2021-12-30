@@ -1,9 +1,7 @@
 package org.stroganov.entities;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.util.Date;
 
 @Entity
 @Table(name = ("history"))
@@ -14,14 +12,12 @@ public class History {
     @ManyToOne
     @JoinColumn(name = "user_login")
     User user;
-    LocalDateTime localDateTime;
+    Date localDateTime;
     String event;
 
     public History(User user, String event) {
         this.user = user;
-        LocalDate date = LocalDate.now();
-        LocalTime time = LocalTime.now();
-        this.localDateTime = LocalDateTime.of(date, time);
+        this.localDateTime = new Date();
         this.event = event;
     }
 
@@ -32,7 +28,7 @@ public class History {
         return user;
     }
 
-    public LocalDateTime getLocalDateTime() {
+    public Date getLocalDateTime() {
         return localDateTime;
     }
 
