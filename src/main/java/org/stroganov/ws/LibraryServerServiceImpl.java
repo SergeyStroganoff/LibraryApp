@@ -5,7 +5,7 @@ import jakarta.jws.WebService;
 
 import java.util.ArrayList;
 
-@WebService(endpointInterface = "org.example.ws.Hello")
+@WebService(endpointInterface = "org.stroganov.ws.LibraryService")
 public class LibraryServerServiceImpl implements org.stroganov.ws.LibraryService {
 
     @Override
