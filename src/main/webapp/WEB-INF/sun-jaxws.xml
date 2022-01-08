@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<endpoints xmlns="http://java.sun.com/xml/ns/jax-ws/ri/runtime"
+           xmlns:javaee="https://jakarta.ee/xml/ns/jakartaee" version='2.0'>
+    <endpoint name="LibraryService"
+              implementation="org.stroganov.ws.LibraryServerServiceImpl"
+              url-pattern="/services">
+    </endpoint>
+</endpoints>
