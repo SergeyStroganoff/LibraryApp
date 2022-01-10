@@ -1,9 +1,12 @@
 package org.stroganov.entities;
 
+import jakarta.xml.bind.annotation.XmlRootElement;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Objects;
 
+@XmlRootElement
 @Entity
 @Table(name = ("history"))
 public class History {
