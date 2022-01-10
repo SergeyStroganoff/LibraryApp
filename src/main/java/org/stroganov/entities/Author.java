@@ -40,6 +40,7 @@ public class Author implements Serializable {
         this.authorName = authorName;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

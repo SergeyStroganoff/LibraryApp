@@ -37,6 +37,26 @@ public class History {
         return event;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setLocalDateTime(Date localDateTime) {
+        this.localDateTime = localDateTime;
+    }
+
+    public void setEvent(String event) {
+        this.event = event;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

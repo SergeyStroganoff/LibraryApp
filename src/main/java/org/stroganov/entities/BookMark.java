@@ -39,6 +39,26 @@ public class BookMark implements Serializable {
         return bookPageNumber;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setBookPageNumber(int bookPageNumber) {
+        this.bookPageNumber = bookPageNumber;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
