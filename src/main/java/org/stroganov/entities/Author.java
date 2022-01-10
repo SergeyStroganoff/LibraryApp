@@ -1,8 +1,11 @@
 package org.stroganov.entities;
 
+import jakarta.xml.bind.annotation.XmlRootElement;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
+@XmlRootElement
 @Entity
 @Table(name = ("authors"))
 public class Author implements Serializable {
