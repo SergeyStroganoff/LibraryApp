@@ -14,7 +14,7 @@ public class AddUserLogic {
 
     public String addNewUser(String userFullName, String userLogin, String password, String adminStatus) {
         int numberID = 0;
-        boolean isAdmin = "true".equalsIgnoreCase(adminStatus);
+        boolean isAdmin = Boolean.TRUE.toString().equalsIgnoreCase(adminStatus);
         User user = new User(numberID, userFullName, userLogin, password, false, isAdmin);
         LibraryDAO libraryDAO = DataManager.getLibraryDAO();
         try {

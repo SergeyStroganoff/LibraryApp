@@ -48,7 +48,6 @@
 
 <!-- Modal menu exit  -->
 <%@ include file="/jsp/modalMenuExit.jsp" %>
-
-</body>
 <script src=${pageContext.request.contextPath}/js/main.js></script>
+</body>
 </html>

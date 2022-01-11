@@ -4,4 +4,3 @@ checkBoxElement.addEventListener('click', () => {
         checkBoxElement.setAttribute('value', 'true');
     }
 });
-

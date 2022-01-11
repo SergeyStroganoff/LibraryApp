@@ -25,13 +25,11 @@
 
     <link rel="icon" href="${pageContext.request.contextPath}/img/books-library-logo.png" type="image/x-icon">
     <link rel="shortcut icon" href="${pageContext.request.contextPath}/img/books-library-logo.png" type="image/x-icon">
-
     <title>Добавить нового автора</title>
 </head>
 <body>
 
 <%@ include file="/jsp/header-menu.jsp" %>
-
 
 <div class="container mt-lg-5">
     <form class="row" name="addAuthorForm" method="POST"
@@ -56,9 +54,10 @@
 
 <input class="hidden-role-value" type="hidden" name="role" value="${sessionScope.role}"/>
 <input class="operation-status" type="hidden" name="operation-status" value="${requestScope.status}"/>
-</body>
+
 <script src=${pageContext.request.contextPath}/js/main.js></script>
 <script src=${pageContext.request.contextPath}/js/modalMenuAction.js></script>
+</body>
 </html>
 
 

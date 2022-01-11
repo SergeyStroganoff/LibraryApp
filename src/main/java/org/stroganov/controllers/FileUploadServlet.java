@@ -22,7 +22,7 @@ import java.util.List;
  * @author Sergey Stroganov
  */
 @WebServlet("/fileloader")
-public class FileUploadHandler extends HttpServlet {
+public class FileUploadServlet extends HttpServlet {
     private final String DIRECTORY = ConfigurationManager.getProperties("serverUploadFolder");
 
     @Override

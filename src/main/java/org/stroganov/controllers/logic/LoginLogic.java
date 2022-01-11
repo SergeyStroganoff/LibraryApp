@@ -14,9 +14,7 @@ public class LoginLogic {
         User user = libraryDAO.findUser(login);
         if (user != null && PasswordAuthentication.authenticate(password.toCharArray(), user.getPasscodeHash())) {
             return user;
-        } else {
-            return null;
         }
+        return null;
     }
-
 }

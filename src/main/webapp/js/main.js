@@ -26,4 +26,3 @@ const AppClass = class {
 
 myApp = new AppClass;
 myApp.init();
-
