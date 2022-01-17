@@ -1,5 +1,7 @@
 package org.stroganov.ws;
 
+
+import jakarta.jws.HandlerChain;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebService;
 import org.stroganov.dao.LibraryDAO;
@@ -10,10 +12,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+// WEB-INF\classes\org\stroganov\ws
+@HandlerChain(file = "../handler.xml")
 @WebService(endpointInterface = "org.stroganov.ws.LibraryService")
 public class LibraryServerServiceImpl implements org.stroganov.ws.LibraryService {
 
-    LibraryDAO libraryDAO = DataManager.getLibraryDAO();
+    private LibraryDAO libraryDAO = DataManager.getLibraryDAO();
 
     @Override
     public User[] getNewUser(@WebParam(name = "userName") String name) {

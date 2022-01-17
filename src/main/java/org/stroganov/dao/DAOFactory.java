@@ -4,6 +4,8 @@ import org.hibernate.SessionFactory;
 import org.stroganov.exceptions.DBExceptions;
 import org.stroganov.util.HibernateUtil;
 
+import java.net.MalformedURLException;
+
 public class DAOFactory {
 
     private static final String ERROR_PARAMETER_MESSAGE = "Тип подключения к базе указан неверно";
@@ -16,6 +18,13 @@ public class DAOFactory {
         switch (type) {
             case JSON:
                 dao = JsonLibraryDAO.getInstance();
+                break;
+            case WEB_SERVICE_SOAP:
+                try {
+                    dao = SoapServiceLibraryDAO.getInstance();
+                } catch (MalformedURLException e) {
+                    throw new DBExceptions("SoapServiceLibraryDAO exception was thrown:", e);
+                }
                 break;
             case MYSQL:
                 SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
