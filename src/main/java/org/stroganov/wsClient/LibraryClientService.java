@@ -1,18 +1,20 @@
-package org.stroganov.ws;
+package org.stroganov.wsClient;
 
+import jakarta.jws.HandlerChain;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebService;
 import jakarta.jws.soap.SOAPBinding;
+import jakarta.xml.ws.WebServiceClient;
 import org.stroganov.entities.*;
 
 import java.io.IOException;
 
 //Service Endpoint Interface
-@WebService
-@SOAPBinding(style = SOAPBinding.Style.RPC, use = SOAPBinding.Use.LITERAL)
-//@SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use = SOAPBinding.Use.LITERAL, parameterStyle = SOAPBinding.ParameterStyle.WRAPPED)
-public interface LibraryService {
+@WebService(name = "LibraryClientService", targetNamespace = "http://ws.stroganov.org/", endpointInterface = "org.stroganov.wsClient.LibraryServerServiceImplService")
+//@HandlerChain(file = "M:\\PROGRAMMING\\EPAM\\EDUCATION\\Design_and_Architecture\\LibraryApp\\src\\main\\java\\org\\stroganov\\wsClient\\clientHandler.xml")
+//@SOAPBinding(style = SOAPBinding.Style.RPC, use = SOAPBinding.Use.LITERAL)
+public interface LibraryClientService {
 
     @WebMethod(operationName = "getNewUser")
     User[] getNewUser(@WebParam(name = "userName") String name);

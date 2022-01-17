@@ -1,11 +1,12 @@
 package org.stroganov.dao;
 
 import jakarta.jws.HandlerChain;
-import jakarta.jws.WebService;
 import jakarta.xml.ws.Service;
 import jakarta.xml.ws.WebServiceClient;
 import org.stroganov.entities.*;
 import org.stroganov.ws.LibraryService;
+import org.stroganov.wsClient.LibraryClientService;
+import org.stroganov.wsClient.LibraryServerServiceImplService;
 
 import javax.xml.namespace.QName;
 import java.io.IOException;
@@ -15,18 +16,20 @@ import java.util.Arrays;
 import java.util.List;
 
 @WebServiceClient(name = "Client", targetNamespace = "http://example.org")
-@HandlerChain(file = "M:\\PROGRAMMING\\EPAM\\EDUCATION\\Design_and_Architecture\\LibraryApp\\src\\main\\java\\org\\stroganov\\wsClient\\clientHandler.xml")
 public class SoapServiceLibraryDAO implements LibraryDAO {
 
     private static SoapServiceLibraryDAO instance;
-    private final LibraryService libraryService;
+    private final LibraryClientService libraryService;
 
     public SoapServiceLibraryDAO() throws MalformedURLException {
-        QName qname = new QName("http://ws.stroganov.org/", "LibraryServerServiceImplService");
+        // QName qname = new QName("http://ws.stroganov.org/", "LibraryServerServiceImplService");
         // settings
-        URL url = new URL("http://127.0.0.1:8082/LibraryService/services?wsdl");
-        Service service = Service.create(url, qname);
-        libraryService = service.getPort(LibraryService.class);
+        // URL url = new URL("http://127.0.0.1:8082/LibraryService/services?wsdl");
+        // Service service = Service.create(url, qname);
+        // libraryService = service.getPort(LibraryClientService.class);
+
+        LibraryServerServiceImplService libraryServerServiceImplService = new LibraryServerServiceImplService();
+        libraryService = libraryServerServiceImplService.getLibraryServerServiceImplPort();
     }
 
     public static synchronized SoapServiceLibraryDAO getInstance() throws MalformedURLException {
@@ -39,7 +42,6 @@ public class SoapServiceLibraryDAO implements LibraryDAO {
     @Override
     public boolean addBook(Book book) throws IOException {
         return libraryService.addBook(book);
-
     }
 
     @Override
