@@ -13,7 +13,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 public class RequestsValidator implements SOAPHandler<SOAPMessageContext> {
-    Logger logger = Logger.getLogger(RequestsValidator.class);
+    private final Logger logger = Logger.getLogger(RequestsValidator.class);
     private final String USER = "Username";
     private final String PASSWORD = "Password";
 

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jwsc:handler-chains xmlns:jwsc="https://jakarta.ee/xml/ns/jakartaee">
+    <jwsc:handler-chain>
+        <jwsc:handler>
+            <jwsc:handler-class>org.stroganov.wsClient.handlers.ClientHandler
+            </jwsc:handler-class>
+        </jwsc:handler>
+    </jwsc:handler-chain>
+</jwsc:handler-chains>

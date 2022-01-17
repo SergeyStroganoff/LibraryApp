@@ -1,6 +1,9 @@
 package org.stroganov.dao;
 
+import jakarta.jws.HandlerChain;
+import jakarta.jws.WebService;
 import jakarta.xml.ws.Service;
+import jakarta.xml.ws.WebServiceClient;
 import org.stroganov.entities.*;
 import org.stroganov.ws.LibraryService;
 
@@ -11,6 +14,8 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
+@WebServiceClient(name = "Client", targetNamespace = "http://example.org")
+@HandlerChain(file = "M:\\PROGRAMMING\\EPAM\\EDUCATION\\Design_and_Architecture\\LibraryApp\\src\\main\\java\\org\\stroganov\\wsClient\\clientHandler.xml")
 public class SoapServiceLibraryDAO implements LibraryDAO {
 
     private static SoapServiceLibraryDAO instance;
