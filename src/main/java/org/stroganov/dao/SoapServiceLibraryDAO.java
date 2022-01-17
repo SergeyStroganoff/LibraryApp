@@ -4,9 +4,9 @@ import jakarta.jws.HandlerChain;
 import jakarta.xml.ws.Service;
 import jakarta.xml.ws.WebServiceClient;
 import org.stroganov.entities.*;
-import org.stroganov.ws.LibraryService;
 import org.stroganov.wsClient.LibraryClientService;
 import org.stroganov.wsClient.LibraryServerServiceImplService;
+import org.stroganov.wsClient.LibraryService;
 
 import javax.xml.namespace.QName;
 import java.io.IOException;
@@ -19,7 +19,7 @@ import java.util.List;
 public class SoapServiceLibraryDAO implements LibraryDAO {
 
     private static SoapServiceLibraryDAO instance;
-    private final LibraryClientService libraryService;
+    private final LibraryService libraryService;
 
     public SoapServiceLibraryDAO() throws MalformedURLException {
         // QName qname = new QName("http://ws.stroganov.org/", "LibraryServerServiceImplService");
