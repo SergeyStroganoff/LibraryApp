@@ -1,7 +1,11 @@
 
 package org.stroganov.wsClient;
 
-import jakarta.xml.ws.*;
+import jakarta.jws.WebService;
+import jakarta.xml.ws.Service;
+import jakarta.xml.ws.WebEndpoint;
+import jakarta.xml.ws.WebServiceException;
+import jakarta.xml.ws.WebServiceFeature;
 
 import javax.xml.namespace.QName;
 import java.net.MalformedURLException;
@@ -13,7 +17,7 @@ import java.net.URL;
  * JAX-WS RI 2.2.9-b130926.1035
  * Generated source version: 2.2
  */
-@WebServiceClient(name = "LibraryServerServiceImplService", targetNamespace = "http://ws.stroganov.org/", wsdlLocation = "http://127.0.0.1:8082/LibraryService/services?wsdl")
+@WebService(name = "LibraryServerServiceImplService", targetNamespace = "http://ws.stroganov.org/", wsdlLocation = "http://127.0.0.1:8082/LibraryService/services?wsdl")
 public class LibraryServerServiceImplService
         extends Service {
 

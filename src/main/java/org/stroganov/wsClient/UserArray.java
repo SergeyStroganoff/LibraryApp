@@ -5,10 +5,10 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
+import org.stroganov.entities.User;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  * <p>Java class for userArray complex type.
@@ -63,4 +63,7 @@ public class UserArray {
         return this.item;
     }
 
+    public void setItem(List<User> item) {
+        this.item = item;
+    }
 }

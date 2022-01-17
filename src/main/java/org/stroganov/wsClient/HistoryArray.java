@@ -63,4 +63,7 @@ public class HistoryArray {
         return this.item;
     }
 
+    public void setItem(List<History> item) {
+        this.item = item;
+    }
 }

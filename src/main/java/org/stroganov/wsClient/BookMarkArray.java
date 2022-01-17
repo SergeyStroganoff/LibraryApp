@@ -63,4 +63,7 @@ public class BookMarkArray {
         return this.item;
     }
 
+    public void setItem(List<BookMark> item) {
+        this.item = item;
+    }
 }

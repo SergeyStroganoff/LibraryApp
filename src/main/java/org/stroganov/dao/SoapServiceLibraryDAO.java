@@ -1,18 +1,14 @@
 package org.stroganov.dao;
 
-import jakarta.jws.HandlerChain;
-import jakarta.xml.ws.Service;
 import jakarta.xml.ws.WebServiceClient;
 import org.stroganov.entities.*;
-import org.stroganov.wsClient.LibraryClientService;
+import org.stroganov.wsClient.BookArray;
+import org.stroganov.wsClient.IOException_Exception;
 import org.stroganov.wsClient.LibraryServerServiceImplService;
 import org.stroganov.wsClient.LibraryService;
 
-import javax.xml.namespace.QName;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Arrays;
 import java.util.List;
 
 @WebServiceClient(name = "Client", targetNamespace = "http://example.org")
@@ -23,7 +19,6 @@ public class SoapServiceLibraryDAO implements LibraryDAO {
 
     public SoapServiceLibraryDAO() throws MalformedURLException {
         // QName qname = new QName("http://ws.stroganov.org/", "LibraryServerServiceImplService");
-        // settings
         // URL url = new URL("http://127.0.0.1:8082/LibraryService/services?wsdl");
         // Service service = Service.create(url, qname);
         // libraryService = service.getPort(LibraryClientService.class);
@@ -41,17 +36,30 @@ public class SoapServiceLibraryDAO implements LibraryDAO {
 
     @Override
     public boolean addBook(Book book) throws IOException {
-        return libraryService.addBook(book);
+        try {
+            return libraryService.addBook(book);
+        } catch (IOException_Exception e) {
+            throw new IOException(e);
+        }
     }
 
     @Override
     public boolean addBookList(List<Book> bookList) throws IOException {
-        return libraryService.addBookList(bookList.toArray(new Book[0]));
+        BookArray bookArray = new BookArray();
+        try {
+            return libraryService.addBookLIst(bookArray);
+        } catch (IOException_Exception e) {
+            throw new IOException(e);
+        }
     }
 
     @Override
     public boolean deleteBook(Book book) throws IOException {
-        return libraryService.deleteBook(book);
+        try {
+            return libraryService.deleteBook(book);
+        } catch (IOException_Exception e) {
+            throw new IOException(e);
+        }
     }
 
     @Override
@@ -61,13 +69,17 @@ public class SoapServiceLibraryDAO implements LibraryDAO {
 
     @Override
     public List<Book> findBooksByPartName(String partOfName) {
-        Book[] books = libraryService.findBooksByPartName(partOfName);
-        return Arrays.asList(books);
+        BookArray bookArray = libraryService.findBookByPartName(partOfName);
+        return bookArray.getItem();
     }
 
     @Override
     public boolean addUser(User user) throws IOException {
-        return libraryService.addUser(user);
+        try {
+            return libraryService.addUser(user);
+        } catch (IOException_Exception e) {
+            throw new IOException(e);
+        }
     }
 
     @Override
@@ -77,32 +89,56 @@ public class SoapServiceLibraryDAO implements LibraryDAO {
 
     @Override
     public boolean deleteUser(User user) throws IOException {
-        return libraryService.deleteUser(user);
+        try {
+            return libraryService.deleteUser(user);
+        } catch (IOException_Exception e) {
+            throw new IOException(e);
+        }
     }
 
     @Override
     public boolean blockUser(User user) throws IOException {
-        return libraryService.blockUser(user);
+        try {
+            return libraryService.blockUser(user);
+        } catch (IOException_Exception e) {
+            throw new IOException(e);
+        }
     }
 
     @Override
     public boolean unblockUser(User user) throws IOException {
-        return libraryService.unblockUser(user);
+        try {
+            return libraryService.unblockUser(user);
+        } catch (IOException_Exception e) {
+            throw new IOException(e);
+        }
     }
 
     @Override
     public boolean addBookMark(BookMark bookMark) throws IOException {
-        return libraryService.addBookMark(bookMark);
+        try {
+            return libraryService.addBookMark(bookMark);
+        } catch (IOException_Exception e) {
+            throw new IOException(e);
+        }
     }
 
     @Override
     public boolean deleteBookMark(BookMark bookMark) throws IOException {
-        return libraryService.deleteBookMark(bookMark);
+        try {
+            return libraryService.deleteBookMark(bookMark);
+        } catch (IOException_Exception e) {
+            throw new IOException(e);
+        }
     }
 
     @Override
     public boolean addAuthor(Author author) throws IOException {
-        return libraryService.addAuthor(author);
+        try {
+            return libraryService.addAuthor(author);
+        } catch (IOException_Exception e) {
+            throw new IOException(e);
+        }
     }
 
     @Override
@@ -112,37 +148,39 @@ public class SoapServiceLibraryDAO implements LibraryDAO {
 
     @Override
     public boolean deleteAuthorWithAllHisBooks(Author author) throws IOException {
-        return libraryService.deleteAuthorWithAllHisBooks(author);
+        try {
+            return libraryService.deleteAuthorWithAllHisBooks(author);
+        } catch (IOException_Exception e) {
+            throw new IOException(e);
+        }
     }
 
     @Override
     public List<Book> findBooksByPartAuthorName(String partAuthorName) {
-        Book[] books = libraryService.findBooksByPartAuthorName(partAuthorName);
-        return Arrays.asList(books);
+        return libraryService.findBooksByPartAuthorName(partAuthorName).getItem();
+
     }
 
     @Override
     public List<Book> findBooksByYearsRange(int firstYear, int secondYear) {
-        Book[] books = libraryService.findBooksByYearsRange(firstYear, secondYear);
-        return Arrays.asList(books);
+        return libraryService.findBooksByYearsRange(firstYear, secondYear).getItem();
     }
 
     @Override
     public List<Book> findBooksByParameters(int bookYear, int bookPages, String partBookName) {
-        Book[] books = libraryService.findBooksByParameters(bookYear, bookPages, partBookName);
-        return Arrays.asList(books);
+        return libraryService.findBooksByParameters(bookYear, bookPages, partBookName).getItem();
     }
 
     @Override
     public List<Book> findBooksWithUserBookMarks(User user) {
-        Book[] books = libraryService.findBooksWithUserBookMarks(user);
-        return Arrays.asList(books);
+        return libraryService.findBooksWithUserBookMarks(user).getItem();
+
     }
 
     @Override
     public List<BookMark> findUserBookMarks(User user) {
-        BookMark[] books = libraryService.findUserBookMarks(user);
-        return Arrays.asList(books);
+        return libraryService.findUserBookMarks(user).getItem();
+
     }
 
     @Override
@@ -152,7 +190,6 @@ public class SoapServiceLibraryDAO implements LibraryDAO {
 
     @Override
     public List<History> getAllHistory() {
-        History[] books = libraryService.getAllHistory();
-        return Arrays.asList(books);
+        return libraryService.getAllHistory().getItem();
     }
 }

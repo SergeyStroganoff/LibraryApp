@@ -63,4 +63,7 @@ public class BookArray {
         return this.item;
     }
 
+    public void setItem(List<Book> item) {
+        this.item = item;
+    }
 }
