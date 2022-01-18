@@ -6,9 +6,6 @@ import jakarta.xml.ws.handler.soap.SOAPHandler;
 import jakarta.xml.ws.handler.soap.SOAPMessageContext;
 import jakarta.xml.ws.soap.SOAPFaultException;
 import org.apache.log4j.Logger;
-import org.stroganov.dao.LibraryDAO;
-import org.stroganov.entities.User;
-import org.stroganov.util.DataManager;
 
 import javax.xml.namespace.QName;
 import java.io.IOException;
@@ -18,57 +15,76 @@ import java.util.Set;
 public class RequestsValidator implements SOAPHandler<SOAPMessageContext> {
     private final Logger logger = Logger.getLogger(RequestsValidator.class);
 
-
     @Override
     public boolean handleMessage(SOAPMessageContext context) {
-        logger.info("Logger stars work");
-        System.out.println("Client executing SOAP Handler");
-        boolean outBoundProperty = (Boolean) context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
-        // if this is an incoming message from the client
-        if (!outBoundProperty) {
+        System.out.println("HandlerValidator on server side");
+        System.out.println("Server : handleMessage()......");
+
+        Boolean isRequest = (Boolean) context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
+
+        //for response message only, true for outbound messages, false for inbound
+        if (!isRequest) {
             try {
-                // Get the SOAP Message and grab the headers
                 SOAPMessage soapMsg = context.getMessage();
                 SOAPEnvelope soapEnv = soapMsg.getSOAPPart().getEnvelope();
                 SOAPHeader soapHeader = soapEnv.getHeader();
-                System.out.println("Зашли в блок мессадж и берем все хеадеры" + soapHeader.extractAllHeaderElements());
+
+                //if no header, add one
                 if (soapHeader == null) {
                     soapHeader = soapEnv.addHeader();
+                    //throw exception
                     generateSOAPErrMessage(soapMsg, "No SOAP header.");
-                    System.out.println("No SOAP header.");
                 }
-                // Grab an iterator to go through the headers
-                Iterator<?> headerIterator = soapHeader.extractHeaderElements(SOAPConstants.URI_SOAP_ACTOR_NEXT);
-                System.out.println(headerIterator == null);
-                // if there is no additional header
-                String userLogin = null;
-                String password = null;
 
-                while (headerIterator != null && headerIterator.hasNext()) {
-                    // Extract the property node of the header
-                    Node propertyNode = (Node) headerIterator.next();
-                    if (propertyNode != null) {
-                        if ("userLogin".equals(propertyNode.getNodeName())) {
-                            userLogin = propertyNode.getValue();
-                        }
+                //Get client mac address from SOAP header
+                Iterator it = soapHeader.extractHeaderElements(SOAPConstants.URI_SOAP_ACTOR_NEXT);
 
-                        if ("password".equals(propertyNode.getNodeName())) {
-                            password = propertyNode.getValue();
-                        }
-                        if (!checkUser(userLogin, password)) {
-                            generateSOAPErrMessage(soapMsg, "Invalid Account");
-                        }
-                    } else {
-                        System.out.println("Property Node is null");
-                        generateSOAPErrMessage(soapMsg, "Try Der Parol");
-                    }
+                //if no header block for next actor found? throw exception
+                if (it == null || !it.hasNext()) {
+                    generateSOAPErrMessage(soapMsg, "No header block for next actor.");
                 }
+
+                //if no mac address found > throw exception
+                assert it != null;
+                Node passNode = (Node) it.next();
+                String password = (passNode == null) ? null : passNode.getValue();
+
+                if (password == null) {
+                    generateSOAPErrMessage(soapMsg, "Try Der Parol");
+                }
+
+                //if mac address is not match, throw exception
+                if ("For the Horde.".equals(password)) {
+                    generateSOAPErrMessage(soapMsg, "The sky is falling");
+                } else if ("Life for Ner'Zhul".equals(password)) {
+                    System.out.println("Все получилось - получилось получить пароль:: " + password);
+                }
+
+                //tracking
                 soapMsg.writeTo(System.out);
+
             } catch (SOAPException | IOException e) {
-                logger.error("SOAP Handler exception caused: " + e.getMessage());
+                System.err.println(e);
             }
+
         }
+        //continue other handler chain
         return true;
+    }
+
+    @Override
+    public Set<QName> getHeaders() {
+        return null;
+    }
+
+    @Override
+    public boolean handleFault(SOAPMessageContext context) {
+        return false;
+    }
+
+    @Override
+    public void close(MessageContext context) {
+
     }
 
     private void generateSOAPErrMessage(SOAPMessage msg, String reason) {
@@ -79,31 +95,5 @@ public class RequestsValidator implements SOAPHandler<SOAPMessageContext> {
             throw new SOAPFaultException(soapFault);
         } catch (SOAPException ignored) {
         }
-    }
-
-    @Override
-    public boolean handleFault(SOAPMessageContext soapMessageContext) {
-        return false;
-    }
-
-    @Override
-    public void close(MessageContext messageContext) {
-    }
-
-    @Override
-    public Set<QName> getHeaders() {
-        return null;
-    }
-
-    private boolean checkUser(String userLogin, String password) {
-        if (userLogin == null || password == null) {
-            return false;
-        }
-        LibraryDAO libraryDAO = DataManager.getLibraryDAO();
-        User user = libraryDAO.findUser(userLogin);
-        if (user == null) {
-            return false;
-        }
-        return user.getPasscodeHash().equals(password);
     }
 }
