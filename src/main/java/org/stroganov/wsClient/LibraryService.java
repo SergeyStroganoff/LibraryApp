@@ -1,9 +1,6 @@
 package org.stroganov.wsClient;
 
-import jakarta.jws.WebMethod;
-import jakarta.jws.WebParam;
-import jakarta.jws.WebResult;
-import jakarta.jws.WebService;
+import jakarta.jws.*;
 import jakarta.jws.soap.SOAPBinding;
 import jakarta.xml.bind.annotation.XmlSeeAlso;
 import jakarta.xml.ws.Action;
@@ -15,6 +12,7 @@ import org.stroganov.entities.*;
  * JAX-WS RI 2.2.9-b130926.1035
  * Generated source version: 2.2
  */
+
 @WebService(name = "LibraryService", targetNamespace = "http://ws.stroganov.org/")
 @SOAPBinding(style = SOAPBinding.Style.RPC)
 @XmlSeeAlso({
@@ -28,6 +26,7 @@ public interface LibraryService {
      * @return returns org.stroganov.ws.BookArray
      */
     @WebMethod
+    @HandlerChain(file = "clientHandler.xml")
     @WebResult(partName = "return")
     @Action(input = "http://ws.stroganov.org/LibraryService/findBooksWithUserBookMarksRequest", output = "http://ws.stroganov.org/LibraryService/findBooksWithUserBookMarksResponse")
     public BookArray findBooksWithUserBookMarks(

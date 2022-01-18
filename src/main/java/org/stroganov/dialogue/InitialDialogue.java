@@ -9,6 +9,7 @@ import org.stroganov.exceptions.DBExceptions;
 import org.stroganov.gui.UserInterface;
 import org.stroganov.history.HistoryManager;
 import org.stroganov.util.PasswordAuthentication;
+import org.stroganov.util.UserContainer;
 
 import java.io.IOException;
 
@@ -75,6 +76,7 @@ public class InitialDialogue {
         historyManager.saveAction("User " + user.getLogin() + " entered in system");
         logger.info("User " + user.getLogin() + " entered in system");
         MenuManagerDialogue menuManagerDialogue = new MenuManagerDialogue(libraryDAO, historyManager, userInterface, user);
+        UserContainer.setUser(user);
         menuManagerDialogue.runDialogue();
     }
 }

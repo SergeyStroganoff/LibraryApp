@@ -1,11 +1,8 @@
 package org.stroganov.wsClient;
 
-import jakarta.jws.HandlerChain;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebService;
-import jakarta.jws.soap.SOAPBinding;
-import jakarta.xml.ws.WebServiceClient;
 import org.stroganov.entities.*;
 
 import java.io.IOException;
