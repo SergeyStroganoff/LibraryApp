@@ -6,75 +6,79 @@ import jakarta.xml.ws.handler.soap.SOAPHandler;
 import jakarta.xml.ws.handler.soap.SOAPMessageContext;
 import jakarta.xml.ws.soap.SOAPFaultException;
 import org.apache.log4j.Logger;
+import org.stroganov.dao.LibraryDAO;
+import org.stroganov.entities.User;
+import org.stroganov.util.DataManager;
 
 import javax.xml.namespace.QName;
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 public class RequestsValidator implements SOAPHandler<SOAPMessageContext> {
     private final Logger logger = Logger.getLogger(RequestsValidator.class);
+    private final List<String> adminRequests = Arrays.asList("ns2:deleteUser", "ns2:blockUser", "ns2:unblockUser", "ns2:getAllHistory", "ns2:addUser");
+    private User user = null;
 
     @Override
     public boolean handleMessage(SOAPMessageContext context) {
-        System.out.println("HandlerValidator on server side");
-        System.out.println("Server : handleMessage()......");
-
-        Boolean isRequest = (Boolean) context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
-
+        boolean isRequest = (Boolean) context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
         //for response message only, true for outbound messages, false for inbound
         if (!isRequest) {
             try {
                 SOAPMessage soapMsg = context.getMessage();
+                String requestName = soapMsg.getSOAPBody().getLastChild().getNodeName();
+                System.out.println(requestName);
+                if (requestName.equals("ns2:findUser")) {
+                    System.out.println("Handler was missed");
+                    logger.info("Handler was missed");
+                    return true;
+                }
                 SOAPEnvelope soapEnv = soapMsg.getSOAPPart().getEnvelope();
                 SOAPHeader soapHeader = soapEnv.getHeader();
-
                 //if no header, add one
                 if (soapHeader == null) {
                     soapHeader = soapEnv.addHeader();
                     //throw exception
+                    System.out.println("No SOAP header.");
                     generateSOAPErrMessage(soapMsg, "No SOAP header.");
                 }
-
-                //Get client mac address from SOAP header
-                Iterator it = soapHeader.extractHeaderElements(SOAPConstants.URI_SOAP_ACTOR_NEXT);
-
+                Iterator<SOAPHeaderElement> it = soapHeader.extractHeaderElements(SOAPConstants.URI_SOAP_ACTOR_NEXT);
                 //if no header block for next actor found? throw exception
                 if (it == null || !it.hasNext()) {
+                    System.out.println("No header block for next actor.");
                     generateSOAPErrMessage(soapMsg, "No header block for next actor.");
                 }
 
-                //if no mac address found > throw exception
                 assert it != null;
-                Node passNode = (Node) it.next();
-                String password = (passNode == null) ? null : passNode.getValue();
-
-                if (password == null) {
-                    generateSOAPErrMessage(soapMsg, "Try Der Parol");
+                Node passNode = it.next();
+                String credentials = (passNode == null) ? null : passNode.getValue();
+                System.out.println("We got credentials:" + credentials);
+                logger.info("We got credentials:" + credentials);
+                if (credentials == null) {
+                    generateSOAPErrMessage(soapMsg, "NO Password");
+                    return false;
                 }
-
-                //if mac address is not match, throw exception
-                if ("For the Horde.".equals(password)) {
-                    generateSOAPErrMessage(soapMsg, "The sky is falling");
-                } else if ("Life for Ner'Zhul".equals(password)) {
-                    System.out.println("Все получилось - получилось получить пароль:: " + password);
+                String[] bufCredentials = credentials.split("&&");
+                String userLogin = bufCredentials[0];
+                String password = bufCredentials[1];
+                if (checkUser(userLogin, password)) {
+                    if (adminRequests.contains(requestName) && !hasUserAdminStatus(userLogin)) {
+                        generateSOAPErrMessage(soapMsg, "permission denied");
+                        return false;
+                    }
+                    return true;
                 }
-
-                //tracking
-                soapMsg.writeTo(System.out);
-
-            } catch (SOAPException | IOException e) {
-                System.err.println(e);
+                generateSOAPErrMessage(soapMsg, "Не удалось получить правильный пароль:" + credentials);
+                return false;
+            } catch (SOAPException e) {
+                logger.error(e);
             }
-
         }
-        //continue other handler chain
         return true;
     }
 
     @Override
     public Set<QName> getHeaders() {
-        return null;
+        return Collections.emptySet();
     }
 
     @Override
@@ -84,7 +88,7 @@ public class RequestsValidator implements SOAPHandler<SOAPMessageContext> {
 
     @Override
     public void close(MessageContext context) {
-
+        //not realized
     }
 
     private void generateSOAPErrMessage(SOAPMessage msg, String reason) {
@@ -93,7 +97,30 @@ public class RequestsValidator implements SOAPHandler<SOAPMessageContext> {
             SOAPFault soapFault = soapBody.addFault();
             soapFault.setFaultString(reason);
             throw new SOAPFaultException(soapFault);
-        } catch (SOAPException ignored) {
+        } catch (SOAPException e) {
+            logger.error(e);
         }
+    }
+
+    private boolean hasUserAdminStatus(String userLogin) {
+        LibraryDAO libraryDAO = DataManager.getLibraryDAO();
+        if (user == null) {
+            libraryDAO.findUser(userLogin);
+        }
+        if (user != null) {
+            return user.isAdmin();
+        } else return false;
+    }
+
+    private boolean checkUser(String userLogin, String password) {
+        if (userLogin == null || password == null) {
+            return false;
+        }
+        LibraryDAO libraryDAO = DataManager.getLibraryDAO();
+        user = libraryDAO.findUser(userLogin);
+        if (user == null) {
+            return false;
+        }
+        return user.getPasscodeHash().equals(password);
     }
 }

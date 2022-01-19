@@ -1,6 +1,5 @@
 package org.stroganov.ws;
 
-
 import jakarta.jws.HandlerChain;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebService;
@@ -12,7 +11,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-// WEB-INF\classes\org\stroganov\ws
 @HandlerChain(file = "../handler.xml")
 @WebService(endpointInterface = "org.stroganov.ws.LibraryService")
 public class LibraryServerServiceImpl implements LibraryService {
@@ -46,6 +44,7 @@ public class LibraryServerServiceImpl implements LibraryService {
     }
 
     @Override
+    @HandlerChain(file = "../handler.xml")
     public Book findBook(String numberISBN) {
         return libraryDAO.findBook(numberISBN);
     }

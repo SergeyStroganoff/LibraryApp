@@ -5,9 +5,11 @@ import jakarta.xml.ws.handler.MessageContext;
 import jakarta.xml.ws.handler.soap.SOAPHandler;
 import jakarta.xml.ws.handler.soap.SOAPMessageContext;
 import org.apache.log4j.Logger;
+import org.stroganov.util.UserContainer;
 
 import javax.xml.namespace.QName;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Set;
 
 public class ClientHandler implements SOAPHandler<SOAPMessageContext> {
@@ -15,10 +17,12 @@ public class ClientHandler implements SOAPHandler<SOAPMessageContext> {
     private final Logger logger = Logger.getLogger(ClientHandler.class);
 
     public boolean handleMessage(SOAPMessageContext context) {
+        if (UserContainer.getUser() == null) {
+            return true;
+        }
+
         System.out.println("ClientHandler handleMessage..");
-
         Boolean outBoundProperty = (Boolean) context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
-
         //if this is a request (outgoing message), true for outbound messages, false for inbound
         if (outBoundProperty) {
             try {
@@ -30,23 +34,19 @@ public class ClientHandler implements SOAPHandler<SOAPMessageContext> {
                 if (header == null) {
                     header = envelope.addHeader();
                 }
-
                 //add password for later check on server side
-                String password = "Life for Ner'Zhul";
+                String userLogin = UserContainer.getUser().getLogin();
+                String password = UserContainer.getUser().getPasscodeHash();
 
                 //add soap header name as 'password'
-                QName qName = new QName("http://localhost", "password");
+                QName qName = new QName("http://localhost", "credentials");
                 SOAPHeaderElement soapHeaderElement = header.addHeaderElement(qName);
 
                 soapHeaderElement.setActor(SOAPConstants.URI_SOAP_ACTOR_NEXT);
-                soapHeaderElement.addTextNode(password);
+                soapHeaderElement.addTextNode(userLogin + "&&" + password);
                 message.saveChanges();
-                //write to console for debug
-                message.writeTo(System.out);
 
             } catch (SOAPException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -55,16 +55,16 @@ public class ClientHandler implements SOAPHandler<SOAPMessageContext> {
     }
 
     public Set<QName> getHeaders() {
-        System.out.println("ClientHandler getHeaders..");
-        return null;
+        logger.info("ClientHandler getHeaders..");
+        return Collections.emptySet();
     }
 
     public boolean handleFault(SOAPMessageContext context) {
-        System.out.println("ClientHandler handleFault..");
+        logger.error("ClientHandler handleFault..");
         return false;
     }
 
     public void close(MessageContext context) {
-        System.out.println("ClientHandler close..");
+        logger.info("ClientHandler close..");
     }
 }

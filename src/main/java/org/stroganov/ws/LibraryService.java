@@ -1,5 +1,6 @@
 package org.stroganov.ws;
 
+import jakarta.jws.HandlerChain;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebService;
@@ -26,6 +27,7 @@ public interface LibraryService {
     @WebMethod(operationName = "deleteBook")
     boolean deleteBook(Book book) throws IOException;
 
+    @HandlerChain(file = "../handler.xml")
     @WebMethod(operationName = "findBook")
     Book findBook(String numberISBN);
 
