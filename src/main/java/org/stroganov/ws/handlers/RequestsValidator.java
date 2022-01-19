@@ -49,17 +49,19 @@ public class RequestsValidator implements SOAPHandler<SOAPMessageContext> {
                 }
 
                 assert it != null;
+                Node loginNode = it.next();
+                System.out.println(loginNode.getNodeName());
+                String userLogin = (loginNode == null) ? null : loginNode.getValue();
                 Node passNode = it.next();
-                String credentials = (passNode == null) ? null : passNode.getValue();
-                System.out.println("We got credentials:" + credentials);
-                logger.info("We got credentials:" + credentials);
-                if (credentials == null) {
+                System.out.println(loginNode.getAttributes());
+                String password = (passNode == null) ? null : passNode.getValue();
+                System.out.println("We got credentials:" + userLogin + "&&" + password);
+                logger.info("We got credentials:" + userLogin + " && " + password);
+                if (userLogin == null || password == null) {
                     generateSOAPErrMessage(soapMsg, "NO Password");
                     return false;
                 }
-                String[] bufCredentials = credentials.split("&&");
-                String userLogin = bufCredentials[0];
-                String password = bufCredentials[1];
+
                 if (checkUser(userLogin, password)) {
                     if (adminRequests.contains(requestName) && !hasUserAdminStatus(userLogin)) {
                         generateSOAPErrMessage(soapMsg, "permission denied");
@@ -67,7 +69,7 @@ public class RequestsValidator implements SOAPHandler<SOAPMessageContext> {
                     }
                     return true;
                 }
-                generateSOAPErrMessage(soapMsg, "Не удалось получить правильный пароль:" + credentials);
+                generateSOAPErrMessage(soapMsg, "Не удалось получить правильный пароль:" + userLogin + "&&" + password);
                 return false;
             } catch (SOAPException e) {
                 logger.error(e);

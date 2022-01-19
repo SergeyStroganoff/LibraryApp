@@ -39,14 +39,20 @@ public class ClientHandler implements SOAPHandler<SOAPMessageContext> {
                 String password = UserContainer.getUser().getPasscodeHash();
 
                 //add soap header name as 'password'
-                QName qName = new QName("http://localhost", "credentials");
-                SOAPHeaderElement soapHeaderElement = header.addHeaderElement(qName);
+                QName loginName = new QName("http://localhost", "login");
+                SOAPHeaderElement soapHeaderElementLogin = header.addHeaderElement(loginName);
+                soapHeaderElementLogin.setActor(SOAPConstants.URI_SOAP_ACTOR_NEXT);
+                soapHeaderElementLogin.addTextNode(userLogin);
 
-                soapHeaderElement.setActor(SOAPConstants.URI_SOAP_ACTOR_NEXT);
-                soapHeaderElement.addTextNode(userLogin + "&&" + password);
+
+                QName passwordName = new QName("http://localhost", "password");
+                SOAPHeaderElement soapHeaderElementPassword = header.addHeaderElement(passwordName);
+                soapHeaderElementPassword.setActor(SOAPConstants.URI_SOAP_ACTOR_NEXT);
+                soapHeaderElementPassword.addTextNode(password);
+
                 message.saveChanges();
-
-            } catch (SOAPException e) {
+                message.writeTo(System.out);
+            } catch (SOAPException | IOException e) {
                 e.printStackTrace();
             }
         }
