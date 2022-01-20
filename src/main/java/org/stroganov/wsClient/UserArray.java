@@ -28,9 +28,7 @@ import java.util.List;
  * </pre>
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "userArray", propOrder = {
-        "item"
-})
+@XmlType(name = "userArray", propOrder = {"item"})
 public class UserArray {
 
     @XmlElement(nillable = true)
@@ -58,7 +56,7 @@ public class UserArray {
      */
     public List<User> getItem() {
         if (item == null) {
-            item = new ArrayList<User>();
+            item = new ArrayList<>();
         }
         return this.item;
     }

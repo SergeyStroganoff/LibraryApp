@@ -20,9 +20,7 @@ public class ClientHandler implements SOAPHandler<SOAPMessageContext> {
         if (UserContainer.getUser() == null) {
             return true;
         }
-
-        System.out.println("ClientHandler handleMessage..");
-        Boolean outBoundProperty = (Boolean) context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
+        boolean outBoundProperty = (Boolean) context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
         //if this is a request (outgoing message), true for outbound messages, false for inbound
         if (outBoundProperty) {
             try {
@@ -34,11 +32,9 @@ public class ClientHandler implements SOAPHandler<SOAPMessageContext> {
                 if (header == null) {
                     header = envelope.addHeader();
                 }
-                //add password for later check on server side
                 String userLogin = UserContainer.getUser().getLogin();
                 String password = UserContainer.getUser().getPasscodeHash();
 
-                //add soap header name as 'password'
                 QName loginName = new QName("http://localhost", "login");
                 SOAPHeaderElement soapHeaderElementLogin = header.addHeaderElement(loginName);
                 soapHeaderElementLogin.setActor(SOAPConstants.URI_SOAP_ACTOR_NEXT);
@@ -51,12 +47,10 @@ public class ClientHandler implements SOAPHandler<SOAPMessageContext> {
                 soapHeaderElementPassword.addTextNode(password);
 
                 message.saveChanges();
-                message.writeTo(System.out);
-            } catch (SOAPException | IOException e) {
+            } catch (SOAPException e) {
                 e.printStackTrace();
             }
         }
-        //continue other handler chain
         return true;
     }
 
