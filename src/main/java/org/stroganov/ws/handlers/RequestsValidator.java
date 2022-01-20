@@ -47,16 +47,21 @@ public class RequestsValidator implements SOAPHandler<SOAPMessageContext> {
                     System.out.println("No header block for next actor.");
                     generateSOAPErrMessage(soapMsg, "No header block for next actor.");
                 }
-
+                String userLogin = null;
+                String password = null;
                 assert it != null;
-                Node loginNode = it.next();
-                System.out.println(loginNode.getNodeName());
-                String userLogin = (loginNode == null) ? null : loginNode.getValue();
-                Node passNode = it.next();
-                System.out.println(loginNode.getAttributes());
-                String password = (passNode == null) ? null : passNode.getValue();
-                System.out.println("We got credentials:" + userLogin + "&&" + password);
+                while (it.hasNext()) {
+                    Node node = it.next();
+                    if (node.getNodeName().equals("login")) {
+                        userLogin = node.getValue();
+                    }
+                    if (node.getNodeName().equals("password")) {
+                        password = node.getValue();
+                    }
+                }
+                System.out.println("We got credentials:" + userLogin + " && " + password);
                 logger.info("We got credentials:" + userLogin + " && " + password);
+
                 if (userLogin == null || password == null) {
                     generateSOAPErrMessage(soapMsg, "NO Password");
                     return false;
