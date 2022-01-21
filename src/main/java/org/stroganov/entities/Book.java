@@ -54,6 +54,30 @@ public class Book implements Serializable {
         this.authorName = authorName;
     }
 
+    public void setNumberISBN(String numberISBN) {
+        this.numberISBN = numberISBN;
+    }
+
+    public void setBookName(String bookName) {
+        this.bookName = bookName;
+    }
+
+    public Author getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(Author authorName) {
+        this.authorName = authorName;
+    }
+
+    public void setYearPublishing(int yearPublishing) {
+        this.yearPublishing = yearPublishing;
+    }
+
+    public void setPagesNumber(int pagesNumber) {
+        this.pagesNumber = pagesNumber;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

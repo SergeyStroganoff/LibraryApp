@@ -76,6 +76,13 @@ public class User implements Serializable {
         this.userID = numberID;
     }
 
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
 
     @Override
     public boolean equals(Object o) {
