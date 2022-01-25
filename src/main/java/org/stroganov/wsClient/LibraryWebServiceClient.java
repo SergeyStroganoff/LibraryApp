@@ -1,23 +1,19 @@
-package org.stroganov.dao;
+package org.stroganov.wsClient;
 
 import jakarta.xml.ws.WebServiceClient;
+import org.stroganov.dao.LibraryDAO;
 import org.stroganov.entities.*;
-import org.stroganov.wsClient.BookArray;
-import org.stroganov.wsClient.IOException_Exception;
-import org.stroganov.wsClient.LibraryServerServiceImplService;
-import org.stroganov.wsClient.LibraryService;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.List;
 
 @WebServiceClient(name = "Client", targetNamespace = "http://example.org")
-public class SoapServiceLibraryDAO implements LibraryDAO {
+public class LibraryWebServiceClient implements LibraryDAO {
 
-    private static SoapServiceLibraryDAO instance;
+    private static volatile LibraryWebServiceClient instance;
     private final LibraryService libraryService;
 
-    public SoapServiceLibraryDAO() throws MalformedURLException {
+    public LibraryWebServiceClient() {
         // QName qname = new QName("http://ws.stroganov.org/", "LibraryServerServiceImplService");
         // URL url = new URL("http://127.0.0.1:8082/LibraryService/services?wsdl");
         // Service service = Service.create(url, qname);
@@ -27,9 +23,13 @@ public class SoapServiceLibraryDAO implements LibraryDAO {
         libraryService = libraryServerServiceImplService.getLibraryServerServiceImplPort();
     }
 
-    public static synchronized SoapServiceLibraryDAO getInstance() throws MalformedURLException {
+    public static synchronized LibraryWebServiceClient getInstance() {
         if (instance == null) {
-            instance = new SoapServiceLibraryDAO();
+            synchronized (LibraryWebServiceClient.class) {
+                if (instance == null) {
+                    instance = new LibraryWebServiceClient();
+                }
+            }
         }
         return instance;
     }
@@ -44,7 +44,7 @@ public class SoapServiceLibraryDAO implements LibraryDAO {
     }
 
     @Override
-    public boolean addBookList(List<Book> bookList) throws IOException {
+    public boolean addBooks(List<Book> bookList) throws IOException {
         BookArray bookArray = new BookArray();
         try {
             return libraryService.addBookLIst(bookArray);

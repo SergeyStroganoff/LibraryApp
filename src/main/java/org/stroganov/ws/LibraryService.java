@@ -2,7 +2,6 @@ package org.stroganov.ws;
 
 import jakarta.jws.HandlerChain;
 import jakarta.jws.WebMethod;
-import jakarta.jws.WebParam;
 import jakarta.jws.WebService;
 import jakarta.jws.soap.SOAPBinding;
 import org.stroganov.entities.*;
@@ -14,9 +13,6 @@ import java.io.IOException;
 @SOAPBinding(style = SOAPBinding.Style.RPC, use = SOAPBinding.Use.LITERAL)
 //@SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use = SOAPBinding.Use.LITERAL, parameterStyle = SOAPBinding.ParameterStyle.WRAPPED)
 public interface LibraryService {
-
-    @WebMethod(operationName = "getNewUser")
-    User[] getNewUser(@WebParam(name = "userName") String name);
 
     @WebMethod(operationName = "addBook")
     boolean addBook(Book book) throws IOException;

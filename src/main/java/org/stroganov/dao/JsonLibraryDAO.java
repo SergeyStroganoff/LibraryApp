@@ -48,7 +48,7 @@ public class JsonLibraryDAO implements LibraryDAO {
     }
 
     @Override
-    public boolean addBookList(List<Book> bookList) throws IOException {
+    public boolean addBooks(List<Book> bookList) throws IOException {
         boolean isSomeBookAdded = false;
         for (Book nextBook : bookList) {
             if (!bookList.contains(nextBook)) {

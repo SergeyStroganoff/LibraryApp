@@ -11,11 +11,16 @@ import org.stroganov.entities.User;
 import org.stroganov.util.DataManager;
 
 import javax.xml.namespace.QName;
-import java.util.*;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.Set;
 
 public class RequestsValidator implements SOAPHandler<SOAPMessageContext> {
+    public static final String CREDENTIALS_ERROR = "Не удалось получить правильный пароль для пользователя:";
     private final Logger logger = Logger.getLogger(RequestsValidator.class);
-    private final List<String> adminRequests = Arrays.asList("ns2:deleteUser", "ns2:blockUser", "ns2:unblockUser", "ns2:getAllHistory", "ns2:addUser");
+    //private final List<String> adminRequests = Arrays.asList("ns2:deleteUser", "ns2:blockUser", "ns2:unblockUser", "ns2:getAllHistory", "ns2:addUser");
+
+    private final LibraryDAO libraryDAO = DataManager.getLibraryDAO();
     private User user = null;
 
     @Override
@@ -25,7 +30,7 @@ public class RequestsValidator implements SOAPHandler<SOAPMessageContext> {
             try {
                 SOAPMessage soapMsg = context.getMessage();
                 String requestName = soapMsg.getSOAPBody().getLastChild().getNodeName();
-                if (requestName.equals("ns2:findUser")) {
+                if (requestName.equals(RequestTypes.FIND_USER.getString())) {
                     logger.info("Handler was missed");
                     return true;
                 }
@@ -52,20 +57,18 @@ public class RequestsValidator implements SOAPHandler<SOAPMessageContext> {
                         password = node.getValue();
                     }
                 }
-                logger.info("We got credentials:" + userLogin + " && " + password);
                 if (userLogin == null || password == null) {
                     generateSOAPErrMessage(soapMsg, "No Password");
                     return false;
                 }
-
                 if (checkUser(userLogin, password)) {
-                    if (adminRequests.contains(requestName) && !hasUserAdminStatus(userLogin)) {
+                    if (RequestTypes.contains(requestName) && !hasUserAdminStatus(userLogin)) {
                         generateSOAPErrMessage(soapMsg, "permission denied");
                         return false;
                     }
                     return true;
                 }
-                generateSOAPErrMessage(soapMsg, "Не удалось получить правильный пароль:" + userLogin + "&&" + password);
+                generateSOAPErrMessage(soapMsg, CREDENTIALS_ERROR + userLogin);
                 return false;
             } catch (SOAPException e) {
                 logger.error(e);
@@ -101,7 +104,7 @@ public class RequestsValidator implements SOAPHandler<SOAPMessageContext> {
     }
 
     private boolean hasUserAdminStatus(String userLogin) {
-        LibraryDAO libraryDAO = DataManager.getLibraryDAO();
+
         if (user == null) {
             libraryDAO.findUser(userLogin);
         }
@@ -114,7 +117,6 @@ public class RequestsValidator implements SOAPHandler<SOAPMessageContext> {
         if (userLogin == null || password == null) {
             return false;
         }
-        LibraryDAO libraryDAO = DataManager.getLibraryDAO();
         user = libraryDAO.findUser(userLogin);
         if (user == null) {
             return false;

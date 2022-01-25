@@ -61,7 +61,7 @@ public class MySQLLibraryDAO implements LibraryDAO {
     }
 
     @Override
-    public boolean addBookList(List<Book> bookList) {
+    public boolean addBooks(List<Book> bookList) {
         boolean isAllBooksWasAdded = true;
         for (Book book : bookList) {
             if (!addBook(book)) {

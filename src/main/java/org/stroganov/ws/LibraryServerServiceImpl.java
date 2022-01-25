@@ -1,14 +1,12 @@
 package org.stroganov.ws;
 
 import jakarta.jws.HandlerChain;
-import jakarta.jws.WebParam;
 import jakarta.jws.WebService;
 import org.stroganov.dao.LibraryDAO;
 import org.stroganov.entities.*;
 import org.stroganov.util.DataManager;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @HandlerChain(file = "../handler.xml")
@@ -18,16 +16,6 @@ public class LibraryServerServiceImpl implements LibraryService {
     private final LibraryDAO libraryDAO = DataManager.getLibraryDAO();
 
     @Override
-    public User[] getNewUser(@WebParam(name = "userName") String name) {
-        ArrayList<User> stringArrayListUsers = new ArrayList<>();
-        User user = new User(1, name, "admin", "sdf34rwf", false, true);
-        User userNext = new User(1, "Иван", "admin", "sdf34rwf", false, true);
-        stringArrayListUsers.add(user);
-        stringArrayListUsers.add(userNext);
-        return stringArrayListUsers.toArray(new User[0]);
-    }
-
-    @Override
     public boolean addBook(Book book) throws IOException {
         return libraryDAO.addBook(book);
     }
@@ -35,7 +23,7 @@ public class LibraryServerServiceImpl implements LibraryService {
     @Override
     public boolean addBookList(Book[] bookArray) throws IOException {
         List<Book> bookList = List.of(bookArray);
-        return libraryDAO.addBookList(bookList);
+        return libraryDAO.addBooks(bookList);
     }
 
     @Override
