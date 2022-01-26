@@ -10,13 +10,40 @@
         <listener-class>com.sun.xml.ws.transport.http.servlet.WSServletContextListener</listener-class>
     </listener>
     <servlet>
-        <servlet-name>services</servlet-name>
+        <servlet-name>bookServices</servlet-name>
+        <servlet-class>com.sun.xml.ws.transport.http.servlet.WSServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>adminServices</servlet-name>
+        <servlet-class>com.sun.xml.ws.transport.http.servlet.WSServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>userServices</servlet-name>
+        <servlet-class>com.sun.xml.ws.transport.http.servlet.WSServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>searchServices</servlet-name>
         <servlet-class>com.sun.xml.ws.transport.http.servlet.WSServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
-        <servlet-name>services</servlet-name>
-        <url-pattern>/services</url-pattern>
+        <servlet-name>bookServices</servlet-name>
+        <url-pattern>/bookServices</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>adminServices</servlet-name>
+        <url-pattern>/adminServices</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>userServices</servlet-name>
+        <url-pattern>/userServices</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>searchServices</servlet-name>
+        <url-pattern>/searchServices</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>120</session-timeout>

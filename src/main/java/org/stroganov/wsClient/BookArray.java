@@ -9,7 +9,6 @@ import org.stroganov.entities.Book;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * <p>Java class for bookArray complex type.
  *

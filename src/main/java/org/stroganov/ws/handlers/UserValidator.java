@@ -15,13 +15,11 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;
 
-public class RequestsValidator implements SOAPHandler<SOAPMessageContext> {
+public class UserValidator implements SOAPHandler<SOAPMessageContext> {
     public static final String CREDENTIALS_ERROR = "Не удалось получить правильный пароль для пользователя:";
-    private final Logger logger = Logger.getLogger(RequestsValidator.class);
-    //private final List<String> adminRequests = Arrays.asList("ns2:deleteUser", "ns2:blockUser", "ns2:unblockUser", "ns2:getAllHistory", "ns2:addUser");
-
-    private final LibraryDAO libraryDAO = DataManager.getLibraryDAO();
-    private User user = null;
+    private final Logger logger = Logger.getLogger(UserValidator.class);
+    protected final LibraryDAO libraryDAO = DataManager.getLibraryDAO();
+    protected User user = null;
 
     @Override
     public boolean handleMessage(SOAPMessageContext context) {
@@ -29,14 +27,8 @@ public class RequestsValidator implements SOAPHandler<SOAPMessageContext> {
         if (!isRequest) {
             try {
                 SOAPMessage soapMsg = context.getMessage();
-                String requestName = soapMsg.getSOAPBody().getLastChild().getNodeName();
-                if (requestName.equals(RequestTypes.FIND_USER.getString())) {
-                    logger.info("Handler was missed");
-                    return true;
-                }
                 SOAPEnvelope soapEnv = soapMsg.getSOAPPart().getEnvelope();
                 SOAPHeader soapHeader = soapEnv.getHeader();
-
                 if (soapHeader == null) {
                     soapHeader = soapEnv.addHeader();
                     generateSOAPErrMessage(soapMsg, "No SOAP header.");
@@ -62,10 +54,6 @@ public class RequestsValidator implements SOAPHandler<SOAPMessageContext> {
                     return false;
                 }
                 if (checkUser(userLogin, password)) {
-                    if (RequestTypes.contains(requestName) && !hasUserAdminStatus(userLogin)) {
-                        generateSOAPErrMessage(soapMsg, "permission denied");
-                        return false;
-                    }
                     return true;
                 }
                 generateSOAPErrMessage(soapMsg, CREDENTIALS_ERROR + userLogin);
@@ -92,7 +80,7 @@ public class RequestsValidator implements SOAPHandler<SOAPMessageContext> {
         //not realized
     }
 
-    private void generateSOAPErrMessage(SOAPMessage msg, String reason) {
+    protected void generateSOAPErrMessage(SOAPMessage msg, String reason) {
         try {
             SOAPBody soapBody = msg.getSOAPPart().getEnvelope().getBody();
             SOAPFault soapFault = soapBody.addFault();
@@ -103,17 +91,7 @@ public class RequestsValidator implements SOAPHandler<SOAPMessageContext> {
         }
     }
 
-    private boolean hasUserAdminStatus(String userLogin) {
-
-        if (user == null) {
-            libraryDAO.findUser(userLogin);
-        }
-        if (user != null) {
-            return user.isAdmin();
-        } else return false;
-    }
-
-    private boolean checkUser(String userLogin, String password) {
+    protected boolean checkUser(String userLogin, String password) {
         if (userLogin == null || password == null) {
             return false;
         }

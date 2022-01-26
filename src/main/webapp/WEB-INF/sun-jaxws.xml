@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <endpoints xmlns="http://java.sun.com/xml/ns/jax-ws/ri/runtime"
-           xmlns:javaee="https://jakarta.ee/xml/ns/jakartaee" version='2.0'>
-    <endpoint name="LibraryService"
-              implementation="org.stroganov.ws.LibraryServerServiceImpl"
-              url-pattern="/services">
+           version='2.0'>
+    <endpoint name="BookService"
+              implementation="org.stroganov.ws.BookServiceImpl"
+              url-pattern="/bookServices">
+    </endpoint>
+    <endpoint name="AdminService"
+              implementation="org.stroganov.ws.AdminServiceImpl"
+              url-pattern="/adminServices">
+    </endpoint>
+    <endpoint name="UserService"
+              implementation="org.stroganov.ws.UserServiceImpl"
+              url-pattern="/userServices">
+    </endpoint>
+    <endpoint name="SearchService"
+              implementation="org.stroganov.ws.SearchServiceImpl"
+              url-pattern="/searchServices">
     </endpoint>
 </endpoints>

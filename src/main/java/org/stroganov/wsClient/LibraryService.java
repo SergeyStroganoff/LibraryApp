@@ -20,13 +20,11 @@ import org.stroganov.entities.*;
 })
 public interface LibraryService {
 
-
     /**
      * @param arg0
      * @return returns org.stroganov.ws.BookArray
      */
     @WebMethod
-    @HandlerChain(file = "clientHandler.xml")
     @WebResult(partName = "return")
     @Action(input = "http://ws.stroganov.org/LibraryService/findBooksWithUserBookMarksRequest", output = "http://ws.stroganov.org/LibraryService/findBooksWithUserBookMarksResponse")
     public BookArray findBooksWithUserBookMarks(

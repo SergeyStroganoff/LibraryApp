@@ -18,9 +18,9 @@ import java.net.URL;
 public class LibraryServerServiceImplService
         extends Service {
 
-    private final static URL LIBRARYSERVERSERVICEIMPLSERVICE_WSDL_LOCATION;
-    private final static WebServiceException LIBRARYSERVERSERVICEIMPLSERVICE_EXCEPTION;
-    private final static QName LIBRARYSERVERSERVICEIMPLSERVICE_QNAME = new QName("http://ws.stroganov.org/", "LibraryServerServiceImplService");
+    private static final URL LIBRARYSERVERSERVICEIMPLSERVICE_WSDL_LOCATION;
+    private static final WebServiceException LIBRARYSERVERSERVICEIMPLSERVICE_EXCEPTION;
+    private static final QName LIBRARYSERVERSERVICEIMPLSERVICE_QNAME = new QName("http://ws.stroganov.org/", "LibraryServerServiceImplService");
 
     static {
         URL url = null;

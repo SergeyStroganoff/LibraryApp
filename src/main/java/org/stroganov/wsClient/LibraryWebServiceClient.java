@@ -1,5 +1,6 @@
 package org.stroganov.wsClient;
 
+import jakarta.jws.HandlerChain;
 import jakarta.xml.ws.WebServiceClient;
 import org.stroganov.dao.LibraryDAO;
 import org.stroganov.entities.*;
@@ -8,10 +9,14 @@ import java.io.IOException;
 import java.util.List;
 
 @WebServiceClient(name = "Client", targetNamespace = "http://example.org")
+@HandlerChain(file = "clientHandler.xml")
 public class LibraryWebServiceClient implements LibraryDAO {
 
     private static volatile LibraryWebServiceClient instance;
-    private final LibraryService libraryService;
+    private final BookServiceClient bookServiceClient;
+    private final UserServiceClient userServiceClient;
+    private final AdminServiceClient adminServiceClient;
+    private final SearchServiceClient searchServiceClient;
 
     public LibraryWebServiceClient() {
         // QName qname = new QName("http://ws.stroganov.org/", "LibraryServerServiceImplService");
@@ -19,8 +24,10 @@ public class LibraryWebServiceClient implements LibraryDAO {
         // Service service = Service.create(url, qname);
         // libraryService = service.getPort(LibraryClientService.class);
 
-        LibraryServerServiceImplService libraryServerServiceImplService = new LibraryServerServiceImplService();
-        libraryService = libraryServerServiceImplService.getLibraryServerServiceImplPort();
+        bookServiceClient = new BookServiceImplService().getBookServiceImplPort();
+        userServiceClient = new UserServiceImplService().getUserServiceImplPort();
+        adminServiceClient = new AdminServiceImplService().getAdminServiceImplPort();
+        searchServiceClient = new SearchServiceImplService().getSearchServiceImplPort();
     }
 
     public static synchronized LibraryWebServiceClient getInstance() {
@@ -37,7 +44,7 @@ public class LibraryWebServiceClient implements LibraryDAO {
     @Override
     public boolean addBook(Book book) throws IOException {
         try {
-            return libraryService.addBook(book);
+            return bookServiceClient.addBook(book);
         } catch (IOException_Exception e) {
             throw new IOException(e);
         }
@@ -47,7 +54,7 @@ public class LibraryWebServiceClient implements LibraryDAO {
     public boolean addBooks(List<Book> bookList) throws IOException {
         BookArray bookArray = new BookArray();
         try {
-            return libraryService.addBookLIst(bookArray);
+            return bookServiceClient.addBookLIst(bookArray);
         } catch (IOException_Exception e) {
             throw new IOException(e);
         }
@@ -56,7 +63,7 @@ public class LibraryWebServiceClient implements LibraryDAO {
     @Override
     public boolean deleteBook(Book book) throws IOException {
         try {
-            return libraryService.deleteBook(book);
+            return bookServiceClient.deleteBook(book);
         } catch (IOException_Exception e) {
             throw new IOException(e);
         }
@@ -64,19 +71,19 @@ public class LibraryWebServiceClient implements LibraryDAO {
 
     @Override
     public Book findBook(String numberISBN) {
-        return libraryService.findBook(numberISBN);
+        return searchServiceClient.findBook(numberISBN);
     }
 
     @Override
     public List<Book> findBooksByPartName(String partOfName) {
-        BookArray bookArray = libraryService.findBookByPartName(partOfName);
+        BookArray bookArray = searchServiceClient.findBooksByPartName(partOfName);
         return bookArray.getItem();
     }
 
     @Override
     public boolean addUser(User user) throws IOException {
         try {
-            return libraryService.addUser(user);
+            return adminServiceClient.addUser(user);
         } catch (IOException_Exception e) {
             throw new IOException(e);
         }
@@ -84,13 +91,13 @@ public class LibraryWebServiceClient implements LibraryDAO {
 
     @Override
     public User findUser(String userLogin) {
-        return libraryService.findUser(userLogin);
+        return searchServiceClient.findUser(userLogin);
     }
 
     @Override
     public boolean deleteUser(User user) throws IOException {
         try {
-            return libraryService.deleteUser(user);
+            return adminServiceClient.deleteUser(user);
         } catch (IOException_Exception e) {
             throw new IOException(e);
         }
@@ -99,7 +106,7 @@ public class LibraryWebServiceClient implements LibraryDAO {
     @Override
     public boolean blockUser(User user) throws IOException {
         try {
-            return libraryService.blockUser(user);
+            return adminServiceClient.blockUser(user);
         } catch (IOException_Exception e) {
             throw new IOException(e);
         }
@@ -108,7 +115,7 @@ public class LibraryWebServiceClient implements LibraryDAO {
     @Override
     public boolean unblockUser(User user) throws IOException {
         try {
-            return libraryService.unblockUser(user);
+            return adminServiceClient.unblockUser(user);
         } catch (IOException_Exception e) {
             throw new IOException(e);
         }
@@ -117,16 +124,17 @@ public class LibraryWebServiceClient implements LibraryDAO {
     @Override
     public boolean addBookMark(BookMark bookMark) throws IOException {
         try {
-            return libraryService.addBookMark(bookMark);
+            return userServiceClient.addBookMark(bookMark);
         } catch (IOException_Exception e) {
             throw new IOException(e);
         }
     }
 
+
     @Override
     public boolean deleteBookMark(BookMark bookMark) throws IOException {
         try {
-            return libraryService.deleteBookMark(bookMark);
+            return userServiceClient.deleteBookMark(bookMark);
         } catch (IOException_Exception e) {
             throw new IOException(e);
         }
@@ -135,21 +143,22 @@ public class LibraryWebServiceClient implements LibraryDAO {
     @Override
     public boolean addAuthor(Author author) throws IOException {
         try {
-            return libraryService.addAuthor(author);
+            return bookServiceClient.addAuthor(author);
         } catch (IOException_Exception e) {
             throw new IOException(e);
         }
+
     }
 
     @Override
     public Author findAuthor(String authorName) {
-        return libraryService.findAuthor(authorName);
+        return searchServiceClient.findAuthor(authorName);
     }
 
     @Override
     public boolean deleteAuthorWithAllHisBooks(Author author) throws IOException {
         try {
-            return libraryService.deleteAuthorWithAllHisBooks(author);
+            return userServiceClient.deleteAuthorWithAllHisBooks(author);
         } catch (IOException_Exception e) {
             throw new IOException(e);
         }
@@ -157,39 +166,39 @@ public class LibraryWebServiceClient implements LibraryDAO {
 
     @Override
     public List<Book> findBooksByPartAuthorName(String partAuthorName) {
-        return libraryService.findBooksByPartAuthorName(partAuthorName).getItem();
+        return searchServiceClient.findBooksByPartAuthorName(partAuthorName).getItem();
 
     }
 
     @Override
     public List<Book> findBooksByYearsRange(int firstYear, int secondYear) {
-        return libraryService.findBooksByYearsRange(firstYear, secondYear).getItem();
+        return searchServiceClient.findBooksByYearsRange(firstYear, secondYear).getItem();
     }
 
     @Override
     public List<Book> findBooksByParameters(int bookYear, int bookPages, String partBookName) {
-        return libraryService.findBooksByParameters(bookYear, bookPages, partBookName).getItem();
+        return searchServiceClient.findBooksByParameters(bookYear, bookPages, partBookName).getItem();
     }
 
     @Override
     public List<Book> findBooksWithUserBookMarks(User user) {
-        return libraryService.findBooksWithUserBookMarks(user).getItem();
+        return searchServiceClient.findBooksWithUserBookMarks(user).getItem();
 
     }
 
     @Override
     public List<BookMark> findUserBookMarks(User user) {
-        return libraryService.findUserBookMarks(user).getItem();
+        return searchServiceClient.findUserBookMarks(user).getItem();
 
     }
 
     @Override
     public boolean addHistoryEvent(History history) {
-        return libraryService.addHistoryEvent(history);
+        return userServiceClient.addHistoryEvent(history);
     }
 
     @Override
     public List<History> getAllHistory() {
-        return libraryService.getAllHistory().getItem();
+        return adminServiceClient.getAllHistory().getItem();
     }
 }
