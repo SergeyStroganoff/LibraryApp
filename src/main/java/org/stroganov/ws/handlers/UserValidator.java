@@ -34,30 +34,12 @@ public class UserValidator implements SOAPHandler<SOAPMessageContext> {
                     generateSOAPErrMessage(soapMsg, "No SOAP header.");
                 }
                 Iterator<SOAPHeaderElement> it = soapHeader.extractHeaderElements(SOAPConstants.URI_SOAP_ACTOR_NEXT);
-                if (it == null || !it.hasNext()) {
-                    generateSOAPErrMessage(soapMsg, "No header block for next actor.");
-                }
-                String userLogin = null;
-                String password = null;
-                assert it != null;
-                while (it.hasNext()) {
-                    Node node = it.next();
-                    if (node.getNodeName().equals("login")) {
-                        userLogin = node.getValue();
-                    }
-                    if (node.getNodeName().equals("password")) {
-                        password = node.getValue();
-                    }
-                }
-                if (userLogin == null || password == null) {
-                    generateSOAPErrMessage(soapMsg, "No Password");
+                user = getAuthorizedUserFromHeaders(it, soapMsg);
+                if (user == null) {
+                    generateSOAPErrMessage(soapMsg, CREDENTIALS_ERROR);
                     return false;
                 }
-                if (checkUser(userLogin, password)) {
-                    return true;
-                }
-                generateSOAPErrMessage(soapMsg, CREDENTIALS_ERROR + userLogin);
-                return false;
+                return true;
             } catch (SOAPException e) {
                 logger.error(e);
             }
@@ -80,6 +62,33 @@ public class UserValidator implements SOAPHandler<SOAPMessageContext> {
         //not realized
     }
 
+    protected User getAuthorizedUserFromHeaders(Iterator<SOAPHeaderElement> it, SOAPMessage soapMsg) {
+        User userFromServerSource;
+        if (it == null || !it.hasNext()) {
+            generateSOAPErrMessage(soapMsg, "No header block for next actor.");
+        }
+        String userLogin = null;
+        String password = null;
+        assert it != null;
+        while (it.hasNext()) {
+            Node node = it.next();
+            if (node.getNodeName().equals("login")) {
+                userLogin = node.getValue();
+            }
+            if (node.getNodeName().equals("password")) {
+                password = node.getValue();
+            }
+        }
+        if (userLogin == null || password == null) {
+            generateSOAPErrMessage(soapMsg, "No Password");
+            return null;
+        }
+        userFromServerSource = libraryDAO.findUser(userLogin);
+        if (userFromServerSource.getPasscodeHash().equals(password)) {
+            return userFromServerSource;
+        } else return null;
+    }
+
     protected void generateSOAPErrMessage(SOAPMessage msg, String reason) {
         try {
             SOAPBody soapBody = msg.getSOAPPart().getEnvelope().getBody();
@@ -91,14 +100,5 @@ public class UserValidator implements SOAPHandler<SOAPMessageContext> {
         }
     }
 
-    protected boolean checkUser(String userLogin, String password) {
-        if (userLogin == null || password == null) {
-            return false;
-        }
-        user = libraryDAO.findUser(userLogin);
-        if (user == null) {
-            return false;
-        }
-        return user.getPasscodeHash().equals(password);
-    }
+
 }
