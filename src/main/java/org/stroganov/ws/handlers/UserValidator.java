@@ -19,10 +19,11 @@ public class UserValidator implements SOAPHandler<SOAPMessageContext> {
     public static final String CREDENTIALS_ERROR = "Не удалось получить правильный пароль для пользователя:";
     private final Logger logger = Logger.getLogger(UserValidator.class);
     protected final LibraryDAO libraryDAO = DataManager.getLibraryDAO();
-    protected User user = null;
+
 
     @Override
     public boolean handleMessage(SOAPMessageContext context) {
+
         boolean isRequest = (Boolean) context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
         if (!isRequest) {
             try {
@@ -34,7 +35,7 @@ public class UserValidator implements SOAPHandler<SOAPMessageContext> {
                     generateSOAPErrMessage(soapMsg, "No SOAP header.");
                 }
                 Iterator<SOAPHeaderElement> it = soapHeader.extractHeaderElements(SOAPConstants.URI_SOAP_ACTOR_NEXT);
-                user = getAuthorizedUserFromHeaders(it, soapMsg);
+                User user = getAuthorizedUserFromHeaders(it, soapMsg);
                 if (user == null) {
                     generateSOAPErrMessage(soapMsg, CREDENTIALS_ERROR);
                     return false;
@@ -63,7 +64,6 @@ public class UserValidator implements SOAPHandler<SOAPMessageContext> {
     }
 
     protected User getAuthorizedUserFromHeaders(Iterator<SOAPHeaderElement> it, SOAPMessage soapMsg) {
-        User userFromServerSource;
         if (it == null || !it.hasNext()) {
             generateSOAPErrMessage(soapMsg, "No header block for next actor.");
         }
@@ -83,7 +83,7 @@ public class UserValidator implements SOAPHandler<SOAPMessageContext> {
             generateSOAPErrMessage(soapMsg, "No Password");
             return null;
         }
-        userFromServerSource = libraryDAO.findUser(userLogin);
+        User userFromServerSource = libraryDAO.findUser(userLogin);
         if (userFromServerSource.getPasscodeHash().equals(password)) {
             return userFromServerSource;
         } else return null;
@@ -99,6 +99,4 @@ public class UserValidator implements SOAPHandler<SOAPMessageContext> {
             logger.error(e);
         }
     }
-
-
 }

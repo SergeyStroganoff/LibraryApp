@@ -4,6 +4,7 @@ import jakarta.xml.soap.*;
 import jakarta.xml.ws.handler.MessageContext;
 import jakarta.xml.ws.handler.soap.SOAPMessageContext;
 import org.apache.log4j.Logger;
+import org.stroganov.entities.User;
 
 import java.util.Iterator;
 
@@ -24,7 +25,7 @@ public class AdminValidator extends UserValidator {
                     generateSOAPErrMessage(soapMsg, "No SOAP header.");
                 }
                 Iterator<SOAPHeaderElement> it = soapHeader.extractHeaderElements(SOAPConstants.URI_SOAP_ACTOR_NEXT);
-                user = getAuthorizedUserFromHeaders(it, soapMsg);
+                User user = getAuthorizedUserFromHeaders(it, soapMsg);
 
                 if (user == null || !user.isAdmin()) {
                     generateSOAPErrMessage(soapMsg, "permission denied");
