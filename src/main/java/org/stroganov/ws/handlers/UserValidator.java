@@ -28,13 +28,7 @@ public class UserValidator implements SOAPHandler<SOAPMessageContext> {
         if (!isRequest) {
             try {
                 SOAPMessage soapMsg = context.getMessage();
-                SOAPEnvelope soapEnv = soapMsg.getSOAPPart().getEnvelope();
-                SOAPHeader soapHeader = soapEnv.getHeader();
-                if (soapHeader == null) {
-                    soapHeader = soapEnv.addHeader();
-                    generateSOAPErrMessage(soapMsg, "No SOAP header.");
-                }
-                Iterator<SOAPHeaderElement> it = soapHeader.extractHeaderElements(SOAPConstants.URI_SOAP_ACTOR_NEXT);
+                Iterator<SOAPHeaderElement> it = getSoapHeaders(soapMsg);
                 User user = getAuthorizedUserFromHeaders(it, soapMsg);
                 if (user == null) {
                     generateSOAPErrMessage(soapMsg, CREDENTIALS_ERROR);
@@ -61,6 +55,16 @@ public class UserValidator implements SOAPHandler<SOAPMessageContext> {
     @Override
     public void close(MessageContext context) {
         //not realized
+    }
+
+    protected Iterator<SOAPHeaderElement> getSoapHeaders(SOAPMessage soapMsg) throws SOAPException {
+        SOAPEnvelope soapEnv = soapMsg.getSOAPPart().getEnvelope();
+        SOAPHeader soapHeader = soapEnv.getHeader();
+        if (soapHeader == null) {
+            soapHeader = soapEnv.addHeader();
+            generateSOAPErrMessage(soapMsg, "No SOAP header.");
+        }
+        return soapHeader.extractHeaderElements(SOAPConstants.URI_SOAP_ACTOR_NEXT);
     }
 
     protected User getAuthorizedUserFromHeaders(Iterator<SOAPHeaderElement> it, SOAPMessage soapMsg) {

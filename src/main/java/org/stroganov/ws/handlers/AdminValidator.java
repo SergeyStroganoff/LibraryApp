@@ -17,14 +17,7 @@ public class AdminValidator extends UserValidator {
         if (!isRequest) {
             try {
                 SOAPMessage soapMsg = context.getMessage();
-                SOAPEnvelope soapEnv = soapMsg.getSOAPPart().getEnvelope();
-                SOAPHeader soapHeader = soapEnv.getHeader();
-
-                if (soapHeader == null) {
-                    soapHeader = soapEnv.addHeader();
-                    generateSOAPErrMessage(soapMsg, "No SOAP header.");
-                }
-                Iterator<SOAPHeaderElement> it = soapHeader.extractHeaderElements(SOAPConstants.URI_SOAP_ACTOR_NEXT);
+                Iterator<SOAPHeaderElement> it = getSoapHeaders(soapMsg);
                 User user = getAuthorizedUserFromHeaders(it, soapMsg);
 
                 if (user == null || !user.isAdmin()) {
