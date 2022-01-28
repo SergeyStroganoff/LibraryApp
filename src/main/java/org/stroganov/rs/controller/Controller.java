@@ -1,4 +1,4 @@
-package org.stroganov.controller;
+package org.stroganov.rs.controller;
 
 import org.stroganov.dao.LibraryDAO;
 import org.stroganov.util.DataManager;
