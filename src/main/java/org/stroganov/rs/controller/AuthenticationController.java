@@ -12,6 +12,9 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.security.Key;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 
 @Path("/api")
 public class AuthenticationController extends Controller {
@@ -25,7 +28,7 @@ public class AuthenticationController extends Controller {
 
         User ourUser = libraryDAO.findUser(user.getLogin());
 
-        if (!ourUser.getPasscodeHash().equals(user.getPasscodeHash())) { // todo
+        if (!ourUser.getPasscodeHash().equals(user.getPasscodeHash())) {
             return Response.status(401)
                     .entity("Password is not correct: " + user.getLogin())
                     .build();
@@ -33,7 +36,7 @@ public class AuthenticationController extends Controller {
         String newJWTToken = createJWTToken(ourUser);
         final ObjectMapper mapper = new ObjectMapper();
         ObjectNode json = mapper.createObjectNode();
-        json.put("token", newJWTToken);
+        json.put("KeyBearer", newJWTToken);
         return Response.status(Response.Status.OK).entity(json).build();
     }
 
@@ -41,6 +44,8 @@ public class AuthenticationController extends Controller {
         Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
         return Jwts.builder()
                 .setIssuer("LibraryServer")
+                .setIssuedAt(new Date())
+                .setExpiration(Date.from(LocalDateTime.now().plusMinutes(45L).atZone(ZoneId.systemDefault()).toInstant()))
                 .setSubject(user.getLogin())
                 .claim("admin", user.isAdmin())
                 .signWith(key)

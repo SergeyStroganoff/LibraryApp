@@ -1,6 +1,7 @@
 package org.stroganov.rs.controller;
 
 import org.stroganov.entities.User;
+import org.stroganov.rs.filter.JWTTokenNeeded;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -8,21 +9,22 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 
 @Path("/api/user")
-//@JWTTokenNeeded // todo !!
 public class UserController extends Controller {
 
     @GET
-    @Path("{userLogin}")
+    @Path("/{userLogin}")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
+    @JWTTokenNeeded
     public User findUser(@PathParam("userLogin") String userLogin) {
         return libraryDAO.findUser(userLogin);
     }
 
     @DELETE
-    @Path("{userLogin}")
+    @Path("/{userLogin}")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
+    @JWTTokenNeeded
     public Response deleteUser(@PathParam("userLogin") String userLogin) {
         boolean operationResult = false;
         User user = libraryDAO.findUser(userLogin);
@@ -45,6 +47,7 @@ public class UserController extends Controller {
     @Path("/block/{userLogin}")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
+    @JWTTokenNeeded
     public Response blockUser(@PathParam("userLogin") String userLogin) {
         boolean operationResult = false;
         User user = libraryDAO.findUser(userLogin);
@@ -66,6 +69,7 @@ public class UserController extends Controller {
     @Path("/unblock/{userLogin}")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
+    @JWTTokenNeeded
     public Response unblockUser(@PathParam("userLogin") String userLogin) {
         boolean operationResult = false;
         User user = libraryDAO.findUser(userLogin);
@@ -85,6 +89,7 @@ public class UserController extends Controller {
     @Path("/")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
+    @JWTTokenNeeded
     public Response addUser(User user) throws IOException {
         boolean operationResult = libraryDAO.addUser(user);
         return Response.status(200)

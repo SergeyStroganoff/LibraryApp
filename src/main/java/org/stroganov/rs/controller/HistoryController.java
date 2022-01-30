@@ -1,6 +1,7 @@
 package org.stroganov.rs.controller;
 
 import org.stroganov.entities.History;
+import org.stroganov.rs.filter.JWTTokenNeeded;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -15,6 +16,7 @@ public class HistoryController extends Controller {
     @Path("/")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
+    @JWTTokenNeeded
     public Response addHistoryEvent(History history) {
         boolean operationResult = libraryDAO.addHistoryEvent(history);
         return Response.status(200)
@@ -26,6 +28,7 @@ public class HistoryController extends Controller {
     @Path("/")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
+    @JWTTokenNeeded
     public Response getAllHistory() {
         List<History> allHistory = libraryDAO.getAllHistory();
         return Response.status(200)

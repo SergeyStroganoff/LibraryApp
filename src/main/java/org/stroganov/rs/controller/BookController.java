@@ -2,6 +2,7 @@ package org.stroganov.rs.controller;
 
 
 import org.stroganov.entities.Book;
+import org.stroganov.rs.filter.JWTTokenNeeded;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -14,9 +15,10 @@ public class BookController extends Controller {
 
 
     @DELETE
-    @Path("{bookISBN}")
+    @Path("/{bookISBN}")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
+    @JWTTokenNeeded
     public Response deleteBook(@PathParam("bookISBN") String bookISBN) {
         Book book = libraryDAO.findBook(bookISBN);
         boolean operationResult = false;
@@ -38,6 +40,7 @@ public class BookController extends Controller {
     @Path("/add")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
+    @JWTTokenNeeded
     public Response addBook(Book book) {
         boolean operationResult;
         try {
@@ -56,6 +59,7 @@ public class BookController extends Controller {
     @Path("/addList")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
+    @JWTTokenNeeded
     public Response addBooks(List<Book> bookList) {
         boolean operationResult;
         try {

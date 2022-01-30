@@ -2,6 +2,7 @@ package org.stroganov.rs.controller;
 
 import org.stroganov.entities.BookMark;
 import org.stroganov.entities.User;
+import org.stroganov.rs.filter.JWTTokenNeeded;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -17,6 +18,7 @@ public class BookMarkController extends Controller {
     @Path("/")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
+    @JWTTokenNeeded
     public Response deleteBookMark(BookMark bookMark) {
         boolean operationResult = false;
         try {
@@ -35,6 +37,7 @@ public class BookMarkController extends Controller {
     @Path("/")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
+    @JWTTokenNeeded
     public Response addBookMark(BookMark bookMark) {
         boolean operationResult;
         try {
@@ -50,9 +53,10 @@ public class BookMarkController extends Controller {
     }
 
     @GET
-    @Path("{userLogin}")
+    @Path("/{userLogin}")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
+    @JWTTokenNeeded
     public Response findUserBookMarks(@PathParam("userLogin") String userLogin) {
         User user = libraryDAO.findUser(userLogin);
         List<BookMark> bookMarkList = Collections.emptyList();
