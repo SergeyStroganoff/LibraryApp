@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Path("/api/book")
+@JWTTokenNeeded
 public class BookController extends Controller {
 
 
@@ -18,7 +19,7 @@ public class BookController extends Controller {
     @Path("/{bookISBN}")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    @JWTTokenNeeded
+
     public Response deleteBook(@PathParam("bookISBN") String bookISBN) {
         Book book = libraryDAO.findBook(bookISBN);
         boolean operationResult = false;
@@ -40,7 +41,6 @@ public class BookController extends Controller {
     @Path("/add")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    @JWTTokenNeeded
     public Response addBook(Book book) {
         boolean operationResult;
         try {
@@ -59,7 +59,6 @@ public class BookController extends Controller {
     @Path("/addList")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    @JWTTokenNeeded
     public Response addBooks(List<Book> bookList) {
         boolean operationResult;
         try {

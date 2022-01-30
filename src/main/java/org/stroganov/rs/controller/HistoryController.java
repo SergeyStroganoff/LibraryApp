@@ -1,6 +1,7 @@
 package org.stroganov.rs.controller;
 
 import org.stroganov.entities.History;
+import org.stroganov.rs.filter.AdminStatusNeeded;
 import org.stroganov.rs.filter.JWTTokenNeeded;
 
 import javax.ws.rs.*;
@@ -29,6 +30,7 @@ public class HistoryController extends Controller {
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
     @JWTTokenNeeded
+    @AdminStatusNeeded
     public Response getAllHistory() {
         List<History> allHistory = libraryDAO.getAllHistory();
         return Response.status(200)

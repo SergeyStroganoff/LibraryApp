@@ -1,6 +1,7 @@
 package org.stroganov.rs.controller;
 
 import org.stroganov.entities.User;
+import org.stroganov.rs.filter.AdminStatusNeeded;
 import org.stroganov.rs.filter.JWTTokenNeeded;
 
 import javax.ws.rs.*;
@@ -25,6 +26,7 @@ public class UserController extends Controller {
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
     @JWTTokenNeeded
+    @AdminStatusNeeded
     public Response deleteUser(@PathParam("userLogin") String userLogin) {
         boolean operationResult = false;
         User user = libraryDAO.findUser(userLogin);
@@ -48,6 +50,7 @@ public class UserController extends Controller {
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
     @JWTTokenNeeded
+    @AdminStatusNeeded
     public Response blockUser(@PathParam("userLogin") String userLogin) {
         boolean operationResult = false;
         User user = libraryDAO.findUser(userLogin);
@@ -70,6 +73,7 @@ public class UserController extends Controller {
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
     @JWTTokenNeeded
+    @AdminStatusNeeded
     public Response unblockUser(@PathParam("userLogin") String userLogin) {
         boolean operationResult = false;
         User user = libraryDAO.findUser(userLogin);
@@ -90,6 +94,7 @@ public class UserController extends Controller {
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
     @JWTTokenNeeded
+    @AdminStatusNeeded
     public Response addUser(User user) throws IOException {
         boolean operationResult = libraryDAO.addUser(user);
         return Response.status(200)

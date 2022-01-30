@@ -20,9 +20,9 @@ import java.security.Key;
 @Provider
 @JWTTokenNeeded
 @Priority(Priorities.AUTHENTICATION)
-public class JWTTokenNeededFilter implements ContainerRequestFilter {
+public class AdminStatusNeededFilter implements ContainerRequestFilter {
 
-    final Logger logger = Logger.getLogger(JWTTokenNeededFilter.class);
+    final Logger logger = Logger.getLogger(org.stroganov.rs.filter.JWTTokenNeededFilter.class);
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
@@ -35,17 +35,14 @@ public class JWTTokenNeededFilter implements ContainerRequestFilter {
             // Validate the token
             Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
             jws = Jwts.parserBuilder()
-                    .requireIssuer("LibraryServer")// (1)
+                    .requireIssuer("LibraryServer")
+                    .require("admin", true)// (1)
                     .setSigningKey(key)         // (2)
                     .build()                    // (3)
                     .parseClaimsJws(token); // (4)
 
             logger.info("Token contains the subject : " + jws.getBody().getSubject());
-            System.out.println("Token contains the subject : " + jws.getBody().getSubject());
-            // we can safely trust the JWT
-            // Jwts.parser().setSigningKey(key).parseClaimsJws(token); Old realization
             logger.info("Server got the valid token : " + token);
-
         } catch (Exception e) {
             logger.error("Server got the invalid token : " + token);
             requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
