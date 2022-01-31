@@ -1,9 +1,12 @@
 package org.stroganov.entities;
 
+import jakarta.xml.bind.annotation.XmlRootElement;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Objects;
 
+@XmlRootElement
 @Entity
 @Table(name = ("history"))
 public class History {
@@ -35,6 +38,26 @@ public class History {
 
     public String getEvent() {
         return event;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setLocalDateTime(Date localDateTime) {
+        this.localDateTime = localDateTime;
+    }
+
+    public void setEvent(String event) {
+        this.event = event;
     }
 
     @Override

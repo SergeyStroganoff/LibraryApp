@@ -1,0 +1,14 @@
+<S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"
+            xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+    <SOAP-ENV:Header>
+        <password xmlns="http://ws.stroganov.org/" SOAP-ENV:actor="http://schemas.xmlsoap.org/soap/actor/next">
+            --PASSWORD--
+        </password>
+        <user xmlns="http://ws.stroganov.org/" SOAP-ENV:actor="http://schemas.xmlsoap.org/soap/actor/next">admin</user>
+    </SOAP-ENV:Header>
+    <S:Body>
+        <ns2:findUser xmlns:ns2="http://ws.stroganov.org/">
+            <arg0>user</arg0>
+        </ns2:findUser>
+    </S:Body>
+</S:Envelope>

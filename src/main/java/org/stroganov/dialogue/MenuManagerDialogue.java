@@ -314,7 +314,7 @@ public class MenuManagerDialogue {
                         return false;
                     }
                 }
-                libraryDAO.addBook(bookList);
+                libraryDAO.addBooks(bookList);
             } catch (DBExceptions | IOException e) {
                 String errorMessage = "Error IO happen: " + e.getMessage();
                 logger.error(errorMessage);

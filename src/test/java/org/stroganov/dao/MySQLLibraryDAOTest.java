@@ -110,7 +110,7 @@ class MySQLLibraryDAOTest {
         List<Book> bookList = libraryDAO.findBooksWithUserBookMarks(userFromDB);
         libraryDAO.deleteUser(userFromDB);
         // THEN
-        Assertions.assertFalse(bookList.isEmpty());
+        Assertions.assertTrue(bookList.isEmpty());
     }
 
     @Test

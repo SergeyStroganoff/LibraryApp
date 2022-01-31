@@ -1,8 +1,11 @@
 package org.stroganov.entities;
 
+import jakarta.xml.bind.annotation.XmlRootElement;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
+@XmlRootElement
 @Entity
 @Table(name = ("books"))
 public class Book implements Serializable {
@@ -52,6 +55,30 @@ public class Book implements Serializable {
 
     public void setAuthor(Author authorName) {
         this.authorName = authorName;
+    }
+
+    public void setNumberISBN(String numberISBN) {
+        this.numberISBN = numberISBN;
+    }
+
+    public void setBookName(String bookName) {
+        this.bookName = bookName;
+    }
+
+    public Author getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(Author authorName) {
+        this.authorName = authorName;
+    }
+
+    public void setYearPublishing(int yearPublishing) {
+        this.yearPublishing = yearPublishing;
+    }
+
+    public void setPagesNumber(int pagesNumber) {
+        this.pagesNumber = pagesNumber;
     }
 
     @Override

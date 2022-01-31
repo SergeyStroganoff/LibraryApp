@@ -1,8 +1,11 @@
 package org.stroganov.entities;
 
+import jakarta.xml.bind.annotation.XmlRootElement;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
+@XmlRootElement
 @Entity
 @Table(name = ("bookmarks"))
 public class BookMark implements Serializable {
@@ -37,6 +40,26 @@ public class BookMark implements Serializable {
 
     public int getBookPageNumber() {
         return bookPageNumber;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setBookPageNumber(int bookPageNumber) {
+        this.bookPageNumber = bookPageNumber;
     }
 
     @Override

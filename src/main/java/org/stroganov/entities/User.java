@@ -1,10 +1,12 @@
 package org.stroganov.entities;
 
+import jakarta.xml.bind.annotation.XmlRootElement;
 import org.stroganov.util.PasswordAuthentication;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
+@XmlRootElement
 @Entity
 @Table(name = ("users"))
 public class User implements Serializable {
@@ -33,7 +35,6 @@ public class User implements Serializable {
     }
 
     public User() {
-
     }
 
     public int getUserID() {
@@ -76,6 +77,13 @@ public class User implements Serializable {
         this.userID = numberID;
     }
 
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
 
     @Override
     public boolean equals(Object o) {
