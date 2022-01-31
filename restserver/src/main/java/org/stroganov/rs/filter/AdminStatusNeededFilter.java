@@ -22,7 +22,7 @@ import java.security.Key;
 @Priority(Priorities.AUTHENTICATION)
 public class AdminStatusNeededFilter implements ContainerRequestFilter {
 
-    final Logger logger = Logger.getLogger(org.stroganov.rs.filter.JWTTokenNeededFilter.class);
+    final Logger logger = Logger.getLogger(JWTTokenNeededFilter.class);
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
