@@ -25,6 +25,7 @@ public class MenuManagerDialogue {
     public static final String USER = "User ";
     public static final String NOT_A_NUMBER_OF_YEAR_MESSAGE = "You entered not a number of year, try again";
     public static final String AN_ERROR_HAPPEN = "An error happen: ";
+    public static final String AUTHOR = "Author ";
     private final LibraryDAO libraryDAO;
     private final HistoryManager historyManager;
     private final UserInterface userInterface;
@@ -330,19 +331,25 @@ public class MenuManagerDialogue {
         userInterface.showMessage("Enter the author's name");
         String authorName = userInterface.getStringFromUser();
         Author author = libraryDAO.findAuthor(authorName);
+        boolean operationResult;
         if (author != null) {
             try {
-                libraryDAO.deleteAuthorWithAllHisBooks(author);
+                operationResult = libraryDAO.deleteAuthorWithAllHisBooks(author);
             } catch (IOException e) {
                 userInterface.showMessage("An error happen:" + e.getMessage());
                 return false;
             }
-            String successMessage = "Author " + authorName + "was successfully deleted with all his books";
+            String successMessage;
+            if (operationResult) {
+                successMessage = AUTHOR + authorName + "was successfully deleted with all his books";
+            } else {
+                successMessage = AUTHOR + authorName + "was not successfully deleted. See logs";
+            }
             historyManager.saveAction(successMessage + " by User " + currentUser.getLogin());
             userInterface.showMessage(successMessage);
             return true;
         } else {
-            userInterface.showMessage("Author " + authorName + "was not found");
+            userInterface.showMessage(AUTHOR + authorName + "was not found");
         }
         return false;
     }

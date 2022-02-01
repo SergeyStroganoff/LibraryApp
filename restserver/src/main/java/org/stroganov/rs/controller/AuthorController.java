@@ -41,7 +41,13 @@ public class AuthorController extends Controller {
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
     @JWTTokenNeeded
-    public Response deleteAuthorWithAllHisBooks(Author author) throws IOException {
+    public Response deleteAuthorWithAllHisBooks(@PathParam("authorName") String authorName) throws IOException {
+        Author author = libraryDAO.findAuthor(authorName);
+        if (author == null) {
+            return Response.status(404)
+                    .entity(authorName + " not found")
+                    .build();
+        }
         boolean operationResult = libraryDAO.deleteAuthorWithAllHisBooks(author);
         logger.info("Result of deleteAuthorWithAllHisBooks: " + operationResult);
         return Response.status(200)

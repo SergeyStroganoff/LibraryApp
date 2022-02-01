@@ -23,7 +23,7 @@ public class AuthenticationServiceClient {
         if (JWTToken != null) {
             return JWTToken;
         }
-        String jsonString = gson.toJson(user, User.class);
+       // String jsonString = gson.toJson(user, User.class);
         WebResource webResource = client.resource(REST_SERVICE_AUTHENTICATION_URL);
         ClientResponse response = webResource.accept("application/json")
                 .post(ClientResponse.class, user);

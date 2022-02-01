@@ -8,17 +8,16 @@ import org.apache.log4j.Logger;
 import org.stroganov.JsonDBAPI.JsonParser;
 import org.stroganov.dao.LibraryDAO;
 import org.stroganov.entities.*;
+import org.stroganov.exceptions.ClientServiceException;
 import org.stroganov.util.PropertiesManager;
 
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
 public class LibraryRestServiceClient implements LibraryDAO {
     public static final String FAILED_HTTP_ERROR_CODE = "Failed : HTTP error code : ";
+    public static final String USER_PATH = "/user/";
     private static volatile LibraryRestServiceClient instance;
     private final Logger logger = Logger.getLogger(LibraryRestServiceClient.class);
     private final Client client = Client.create();
@@ -37,24 +36,32 @@ public class LibraryRestServiceClient implements LibraryDAO {
     }
 
     @Override
-    public boolean addBook(Book book) throws IOException {
+    public boolean addBook(Book book) {
         return false;
     }
 
     @Override
-    public boolean addBook(List<Book> bookList) throws IOException {
+    public boolean addBook(List<Book> bookList) {
         return false;
     }
 
     @Override
-    public boolean deleteBook(Book book) throws IOException {
-        return false;
+    public boolean deleteBook(Book book) {
+        String bookISBNJSONFormat = gson.toJson(book.getNumberISBN(), String.class);
+        String result;
+        try {
+            result = deleteJSONStringToServer("/book", bookISBNJSONFormat);
+        } catch (ClientServiceException e) {
+            logger.error("Error deleteBook", e);
+            return false;
+        }
+        return gson.fromJson(result, Boolean.class);
     }
 
     @Override
     public Book findBook(String numberISBN) {
         try {
-            String responseJSON = getJSONStringFromServer("/search/" + numberISBN);
+            String responseJSON = getJSONStringFromServer("/search/" + numberISBN, true);
             return gson.fromJson(responseJSON, Book.class);
         } catch (Exception e) {
             logger.error("Error in findBook method", e);
@@ -65,8 +72,8 @@ public class LibraryRestServiceClient implements LibraryDAO {
     @Override
     public List<Book> findBooksByPartName(String partOfName) {
         try {
-            String responseJSON = getJSONStringFromServer("/search/partOfName/" + partOfName);
-            return JsonParser.getListEntitiesFromDB(responseJSON, Book.class);
+            String responseJSON = getJSONStringFromServer("/search/partOfName/" + partOfName, true);
+            return JsonParser.getListEntitiesFromJsonString(responseJSON, Book.class);
         } catch (Exception e) {
             logger.error("Error in findBooksByPartName method", e);
             return Collections.emptyList();
@@ -75,15 +82,22 @@ public class LibraryRestServiceClient implements LibraryDAO {
 
 
     @Override
-    public boolean addUser(User user) throws IOException {
-        return false;
+    public boolean addUser(User user) {
+        String userJSONFormat = gson.toJson(user, BookMark.class);
+        String result;
+        try {
+            result = postJSONStringToServer(USER_PATH, userJSONFormat);
+        } catch (Exception e) {
+            logger.error("Error addUser " + user.getLogin(), e);
+            return false;
+        }
+        return gson.fromJson(result, Boolean.class);
     }
 
     @Override
     public User findUser(String userLogin) {
         try {
-            String responseJSON = getJSONStringFromServer("/user/" + userLogin);
-            System.out.println(responseJSON);
+            String responseJSON = getJSONStringFromServer(USER_PATH + userLogin, false);
             return gson.fromJson(responseJSON, User.class);
         } catch (Exception e) {
             logger.error("Error in client method", e);
@@ -92,28 +106,68 @@ public class LibraryRestServiceClient implements LibraryDAO {
     }
 
     @Override
-    public boolean deleteUser(User user) throws IOException {
-        return false;
+    public boolean deleteUser(User user) {
+        String userLoginJSONFormat = gson.toJson(user.getLogin(), String.class);
+        String result;
+        try {
+            result = deleteJSONStringToServer(USER_PATH, userLoginJSONFormat);
+        } catch (ClientServiceException e) {
+            logger.error("Error deleteUser " + user.getLogin(), e);
+            return false;
+        }
+        return gson.fromJson(result, Boolean.class);
     }
 
     @Override
-    public boolean blockUser(User user) throws IOException {
-        return false;
+    public boolean blockUser(User user) {
+        String userLoginJSONFormat = gson.toJson(user.getLogin(), String.class);
+        String result;
+        try {
+            result = postJSONStringToServer("/user/block/", userLoginJSONFormat);
+        } catch (Exception e) {
+            logger.error("Error blockUser " + user.getLogin(), e);
+            return false;
+        }
+        return gson.fromJson(result, Boolean.class);
     }
 
     @Override
-    public boolean unblockUser(User user) throws IOException {
-        return false;
+    public boolean unblockUser(User user) {
+        String userLoginJSONFormat = gson.toJson(user.getLogin(), String.class);
+        String result;
+        try {
+            result = postJSONStringToServer("/user/unblock/", userLoginJSONFormat);
+        } catch (Exception e) {
+            logger.error("Error unBlockUser " + user.getLogin(), e);
+            return false;
+        }
+        return gson.fromJson(result, Boolean.class);
     }
 
     @Override
-    public boolean addBookMark(BookMark bookMark) throws IOException {
-        return false;
+    public boolean addBookMark(BookMark bookMark) {
+        String bookMArkJSONFormat = gson.toJson(bookMark, BookMark.class);
+        String result;
+        try {
+            result = postJSONStringToServer("/bookMark/", bookMArkJSONFormat);
+        } catch (Exception e) {
+            logger.error("Error addBookMark " + bookMark, e);
+            return false;
+        }
+        return gson.fromJson(result, Boolean.class);
     }
 
     @Override
-    public boolean deleteBookMark(BookMark bookMark) throws IOException {
-        return false;
+    public boolean deleteBookMark(BookMark bookMark) {
+        String userLoginJSONFormat = gson.toJson(bookMark.getId(), Integer.class);
+        String result;
+        try {
+            result = deleteJSONStringToServer("/user", userLoginJSONFormat);
+        } catch (ClientServiceException e) {
+            logger.error("Error deleteBookMark " + bookMark.getId(), e);
+            return false;
+        }
+        return gson.fromJson(result, Boolean.class);
     }
 
     @Override
@@ -121,13 +175,12 @@ public class LibraryRestServiceClient implements LibraryDAO {
         String authorJSONFormat = gson.toJson(author, Author.class);
         String result = postJSONStringToServer("/author", authorJSONFormat);
         return gson.fromJson(result, Boolean.class);
-        // return "true".equals(result);
     }
 
     @Override
     public Author findAuthor(String authorName) {
         try {
-            String responseJSON = getJSONStringFromServer("/author/" + authorName);
+            String responseJSON = getJSONStringFromServer("/author/" + authorName, true);
             return gson.fromJson(responseJSON, Author.class);
         } catch (Exception e) {
             logger.error("Error in findAuthor method", e);
@@ -136,17 +189,23 @@ public class LibraryRestServiceClient implements LibraryDAO {
     }
 
     @Override
-    public boolean deleteAuthorWithAllHisBooks(Author author) throws IOException {
-        String authorJSONFormat = gson.toJson(author, Author.class);
-        String result = deleteJSONStringToServer("/author", authorJSONFormat);
+    public boolean deleteAuthorWithAllHisBooks(Author author) {
+        String authorJSONFormat = gson.toJson(author.getAuthorName(), String.class);
+        String result;
+        try {
+            result = deleteJSONStringToServer("/author", authorJSONFormat);
+        } catch (ClientServiceException e) {
+            logger.error("Error in deleteAuthorWithAllHisBooks", e);
+            return false;
+        }
         return gson.fromJson(result, Boolean.class);
     }
 
     @Override
     public List<Book> findBooksByPartAuthorName(String partAuthorName) {
         try {
-            String responseJSON = getJSONStringFromServer("/search/partAuthorName/" + partAuthorName);
-            return JsonParser.getListEntitiesFromDB(responseJSON, Book.class);
+            String responseJSON = getJSONStringFromServer("/search/partAuthorName/" + partAuthorName, true);
+            return JsonParser.getListEntitiesFromJsonString(responseJSON, Book.class);
         } catch (Exception e) {
             logger.error("Error in findBooksByPartName method", e);
             return Collections.emptyList();
@@ -155,27 +214,82 @@ public class LibraryRestServiceClient implements LibraryDAO {
 
     @Override
     public List<Book> findBooksByYearsRange(int firstYear, int secondYear) {
-        return null;
+        try {
+            WebResource webResource = client.resource(restServiceURL + "/search/findBooksByYearsRange/");
+            webResource.header(HttpHeaders.AUTHORIZATION, "Bearer " + AuthenticationServiceClient.getJWTToken());
+            ClientResponse response = webResource.
+                    queryParam("firstYear", String.valueOf(firstYear)).
+                    queryParam("secondYear", String.valueOf(secondYear)).
+                    accept("application/json")
+                    .get(ClientResponse.class);
+            if (response.getStatus() != 200) {
+                logger.error(FAILED_HTTP_ERROR_CODE + response.getStatus());
+                throw new RuntimeException(FAILED_HTTP_ERROR_CODE + response.getStatus());
+            }
+            String responseJSON = response.getEntity(String.class);
+            return JsonParser.getListEntitiesFromJsonString(responseJSON, Book.class);
+        } catch (Exception e) {
+            logger.error("Error in findBooksByPartName method", e);
+            return Collections.emptyList();
+        }
     }
 
     @Override
     public List<Book> findBooksByParameters(int bookYear, int bookPages, String partBookName) {
-        return null;
+        try {
+            WebResource webResource = client.resource(restServiceURL + "/search/findBooksByParameters/");
+            webResource.header(HttpHeaders.AUTHORIZATION, "Bearer " + AuthenticationServiceClient.getJWTToken());
+            ClientResponse response = webResource.
+                    queryParam("bookYear", String.valueOf(bookYear)).
+                    queryParam("bookPages", String.valueOf(bookPages)).
+                    queryParam("partBookName", partBookName).
+                    accept("application/json")
+                    .get(ClientResponse.class);
+            if (response.getStatus() != 200) {
+                logger.error(FAILED_HTTP_ERROR_CODE + response.getStatus());
+                throw new RuntimeException(FAILED_HTTP_ERROR_CODE + response.getStatus());
+            }
+            String responseJSON = response.getEntity(String.class);
+            return JsonParser.getListEntitiesFromJsonString(responseJSON, Book.class);
+        } catch (Exception e) {
+            logger.error("Error in findBooksByPartName method", e);
+            return Collections.emptyList();
+        }
     }
 
     @Override
     public List<Book> findBooksWithUserBookMarks(User user) {
-        return null;
+        try {
+            String responseJSON = getJSONStringFromServer("/search/findBooksWithUserBookMarks/" + user.getLogin(), true);
+            return JsonParser.getListEntitiesFromJsonString(responseJSON, Book.class);
+        } catch (Exception e) {
+            logger.error("Error in findBooksWithUserBookMarks method", e);
+            return Collections.emptyList();
+        }
     }
 
     @Override
     public List<BookMark> findUserBookMarks(User user) {
-        return null;
+        try {
+            String responseJSON = getJSONStringFromServer("/bookMark/" + user.getLogin(), true);
+            return JsonParser.getListEntitiesFromJsonString(responseJSON, BookMark.class);
+        } catch (Exception e) {
+            logger.error("Error in findBooksWithUserBookMarks method", e);
+            return Collections.emptyList();
+        }
     }
 
     @Override
     public boolean addHistoryEvent(History history) {
-        return false;
+        String historyEventJSONFormat = gson.toJson(history, History.class);
+        String result;
+        try {
+            result = postJSONStringToServer("/bookMark/", historyEventJSONFormat);
+        } catch (Exception e) {
+            logger.error("Error addHistoryEvent " + history, e);
+            return false;
+        }
+        return gson.fromJson(result, Boolean.class);
     }
 
     @Override
@@ -183,9 +297,11 @@ public class LibraryRestServiceClient implements LibraryDAO {
         return null;
     }
 
-    private String getJSONStringFromServer(String pathParam) {
+    private String getJSONStringFromServer(String pathParam, boolean isJWSTokenNeeded) {
         WebResource webResource = client.resource(restServiceURL + pathParam);
-        // webResource.header(HttpHeaders.AUTHORIZATION,"Bearer " + AuthenticationServiceClient.getJWTToken());
+        if (isJWSTokenNeeded) {
+            webResource.header(HttpHeaders.AUTHORIZATION, "Bearer " + AuthenticationServiceClient.getJWTToken());
+        }
         ClientResponse response = webResource.accept("application/json")
                 .get(ClientResponse.class);
         if (response.getStatus() != 200) {
@@ -196,6 +312,7 @@ public class LibraryRestServiceClient implements LibraryDAO {
 
     private String postJSONStringToServer(String pathParam, String jsonString) {
         WebResource webResource = client.resource(restServiceURL + pathParam);
+        webResource.header(HttpHeaders.AUTHORIZATION, "Bearer " + AuthenticationServiceClient.getJWTToken());
         ClientResponse response = webResource.accept("application/json")
                 .post(ClientResponse.class, jsonString);
         if (response.getStatus() != 200) {
@@ -204,12 +321,13 @@ public class LibraryRestServiceClient implements LibraryDAO {
         return response.getEntity(String.class);
     }
 
-    private String deleteJSONStringToServer(String pathParam, String jsonString) {
+    private String deleteJSONStringToServer(String pathParam, String jsonString) throws ClientServiceException {
         WebResource webResource = client.resource(restServiceURL + pathParam);
+        webResource.header(HttpHeaders.AUTHORIZATION, "Bearer " + AuthenticationServiceClient.getJWTToken());
         ClientResponse response = webResource.accept("application/json")
                 .delete(ClientResponse.class, jsonString);
         if (response.getStatus() != 200) {
-            throw new RuntimeException(FAILED_HTTP_ERROR_CODE + response.getStatus());
+            throw new ClientServiceException(FAILED_HTTP_ERROR_CODE + response.getStatus());
         }
         return response.getEntity(String.class);
     }

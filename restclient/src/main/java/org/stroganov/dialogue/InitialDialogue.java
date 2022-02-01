@@ -75,7 +75,7 @@ public class InitialDialogue {
         }
         historyManager.saveAction("User " + user.getLogin() + " entered in system");
         logger.info("User " + user.getLogin() + " entered in system");
-        AuthenticationServiceClient.getJWTToken(user);
+        AuthenticationServiceClient.getJWTToken(user); //TODO
         MenuManagerDialogue menuManagerDialogue = new MenuManagerDialogue(libraryDAO, historyManager, userInterface, user);
         menuManagerDialogue.runDialogue();
     }

@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface JsonParser {
 
-    static <T> List<T> getListEntitiesFromDB(String jsonString, Class<T> tClass) {
+    static <T> List<T> getListEntitiesFromJsonString(String jsonString, Class<T> tClass) {
         Gson gson = new Gson();
         Type itemsListType = TypeToken.getParameterized(ArrayList.class, tClass).getType();
         List<T> entityList = gson.fromJson(jsonString, itemsListType);

@@ -1,6 +1,5 @@
 package org.stroganov.dao;
 
-import org.stroganov.App;
 import org.stroganov.JsonDBAPI.JsonDBLoader;
 import org.stroganov.JsonDBAPI.JsonDBSaver;
 import org.stroganov.entities.*;

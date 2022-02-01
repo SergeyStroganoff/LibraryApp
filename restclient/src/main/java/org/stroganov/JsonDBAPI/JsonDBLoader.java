@@ -19,6 +19,6 @@ public interface JsonDBLoader {
             logger.error(e);
             throw new DBExceptions(DB_EXCEPTIONS + e.getMessage());
         }
-        return JsonParser.getListEntitiesFromDB(jsonString, tClass);
+        return JsonParser.getListEntitiesFromJsonString(jsonString, tClass);
     }
 }
