@@ -29,7 +29,9 @@ public class JWTTokenNeededFilter implements ContainerRequestFilter {
         // Get the HTTP Authorization header from the request
         String authorizationHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
         // Extract the token from the HTTP Authorization header
-        String token = authorizationHeader.substring("KeyBearer".length()).trim();
+        System.out.println(authorizationHeader);
+        String token = authorizationHeader.substring("Bearer".length()).trim();
+        System.out.println(token);
         Jws<Claims> jws;
         try {
             // Validate the token

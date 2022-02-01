@@ -18,13 +18,14 @@ public class AuthorController extends Controller {
     @JWTTokenNeeded
     public Response addAuthor(Author author) throws IOException {
         boolean operationResult = libraryDAO.addAuthor(author);
+        logger.info("Result of addAuthor: " + operationResult);
         return Response.status(200)
-                .entity(operationResult)
+                .entity("true")
                 .build();
     }
 
     @GET
-    @Path("{authorName}")
+    @Path("/{authorName}")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
     @JWTTokenNeeded
@@ -36,12 +37,13 @@ public class AuthorController extends Controller {
     }
 
     @DELETE
-    @Path("/")
+    @Path("/{authorName}")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
     @JWTTokenNeeded
     public Response deleteAuthorWithAllHisBooks(Author author) throws IOException {
         boolean operationResult = libraryDAO.deleteAuthorWithAllHisBooks(author);
+        logger.info("Result of deleteAuthorWithAllHisBooks: " + operationResult);
         return Response.status(200)
                 .entity(operationResult)
                 .build();

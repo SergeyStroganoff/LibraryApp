@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.stroganov.App;
 import org.stroganov.entities.HistoryEvent;
 import org.stroganov.util.FileUtil;
+import org.stroganov.util.PropertiesManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ import java.util.List;
 public class HistoryManager {
 
     private final Logger logger = Logger.getLogger(HistoryManager.class);
-    final String historyFileName = App.properties.getProperty("historyLogFileName");
+    final String historyFileName = PropertiesManager.getProperties().getProperty("historyLogFileName");
 
     public HistoryManager() throws IOException {
         logger.addAppender(new FileAppender(new JSONEventLayoutV1(), historyFileName));

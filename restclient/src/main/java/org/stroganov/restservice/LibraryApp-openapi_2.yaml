@@ -1,0 +1,187 @@
+openapi: "3.0.3"
+info:
+  title: "LibraryApp API"
+  description: "LibraryApp API"
+  version: "1.0.0"
+servers:
+  - url: "https://LibraryApp"
+paths:
+  /api/authentication:
+    post:
+      summary: "POST api/authentication"
+      responses:
+        "200":
+          description: "OK"
+  /api/author/:
+    post:
+      summary: "POST api/author/"
+      responses:
+        "200":
+          description: "OK"
+    delete:
+      summary: "DELETE api/author/"
+      responses:
+        "200":
+          description: "OK"
+  /api/author/{authorName}:
+    get:
+      summary: "GET api/author/{authorName}"
+      parameters:
+        - name: "authorName"
+          in: "path"
+      responses:
+        "200":
+          description: "OK"
+  /api/book/add:
+    post:
+      summary: "POST api/book/add"
+      responses:
+        "200":
+          description: "OK"
+  /api/book/addList:
+    post:
+      summary: "POST api/book/addList"
+      responses:
+        "200":
+          description: "OK"
+  /api/book/{bookISBN}:
+    delete:
+      summary: "DELETE api/book/{bookISBN}"
+      parameters:
+        - name: "bookISBN"
+          in: "path"
+      responses:
+        "200":
+          description: "OK"
+  /api/bookMark/:
+    post:
+      summary: "POST api/bookMark/"
+      responses:
+        "200":
+          description: "OK"
+    delete:
+      summary: "DELETE api/bookMark/"
+      responses:
+        "200":
+          description: "OK"
+  /api/bookMark/{userLogin}:
+    get:
+      summary: "GET api/bookMark/{userLogin}"
+      parameters:
+        - name: "userLogin"
+          in: "path"
+      responses:
+        "200":
+          description: "OK"
+  /api/history/:
+    get:
+      summary: "GET api/history/"
+      responses:
+        "200":
+          description: "OK"
+    post:
+      summary: "POST api/history/"
+      responses:
+        "200":
+          description: "OK"
+  /api/search/findBooksByParameters:
+    get:
+      summary: "GET api/search/findBooksByParameters"
+      parameters:
+        - name: "bookYear"
+          in: "query"
+        - name: "bookPages"
+          in: "query"
+        - name: "partBookName"
+          in: "query"
+      responses:
+        "200":
+          description: "OK"
+  /api/search/findBooksByYearsRange:
+    get:
+      summary: "GET api/search/findBooksByYearsRange"
+      parameters:
+        - name: "firstYear"
+          in: "query"
+        - name: "secondYear"
+          in: "query"
+      responses:
+        "200":
+          description: "OK"
+  /api/search/findBooksWithUserBookMarks/{userLogin}:
+    get:
+      summary: "GET api/search/findBooksWithUserBookMarks/{userLogin}"
+      parameters:
+        - name: "userLogin"
+          in: "path"
+      responses:
+        "200":
+          description: "OK"
+  /api/search/partOfAuthorName/{partAuthorName}:
+    get:
+      summary: "GET api/search/partOfAuthorName/{partAuthorName}"
+      parameters:
+        - name: "partAuthorName"
+          in: "path"
+      responses:
+        "200":
+          description: "OK"
+  /api/search/partOfName/{partOfName}:
+    get:
+      summary: "GET api/search/partOfName/{partOfName}"
+      parameters:
+        - name: "partOfName"
+          in: "path"
+      responses:
+        "200":
+          description: "OK"
+  /api/search/{numberISBN}:
+    get:
+      summary: "GET api/search/{numberISBN}"
+      parameters:
+        - name: "numberISBN"
+          in: "path"
+      responses:
+        "200":
+          description: "OK"
+  /api/user/:
+    post:
+      summary: "POST api/user/"
+      responses:
+        "200":
+          description: "OK"
+  /api/user/block/{userLogin}:
+    post:
+      summary: "POST api/user/block/{userLogin}"
+      parameters:
+        - name: "userLogin"
+          in: "path"
+      responses:
+        "200":
+          description: "OK"
+  /api/user/unblock/{userLogin}:
+    post:
+      summary: "POST api/user/unblock/{userLogin}"
+      parameters:
+        - name: "userLogin"
+          in: "path"
+      responses:
+        "200":
+          description: "OK"
+  /api/user/{userLogin}:
+    get:
+      summary: "GET api/user/{userLogin}"
+      parameters:
+        - name: "userLogin"
+          in: "path"
+      responses:
+        "200":
+          description: "OK"
+    delete:
+      summary: "DELETE api/user/{userLogin}"
+      parameters:
+        - name: "userLogin"
+          in: "path"
+      responses:
+        "200":
+          description: "OK"

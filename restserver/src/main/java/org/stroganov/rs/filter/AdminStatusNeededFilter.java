@@ -29,7 +29,7 @@ public class AdminStatusNeededFilter implements ContainerRequestFilter {
         // Get the HTTP Authorization header from the request
         String authorizationHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
         // Extract the token from the HTTP Authorization header
-        String token = authorizationHeader.substring("KeyBearer".length()).trim();
+        String token = authorizationHeader.substring("Bearer".length()).trim();
         Jws<Claims> jws;
         try {
             // Validate the token

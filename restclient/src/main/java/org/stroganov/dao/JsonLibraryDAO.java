@@ -5,11 +5,13 @@ import org.stroganov.JsonDBAPI.JsonDBLoader;
 import org.stroganov.JsonDBAPI.JsonDBSaver;
 import org.stroganov.entities.*;
 import org.stroganov.exceptions.DBExceptions;
+import org.stroganov.util.PropertiesManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
 public class JsonLibraryDAO implements LibraryDAO {
@@ -29,11 +31,12 @@ public class JsonLibraryDAO implements LibraryDAO {
     }
 
     private JsonLibraryDAO() throws DBExceptions {
-        jsonDBSaver = new JsonDBSaver(App.properties);
-        bookList = JsonDBLoader.loadEntities(App.properties.getProperty("booksJsonFile"), Book.class);
-        userList = JsonDBLoader.loadEntities(App.properties.getProperty("usersJsonFile"), User.class);
-        bookMarkList = JsonDBLoader.loadEntities(App.properties.getProperty("bookMarksJsonFile"), BookMark.class);
-        authorsList = JsonDBLoader.loadEntities(App.properties.getProperty("authorsJsonFile"), Author.class);
+        Properties properties = PropertiesManager.getProperties();
+        jsonDBSaver = new JsonDBSaver(properties);
+        bookList = JsonDBLoader.loadEntities(properties.getProperty("booksJsonFile"), Book.class);
+        userList = JsonDBLoader.loadEntities(properties.getProperty("usersJsonFile"), User.class);
+        bookMarkList = JsonDBLoader.loadEntities(properties.getProperty("bookMarksJsonFile"), BookMark.class);
+        authorsList = JsonDBLoader.loadEntities(properties.getProperty("authorsJsonFile"), Author.class);
     }
 
     @Override

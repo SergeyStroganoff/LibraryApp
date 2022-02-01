@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.glassfish.jersey.message.internal.MediaTypes;
 import org.stroganov.entities.User;
 import org.stroganov.rs.model.UserDTO;
 
@@ -27,7 +28,6 @@ public class AuthenticationController extends Controller {
     public Response authentication(User user) {
 
         User ourUser = libraryDAO.findUser(user.getLogin());
-
         if (!ourUser.getPasscodeHash().equals(user.getPasscodeHash())) {
             return Response.status(401)
                     .entity("Password is not correct: " + user.getLogin())
@@ -36,8 +36,10 @@ public class AuthenticationController extends Controller {
         String newJWTToken = createJWTToken(ourUser);
         final ObjectMapper mapper = new ObjectMapper();
         ObjectNode json = mapper.createObjectNode();
-        json.put("KeyBearer", newJWTToken);
-        return Response.status(Response.Status.OK).entity(json).build();
+        json.put("Bearer", newJWTToken);
+        return Response.status(200)
+                .entity(json.toString())
+                .build();
     }
 
     private String createJWTToken(User user) {
@@ -51,5 +53,4 @@ public class AuthenticationController extends Controller {
                 .signWith(key)
                 .compact();
     }
-
 }

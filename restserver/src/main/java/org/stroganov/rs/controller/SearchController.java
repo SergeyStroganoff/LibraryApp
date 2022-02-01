@@ -37,6 +37,18 @@ public class SearchController extends Controller {
     }
 
     @GET
+    @Path("/partOfAuthorName/{partAuthorName}")
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response findBooksByPartAuthorName(@PathParam("partAuthorName") String partOfName) {
+        List<Book> bookList = libraryDAO.findBooksByPartAuthorName(partOfName);
+        return Response.status(200)
+                .entity(bookList)
+                .build();
+    }
+
+
+    @GET
     @Path("/findBooksByYearsRange")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})

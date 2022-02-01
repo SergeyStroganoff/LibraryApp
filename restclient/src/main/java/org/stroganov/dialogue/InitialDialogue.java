@@ -8,6 +8,7 @@ import org.stroganov.entities.User;
 import org.stroganov.exceptions.DBExceptions;
 import org.stroganov.gui.UserInterface;
 import org.stroganov.history.HistoryManager;
+import org.stroganov.restservice.AuthenticationServiceClient;
 import org.stroganov.util.PasswordAuthentication;
 
 import java.io.IOException;
@@ -25,7 +26,7 @@ public class InitialDialogue {
     public InitialDialogue(UserInterface userInterface) {
         this.userInterface = userInterface;
         try {
-            libraryDAO = DAOFactory.getLibraryDAO(DAOType.MYSQL);
+            libraryDAO = DAOFactory.getLibraryDAO(DAOType.WEB_SERVICE_REST);
         } catch (DBExceptions e) {
             userInterface.showMessage(e.getMessage());
             System.exit(1);
@@ -74,6 +75,7 @@ public class InitialDialogue {
         }
         historyManager.saveAction("User " + user.getLogin() + " entered in system");
         logger.info("User " + user.getLogin() + " entered in system");
+        AuthenticationServiceClient.getJWTToken(user);
         MenuManagerDialogue menuManagerDialogue = new MenuManagerDialogue(libraryDAO, historyManager, userInterface, user);
         menuManagerDialogue.runDialogue();
     }

@@ -16,7 +16,6 @@ public class UserController extends Controller {
     @Path("/{userLogin}")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    @JWTTokenNeeded
     public User findUser(@PathParam("userLogin") String userLogin) {
         return libraryDAO.findUser(userLogin);
     }
