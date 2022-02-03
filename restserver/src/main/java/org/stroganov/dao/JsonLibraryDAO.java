@@ -154,6 +154,13 @@ public class JsonLibraryDAO implements LibraryDAO {
     }
 
     @Override
+    public BookMark findBookMarkById(int bookMarkId) {
+        return bookMarkList.stream()
+                .filter(bookMark -> bookMark.getId() == bookMarkId)
+                .findFirst().orElse(null);
+    }
+
+    @Override
     public boolean deleteBookMark(BookMark bookMark) throws IOException {
         if (bookMarkList.contains(bookMark)) {
             bookMarkList.remove(bookMark);

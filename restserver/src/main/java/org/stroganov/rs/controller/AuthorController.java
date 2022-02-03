@@ -19,8 +19,8 @@ public class AuthorController extends Controller {
     public Response addAuthor(Author author) throws IOException {
         boolean operationResult = libraryDAO.addAuthor(author);
         logger.info("Result of addAuthor: " + operationResult);
-        return Response.status(200)
-                .entity("true")
+        return Response.status(Response.Status.OK)
+                .entity(operationResult)
                 .build();
     }
 
@@ -31,7 +31,7 @@ public class AuthorController extends Controller {
     @JWTTokenNeeded
     public Response findAuthor(@PathParam("authorName") String authorName) {
         Author author = libraryDAO.findAuthor(authorName);
-        return Response.status(200)
+        return Response.status(Response.Status.OK)
                 .entity(author)
                 .build();
     }
@@ -44,13 +44,13 @@ public class AuthorController extends Controller {
     public Response deleteAuthorWithAllHisBooks(@PathParam("authorName") String authorName) throws IOException {
         Author author = libraryDAO.findAuthor(authorName);
         if (author == null) {
-            return Response.status(404)
+            return Response.status(Response.Status.NOT_FOUND)
                     .entity(authorName + " not found")
                     .build();
         }
         boolean operationResult = libraryDAO.deleteAuthorWithAllHisBooks(author);
         logger.info("Result of deleteAuthorWithAllHisBooks: " + operationResult);
-        return Response.status(200)
+        return Response.status(Response.Status.OK)
                 .entity(operationResult)
                 .build();
     }

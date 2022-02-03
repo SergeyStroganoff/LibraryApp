@@ -185,6 +185,17 @@ public class MySQLLibraryDAO implements LibraryDAO {
     }
 
     @Override
+    public BookMark findBookMarkById(int bookMarkId) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.get(BookMark.class, bookMarkId);
+        } catch (HibernateException e) {
+            logger.error(HIBERNATE_ERROR_MESSAGE + "findBookMarkById: " + bookMarkId, e);
+            return null;
+        }
+    }
+
+
+    @Override
     public boolean deleteUser(User user) {
         findUserBookMarks(user).forEach(this::deleteBookMark);
         return deleteEntity(user, "deleteUser");

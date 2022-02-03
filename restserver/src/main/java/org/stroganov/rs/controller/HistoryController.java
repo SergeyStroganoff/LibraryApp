@@ -20,7 +20,7 @@ public class HistoryController extends Controller {
     @JWTTokenNeeded
     public Response addHistoryEvent(History history) {
         boolean operationResult = libraryDAO.addHistoryEvent(history);
-        return Response.status(200)
+        return Response.status(Response.Status.OK)
                 .entity(operationResult)
                 .build();
     }
@@ -33,7 +33,7 @@ public class HistoryController extends Controller {
     @AdminStatusNeeded
     public Response getAllHistory() {
         List<History> allHistory = libraryDAO.getAllHistory();
-        return Response.status(200)
+        return Response.status(Response.Status.OK)
                 .entity(allHistory)
                 .build();
     }

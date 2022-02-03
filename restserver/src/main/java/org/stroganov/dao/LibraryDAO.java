@@ -31,6 +31,8 @@ public interface LibraryDAO {
 
     boolean addBookMark(BookMark bookMark) throws IOException;
 
+    BookMark findBookMarkById(int bookMarkId);
+
     boolean deleteBookMark(BookMark bookMark) throws IOException;
 
     boolean addAuthor(Author author) throws IOException;

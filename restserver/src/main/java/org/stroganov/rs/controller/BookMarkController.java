@@ -15,20 +15,26 @@ import java.util.List;
 public class BookMarkController extends Controller {
 
     @DELETE
-    @Path("/")
+    @Path("/{id}")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
     @JWTTokenNeeded
-    public Response deleteBookMark(BookMark bookMark) {
+    public Response deleteBookMark(@PathParam("id") int id) {
         boolean operationResult = false;
+        BookMark bookMark = libraryDAO.findBookMarkById(id);
+        if (bookMark == null) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(operationResult)
+                    .build();
+        }
         try {
             operationResult = libraryDAO.deleteBookMark(bookMark);
         } catch (IOException e) {
-            return Response.status(500)
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity(e.getMessage())
                     .build();
         }
-        return Response.status(200)
+        return Response.status(Response.Status.OK)
                 .entity(operationResult)
                 .build();
     }
@@ -43,11 +49,11 @@ public class BookMarkController extends Controller {
         try {
             operationResult = libraryDAO.addBookMark(bookMark);
         } catch (IOException e) {
-            return Response.status(500)
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity(e.getMessage())
                     .build();
         }
-        return Response.status(200)
+        return Response.status(Response.Status.OK)
                 .entity(operationResult)
                 .build();
     }
@@ -63,7 +69,7 @@ public class BookMarkController extends Controller {
         if (user != null) {
             bookMarkList = libraryDAO.findUserBookMarks(user);
         }
-        return Response.status(200)
+        return Response.status(Response.Status.OK)
                 .entity(bookMarkList)
                 .build();
     }

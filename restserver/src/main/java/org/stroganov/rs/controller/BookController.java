@@ -15,6 +15,8 @@ import java.util.List;
 public class BookController extends Controller {
 
 
+    public static final String SERVER_ERROR_ADD_BOOKS_MESSAGE = "Server error when 'addBooks' method was called";
+
     @DELETE
     @Path("/{bookISBN}")
     @Consumes({MediaType.APPLICATION_JSON})
@@ -27,12 +29,12 @@ public class BookController extends Controller {
             try {
                 operationResult = libraryDAO.deleteBook(book);
             } catch (IOException e) {
-                return Response.status(500)
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                         .entity(e.getMessage())
                         .build();
             }
         }
-        return Response.status(200)
+        return Response.status(Response.Status.OK)
                 .entity(operationResult)
                 .build();
     }
@@ -46,11 +48,11 @@ public class BookController extends Controller {
         try {
             operationResult = libraryDAO.addBook(book);
         } catch (IOException e) {
-            return Response.status(500)
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity(e.getMessage())
                     .build();
         }
-        return Response.status(200)
+        return Response.status(Response.Status.OK)
                 .entity(operationResult)
                 .build();
     }
@@ -64,11 +66,11 @@ public class BookController extends Controller {
         try {
             operationResult = libraryDAO.addBook(bookList);
         } catch (IOException e) {
-            return Response.status(500)
-                    .entity(e.getMessage())
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(SERVER_ERROR_ADD_BOOKS_MESSAGE)
                     .build();
         }
-        return Response.status(200)
+        return Response.status(Response.Status.OK)
                 .entity(operationResult)
                 .build();
     }

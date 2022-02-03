@@ -33,12 +33,12 @@ public class UserController extends Controller {
             try {
                 operationResult = libraryDAO.deleteUser(user);
             } catch (IOException e) {
-                return Response.status(500)
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                         .entity(e.getMessage())
                         .build();
             }
         }
-        return Response.status(200)
+        return Response.status(Response.Status.OK)
                 .entity(operationResult)
                 .build();
 
@@ -57,12 +57,12 @@ public class UserController extends Controller {
             try {
                 operationResult = libraryDAO.blockUser(user);
             } catch (IOException e) {
-                return Response.status(500)
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                         .entity(e.getMessage())
                         .build();
             }
         }
-        return Response.status(200)
+        return Response.status(Response.Status.OK)
                 .entity(operationResult)
                 .build();
     }
@@ -83,7 +83,7 @@ public class UserController extends Controller {
                 e.printStackTrace();
             }
         }
-        return Response.status(200)
+        return Response.status(Response.Status.OK)
                 .entity(operationResult)
                 .build();
     }
@@ -96,7 +96,7 @@ public class UserController extends Controller {
     @AdminStatusNeeded
     public Response addUser(User user) throws IOException {
         boolean operationResult = libraryDAO.addUser(user);
-        return Response.status(200)
+        return Response.status(Response.Status.OK)
                 .entity(operationResult)
                 .build();
     }

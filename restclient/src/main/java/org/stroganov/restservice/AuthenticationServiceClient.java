@@ -16,27 +16,27 @@ public class AuthenticationServiceClient {
     private static final Client client = Client.create();
     private static final Gson gson = new Gson();
     private static final String REST_SERVICE_AUTHENTICATION_URL = PropertiesManager.getProperties().getProperty("restServiceAuthenticationURL");
-    private static String JWTToken;
+    private static String jwtToken;
 
 
     public static String getJWTToken(User user) {
-        if (JWTToken != null) {
-            return JWTToken;
+        if (jwtToken != null) {
+            return jwtToken;
         }
-       // String jsonString = gson.toJson(user, User.class);
+        // String jsonString = gson.toJson(user, User.class);
         WebResource webResource = client.resource(REST_SERVICE_AUTHENTICATION_URL);
         ClientResponse response = webResource.accept("application/json")
                 .post(ClientResponse.class, user);
         if (response.getStatus() != 200) {
             throw new RuntimeException(FAILED_HTTP_ERROR_CODE + response.getStatus());
         }
-        JWTToken = response.getEntity(String.class);
-        return JWTToken;
+        jwtToken = response.getEntity(String.class);
+        return jwtToken;
     }
 
-    public static String getJWTToken() {
-        if (JWTToken != null) {
-            return JWTToken;
+    public static String getJwtToken() {
+        if (jwtToken != null) {
+            return jwtToken;
         } else {
             throw new NullArgumentException("JWTToken empty!");
         }

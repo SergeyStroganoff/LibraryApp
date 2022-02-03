@@ -20,7 +20,7 @@ public class SearchController extends Controller {
     @Produces({MediaType.APPLICATION_JSON})
     public Response findBook(@PathParam("numberISBN") String numberISBN) {
         Book book = libraryDAO.findBook(numberISBN);
-        return Response.status(200)
+        return Response.status(Response.Status.OK)
                 .entity(book)
                 .build();
     }
@@ -31,7 +31,7 @@ public class SearchController extends Controller {
     @Produces({MediaType.APPLICATION_JSON})
     public Response findUserBookMarks(@PathParam("partOfName") String partOfName) {
         List<Book> bookList = libraryDAO.findBooksByPartName(partOfName);
-        return Response.status(200)
+        return Response.status(Response.Status.OK)
                 .entity(bookList)
                 .build();
     }
@@ -42,7 +42,7 @@ public class SearchController extends Controller {
     @Produces({MediaType.APPLICATION_JSON})
     public Response findBooksByPartAuthorName(@PathParam("partAuthorName") String partOfName) {
         List<Book> bookList = libraryDAO.findBooksByPartAuthorName(partOfName);
-        return Response.status(200)
+        return Response.status(Response.Status.OK)
                 .entity(bookList)
                 .build();
     }
@@ -54,7 +54,7 @@ public class SearchController extends Controller {
     @Produces({MediaType.APPLICATION_JSON})
     public Response findUserBookMarks(@QueryParam("firstYear") int firstYear, @QueryParam("secondYear") int secondYear) {
         List<Book> bookList = libraryDAO.findBooksByYearsRange(firstYear, secondYear);
-        return Response.status(200)
+        return Response.status(Response.Status.OK)
                 .entity(bookList)
                 .build();
     }
@@ -65,7 +65,7 @@ public class SearchController extends Controller {
     @Produces({MediaType.APPLICATION_JSON})
     public Response findBooksByParameters(@QueryParam("bookYear") int bookYear, @QueryParam("bookPages") int bookPages, @QueryParam("partBookName") String partBookName) {
         List<Book> bookList = libraryDAO.findBooksByParameters(bookYear, bookPages, partBookName);
-        return Response.status(200)
+        return Response.status(Response.Status.OK)
                 .entity(bookList)
                 .build();
     }
@@ -80,7 +80,7 @@ public class SearchController extends Controller {
         if (user != null) {
             bookList = libraryDAO.findBooksWithUserBookMarks(user);
         }
-        return Response.status(200)
+        return Response.status(Response.Status.OK)
                 .entity(bookList)
                 .build();
     }

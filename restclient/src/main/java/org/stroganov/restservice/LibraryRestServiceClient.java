@@ -24,7 +24,7 @@ public class LibraryRestServiceClient implements LibraryDAO {
     private final Gson gson = new Gson();
     private final String restServiceURL = PropertiesManager.getProperties().getProperty("restServiceURL");
 
-    public static synchronized LibraryRestServiceClient getInstance() {
+    public static LibraryRestServiceClient getInstance() {
         if (instance == null) {
             synchronized (LibraryRestServiceClient.class) {
                 if (instance == null) {
@@ -216,7 +216,7 @@ public class LibraryRestServiceClient implements LibraryDAO {
     public List<Book> findBooksByYearsRange(int firstYear, int secondYear) {
         try {
             WebResource webResource = client.resource(restServiceURL + "/search/findBooksByYearsRange/");
-            webResource.header(HttpHeaders.AUTHORIZATION, "Bearer " + AuthenticationServiceClient.getJWTToken());
+            webResource.header(HttpHeaders.AUTHORIZATION, "Bearer " + AuthenticationServiceClient.getJwtToken());
             ClientResponse response = webResource.
                     queryParam("firstYear", String.valueOf(firstYear)).
                     queryParam("secondYear", String.valueOf(secondYear)).
@@ -238,7 +238,7 @@ public class LibraryRestServiceClient implements LibraryDAO {
     public List<Book> findBooksByParameters(int bookYear, int bookPages, String partBookName) {
         try {
             WebResource webResource = client.resource(restServiceURL + "/search/findBooksByParameters/");
-            webResource.header(HttpHeaders.AUTHORIZATION, "Bearer " + AuthenticationServiceClient.getJWTToken());
+            webResource.header(HttpHeaders.AUTHORIZATION, "Bearer " + AuthenticationServiceClient.getJwtToken());
             ClientResponse response = webResource.
                     queryParam("bookYear", String.valueOf(bookYear)).
                     queryParam("bookPages", String.valueOf(bookPages)).
@@ -300,7 +300,7 @@ public class LibraryRestServiceClient implements LibraryDAO {
     private String getJSONStringFromServer(String pathParam, boolean isJWSTokenNeeded) {
         WebResource webResource = client.resource(restServiceURL + pathParam);
         if (isJWSTokenNeeded) {
-            webResource.header(HttpHeaders.AUTHORIZATION, "Bearer " + AuthenticationServiceClient.getJWTToken());
+            webResource.header(HttpHeaders.AUTHORIZATION, "Bearer " + AuthenticationServiceClient.getJwtToken());
         }
         ClientResponse response = webResource.accept("application/json")
                 .get(ClientResponse.class);
@@ -312,7 +312,7 @@ public class LibraryRestServiceClient implements LibraryDAO {
 
     private String postJSONStringToServer(String pathParam, String jsonString) {
         WebResource webResource = client.resource(restServiceURL + pathParam);
-        webResource.header(HttpHeaders.AUTHORIZATION, "Bearer " + AuthenticationServiceClient.getJWTToken());
+        webResource.header(HttpHeaders.AUTHORIZATION, "Bearer " + AuthenticationServiceClient.getJwtToken());
         ClientResponse response = webResource.accept("application/json")
                 .post(ClientResponse.class, jsonString);
         if (response.getStatus() != 200) {
@@ -323,7 +323,7 @@ public class LibraryRestServiceClient implements LibraryDAO {
 
     private String deleteJSONStringToServer(String pathParam, String jsonString) throws ClientServiceException {
         WebResource webResource = client.resource(restServiceURL + pathParam);
-        webResource.header(HttpHeaders.AUTHORIZATION, "Bearer " + AuthenticationServiceClient.getJWTToken());
+        webResource.header(HttpHeaders.AUTHORIZATION, "Bearer " + AuthenticationServiceClient.getJwtToken());
         ClientResponse response = webResource.accept("application/json")
                 .delete(ClientResponse.class, jsonString);
         if (response.getStatus() != 200) {
