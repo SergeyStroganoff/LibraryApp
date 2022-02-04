@@ -83,7 +83,7 @@ public class UserController extends Controller {
                 e.printStackTrace();
             }
         }
-        return Response.status(Response.Status.OK)
+        return Response.ok()
                 .entity(operationResult)
                 .build();
     }

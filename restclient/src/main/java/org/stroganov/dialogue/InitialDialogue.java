@@ -1,5 +1,6 @@
 package org.stroganov.dialogue;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.log4j.Logger;
 import org.stroganov.dao.DAOFactory;
 import org.stroganov.dao.DAOType;
@@ -75,7 +76,12 @@ public class InitialDialogue {
         }
         historyManager.saveAction("User " + user.getLogin() + " entered in system");
         logger.info("User " + user.getLogin() + " entered in system");
-        AuthenticationServiceClient.getJWTToken(user); //TODO
+        try {
+            AuthenticationServiceClient.getJWTToken(user);
+        } catch (JsonProcessingException e) {
+            logger.error(e);
+            userInterface.showMessage("We have got error: " + e.getMessage());
+        }
         MenuManagerDialogue menuManagerDialogue = new MenuManagerDialogue(libraryDAO, historyManager, userInterface, user);
         menuManagerDialogue.runDialogue();
     }

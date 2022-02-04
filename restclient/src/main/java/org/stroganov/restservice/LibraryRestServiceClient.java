@@ -1,5 +1,7 @@
 package org.stroganov.restservice;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -12,12 +14,16 @@ import org.stroganov.exceptions.ClientServiceException;
 import org.stroganov.util.PropertiesManager;
 
 import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.Collections;
 import java.util.List;
 
 public class LibraryRestServiceClient implements LibraryDAO {
-    public static final String FAILED_HTTP_ERROR_CODE = "Failed : HTTP error code : ";
-    public static final String USER_PATH = "/user/";
+    private static final String FAILED_HTTP_ERROR_CODE = "Failed : HTTP error code : ";
+    private static final String USER_PATH = "/user/";
+    private static final String BEARER = "Bearer ";
+    private static final String BOOK_MARK_PATH = "/bookMark/";
     private static volatile LibraryRestServiceClient instance;
     private final Logger logger = Logger.getLogger(LibraryRestServiceClient.class);
     private final Client client = Client.create();
@@ -149,7 +155,7 @@ public class LibraryRestServiceClient implements LibraryDAO {
         String bookMArkJSONFormat = gson.toJson(bookMark, BookMark.class);
         String result;
         try {
-            result = postJSONStringToServer("/bookMark/", bookMArkJSONFormat);
+            result = postJSONStringToServer(BOOK_MARK_PATH, bookMArkJSONFormat);
         } catch (Exception e) {
             logger.error("Error addBookMark " + bookMark, e);
             return false;
@@ -172,8 +178,12 @@ public class LibraryRestServiceClient implements LibraryDAO {
 
     @Override
     public boolean addAuthor(Author author) {
-        String authorJSONFormat = gson.toJson(author, Author.class);
-        String result = postJSONStringToServer("/author", authorJSONFormat);
+        String result = null;
+        try {
+            result = postJSONStringToServer("/author", author);
+        } catch (JsonProcessingException e) {
+            logger.error("Error serialization when add new Author", e);
+        }
         return gson.fromJson(result, Boolean.class);
     }
 
@@ -216,18 +226,13 @@ public class LibraryRestServiceClient implements LibraryDAO {
     public List<Book> findBooksByYearsRange(int firstYear, int secondYear) {
         try {
             WebResource webResource = client.resource(restServiceURL + "/search/findBooksByYearsRange/");
-            webResource.header(HttpHeaders.AUTHORIZATION, "Bearer " + AuthenticationServiceClient.getJwtToken());
+            webResource.header(HttpHeaders.AUTHORIZATION, BEARER + AuthenticationServiceClient.getJwtToken());
             ClientResponse response = webResource.
                     queryParam("firstYear", String.valueOf(firstYear)).
                     queryParam("secondYear", String.valueOf(secondYear)).
-                    accept("application/json")
+                    accept(MediaType.APPLICATION_JSON)
                     .get(ClientResponse.class);
-            if (response.getStatus() != 200) {
-                logger.error(FAILED_HTTP_ERROR_CODE + response.getStatus());
-                throw new RuntimeException(FAILED_HTTP_ERROR_CODE + response.getStatus());
-            }
-            String responseJSON = response.getEntity(String.class);
-            return JsonParser.getListEntitiesFromJsonString(responseJSON, Book.class);
+            return getBooks(response);
         } catch (Exception e) {
             logger.error("Error in findBooksByPartName method", e);
             return Collections.emptyList();
@@ -238,23 +243,27 @@ public class LibraryRestServiceClient implements LibraryDAO {
     public List<Book> findBooksByParameters(int bookYear, int bookPages, String partBookName) {
         try {
             WebResource webResource = client.resource(restServiceURL + "/search/findBooksByParameters/");
-            webResource.header(HttpHeaders.AUTHORIZATION, "Bearer " + AuthenticationServiceClient.getJwtToken());
+            webResource.header(HttpHeaders.AUTHORIZATION, BEARER + AuthenticationServiceClient.getJwtToken());
             ClientResponse response = webResource.
                     queryParam("bookYear", String.valueOf(bookYear)).
                     queryParam("bookPages", String.valueOf(bookPages)).
                     queryParam("partBookName", partBookName).
-                    accept("application/json")
+                    accept(MediaType.APPLICATION_JSON)
                     .get(ClientResponse.class);
-            if (response.getStatus() != 200) {
-                logger.error(FAILED_HTTP_ERROR_CODE + response.getStatus());
-                throw new RuntimeException(FAILED_HTTP_ERROR_CODE + response.getStatus());
-            }
-            String responseJSON = response.getEntity(String.class);
-            return JsonParser.getListEntitiesFromJsonString(responseJSON, Book.class);
+            return getBooks(response);
         } catch (Exception e) {
             logger.error("Error in findBooksByPartName method", e);
             return Collections.emptyList();
         }
+    }
+
+    private List<Book> getBooks(ClientResponse response) {
+        if (response.getStatus() != Response.Status.OK.getStatusCode()) {
+            logger.error(FAILED_HTTP_ERROR_CODE + response.getStatus());
+            throw new RuntimeException(FAILED_HTTP_ERROR_CODE + response.getStatus());
+        }
+        String responseJSON = response.getEntity(String.class);
+        return JsonParser.getListEntitiesFromJsonString(responseJSON, Book.class);
     }
 
     @Override
@@ -271,7 +280,7 @@ public class LibraryRestServiceClient implements LibraryDAO {
     @Override
     public List<BookMark> findUserBookMarks(User user) {
         try {
-            String responseJSON = getJSONStringFromServer("/bookMark/" + user.getLogin(), true);
+            String responseJSON = getJSONStringFromServer(BOOK_MARK_PATH + user.getLogin(), true);
             return JsonParser.getListEntitiesFromJsonString(responseJSON, BookMark.class);
         } catch (Exception e) {
             logger.error("Error in findBooksWithUserBookMarks method", e);
@@ -284,7 +293,7 @@ public class LibraryRestServiceClient implements LibraryDAO {
         String historyEventJSONFormat = gson.toJson(history, History.class);
         String result;
         try {
-            result = postJSONStringToServer("/bookMark/", historyEventJSONFormat);
+            result = postJSONStringToServer(BOOK_MARK_PATH, historyEventJSONFormat);
         } catch (Exception e) {
             logger.error("Error addHistoryEvent " + history, e);
             return false;
@@ -300,22 +309,22 @@ public class LibraryRestServiceClient implements LibraryDAO {
     private String getJSONStringFromServer(String pathParam, boolean isJWSTokenNeeded) {
         WebResource webResource = client.resource(restServiceURL + pathParam);
         if (isJWSTokenNeeded) {
-            webResource.header(HttpHeaders.AUTHORIZATION, "Bearer " + AuthenticationServiceClient.getJwtToken());
+            webResource.header(HttpHeaders.AUTHORIZATION, BEARER + AuthenticationServiceClient.getJwtToken());
         }
-        ClientResponse response = webResource.accept("application/json")
+        ClientResponse response = webResource.accept(MediaType.APPLICATION_JSON)
                 .get(ClientResponse.class);
-        if (response.getStatus() != 200) {
+        if (response.getStatus() != Response.Status.OK.getStatusCode()) {
             throw new RuntimeException(FAILED_HTTP_ERROR_CODE + response.getStatus());
         }
         return response.getEntity(String.class);
     }
 
-    private String postJSONStringToServer(String pathParam, String jsonString) {
+    private String postJSONStringToServer(String pathParam, Object object) throws JsonProcessingException {
+        final ObjectMapper mapper = new ObjectMapper();
         WebResource webResource = client.resource(restServiceURL + pathParam);
-        webResource.header(HttpHeaders.AUTHORIZATION, "Bearer " + AuthenticationServiceClient.getJwtToken());
-        ClientResponse response = webResource.accept("application/json")
-                .post(ClientResponse.class, jsonString);
-        if (response.getStatus() != 200) {
+        webResource.header(HttpHeaders.AUTHORIZATION, BEARER + AuthenticationServiceClient.getJwtToken());
+        ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).post(ClientResponse.class, mapper.writeValueAsString(object));
+        if (response.getStatus() != Response.Status.OK.getStatusCode()) {
             throw new RuntimeException(FAILED_HTTP_ERROR_CODE + response.getStatus());
         }
         return response.getEntity(String.class);
@@ -323,10 +332,10 @@ public class LibraryRestServiceClient implements LibraryDAO {
 
     private String deleteJSONStringToServer(String pathParam, String jsonString) throws ClientServiceException {
         WebResource webResource = client.resource(restServiceURL + pathParam);
-        webResource.header(HttpHeaders.AUTHORIZATION, "Bearer " + AuthenticationServiceClient.getJwtToken());
-        ClientResponse response = webResource.accept("application/json")
+        webResource.header(HttpHeaders.AUTHORIZATION, BEARER + AuthenticationServiceClient.getJwtToken());
+        ClientResponse response = webResource.accept(MediaType.APPLICATION_JSON)
                 .delete(ClientResponse.class, jsonString);
-        if (response.getStatus() != 200) {
+        if (response.getStatus() != Response.Status.OK.getStatusCode()) {
             throw new ClientServiceException(FAILED_HTTP_ERROR_CODE + response.getStatus());
         }
         return response.getEntity(String.class);

@@ -1,33 +1,39 @@
 package org.stroganov.restservice;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.config.ClientConfig;
+import com.sun.jersey.api.client.config.DefaultClientConfig;
 import org.apache.commons.lang.NullArgumentException;
 import org.apache.log4j.Logger;
+import org.glassfish.jersey.jackson.internal.jackson.jaxrs.json.JacksonJsonProvider;
 import org.stroganov.entities.User;
 import org.stroganov.util.PropertiesManager;
+
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 public class AuthenticationServiceClient {
 
     public static final String FAILED_HTTP_ERROR_CODE = "Failed : HTTP error code : ";
-    private final Logger logger = Logger.getLogger(AuthenticationServiceClient.class);
-    private static final Client client = Client.create();
-    private static final Gson gson = new Gson();
+    private static final Logger LOGGER = Logger.getLogger(AuthenticationServiceClient.class);
     private static final String REST_SERVICE_AUTHENTICATION_URL = PropertiesManager.getProperties().getProperty("restServiceAuthenticationURL");
     private static String jwtToken;
 
 
-    public static String getJWTToken(User user) {
+    public static String getJWTToken(User user) throws JsonProcessingException {
         if (jwtToken != null) {
             return jwtToken;
         }
-        // String jsonString = gson.toJson(user, User.class);
+        ClientConfig cc = new DefaultClientConfig();
+        cc.getClasses().add(JacksonJsonProvider.class);
+        final Client client = Client.create(cc);
         WebResource webResource = client.resource(REST_SERVICE_AUTHENTICATION_URL);
-        ClientResponse response = webResource.accept("application/json")
-                .post(ClientResponse.class, user);
-        if (response.getStatus() != 200) {
+        ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).post(ClientResponse.class, user);
+        if (response.getStatus() != Response.Status.OK.getStatusCode()) {
+            LOGGER.error("Error jwt token getting. Server response:" + response.getStatus());
             throw new RuntimeException(FAILED_HTTP_ERROR_CODE + response.getStatus());
         }
         jwtToken = response.getEntity(String.class);

@@ -34,6 +34,7 @@ public class AuthenticationController extends Controller {
     public Response authentication(User user) {
 
         User ourUser = libraryDAO.findUser(user.getLogin());
+        System.out.println(ourUser.getLogin());
         if (!ourUser.getPasscodeHash().equals(user.getPasscodeHash())) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity("Password is not correct: " + user.getLogin())
