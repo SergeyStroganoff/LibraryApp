@@ -48,6 +48,7 @@ public class MenuManagerDialogue {
                 "The following actions are available to you: \n" +
                 "Enter number of menu";
         userInterface.showMessage(welcomeMessage);
+        userInterface.showMessage(currentUser.toString());
         String command;
         String menu = currentUser.isAdmin() ? returnAdminMenu().toString() : returnUserMenu().toString();
         do {

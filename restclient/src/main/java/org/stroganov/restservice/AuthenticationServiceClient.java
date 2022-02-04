@@ -1,6 +1,7 @@
 package org.stroganov.restservice;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
@@ -27,11 +28,10 @@ public class AuthenticationServiceClient {
         if (jwtToken != null) {
             return jwtToken;
         }
-        ClientConfig cc = new DefaultClientConfig();
-        cc.getClasses().add(JacksonJsonProvider.class);
-        final Client client = Client.create(cc);
+        ObjectMapper mapper = new ObjectMapper();
+        final Client client = Client.create();
         WebResource webResource = client.resource(REST_SERVICE_AUTHENTICATION_URL);
-        ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).post(ClientResponse.class, user);
+        ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).post(ClientResponse.class, mapper.writeValueAsString(user));
         if (response.getStatus() != Response.Status.OK.getStatusCode()) {
             LOGGER.error("Error jwt token getting. Server response:" + response.getStatus());
             throw new RuntimeException(FAILED_HTTP_ERROR_CODE + response.getStatus());

@@ -66,12 +66,12 @@ public class User implements Serializable {
         this.passcodeHash = passcodeHash;
     }
 
-    public void setBlocked(boolean blocked) {
-        isBlocked = blocked;
+    public void setBlocked(boolean isBlocked) {
+        isBlocked = isBlocked;
     }
 
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
+    public void setAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
     }
 
     public void setUserID(int numberID) {

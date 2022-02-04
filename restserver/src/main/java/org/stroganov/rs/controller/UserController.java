@@ -1,6 +1,7 @@
 package org.stroganov.rs.controller;
 
 import org.stroganov.entities.User;
+import org.stroganov.models.UserDTO;
 import org.stroganov.rs.filter.AdminStatusNeeded;
 import org.stroganov.rs.filter.JWTTokenNeeded;
 
@@ -16,8 +17,10 @@ public class UserController extends Controller {
     @Path("/{userLogin}")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    public User findUser(@PathParam("userLogin") String userLogin) {
-        return libraryDAO.findUser(userLogin);
+    public UserDTO findUser(@PathParam("userLogin") String userLogin) {
+        User user = libraryDAO.findUser(userLogin);
+        logger.info("Have got user from DB: " + user);
+        return new UserDTO(user);
     }
 
     @DELETE

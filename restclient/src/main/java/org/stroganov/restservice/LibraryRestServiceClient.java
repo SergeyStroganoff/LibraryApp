@@ -11,7 +11,9 @@ import org.stroganov.JsonDBAPI.JsonParser;
 import org.stroganov.dao.LibraryDAO;
 import org.stroganov.entities.*;
 import org.stroganov.exceptions.ClientServiceException;
+import org.stroganov.models.UserDTO;
 import org.stroganov.util.PropertiesManager;
+import org.stroganov.util.TransitionObjectsService;
 
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -69,6 +71,7 @@ public class LibraryRestServiceClient implements LibraryDAO {
         try {
             String responseJSON = getJSONStringFromServer("/search/" + numberISBN, true);
             return gson.fromJson(responseJSON, Book.class);
+            //return getJSONStringFromServer("/search/" + numberISBN, true).getEntity(Book.class);
         } catch (Exception e) {
             logger.error("Error in findBook method", e);
             return null;
@@ -80,6 +83,8 @@ public class LibraryRestServiceClient implements LibraryDAO {
         try {
             String responseJSON = getJSONStringFromServer("/search/partOfName/" + partOfName, true);
             return JsonParser.getListEntitiesFromJsonString(responseJSON, Book.class);
+
+            // return getJSONStringFromServer("/search/partOfName/" + partOfName, true).getEntity(List.class);
         } catch (Exception e) {
             logger.error("Error in findBooksByPartName method", e);
             return Collections.emptyList();
@@ -104,7 +109,8 @@ public class LibraryRestServiceClient implements LibraryDAO {
     public User findUser(String userLogin) {
         try {
             String responseJSON = getJSONStringFromServer(USER_PATH + userLogin, false);
-            return gson.fromJson(responseJSON, User.class);
+            UserDTO userDTO = gson.fromJson(responseJSON, UserDTO.class);
+            return TransitionObjectsService.getUser(userDTO);
         } catch (Exception e) {
             logger.error("Error in client method", e);
             return null;

@@ -10,6 +10,7 @@
     <modules>
         <module>restclient</module>
         <module>restserver</module>
+        <module>apidtoobjects</module>
     </modules>
     <packaging>pom</packaging>
 

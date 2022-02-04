@@ -1,40 +1,33 @@
-package org.stroganov.entities;
+package org.stroganov.models;
 
-import org.stroganov.util.PasswordAuthentication;
+import org.stroganov.entities.User;
 
-import javax.persistence.*;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
-@XmlRootElement
-@Entity
-@Table(name = ("users"))
-public class User implements Serializable {
+public class UserDTO implements Serializable {
 
-    @Transient
     private int userID;
-    @Column(name = "fullname", nullable = false)
+
     private String fullName;
-    @Id
-    @Column(name = "login")
+
     private String login;
-    @Column(name = "passcode")
+
     private String passcodeHash;
-    @Column(name = "isblocked")
+
     private boolean isBlocked;
-    @Column(name = "isadmin")
+
     private boolean isAdmin;
 
-    public User(int userID, String fullName, String login, String passcodeHash, boolean isBlocked, boolean isAdmin) {
-        this.userID = userID;
-        this.fullName = fullName;
-        this.login = login;
-        this.passcodeHash = PasswordAuthentication.hash(passcodeHash.toCharArray());
-        this.isBlocked = isBlocked;
-        this.isAdmin = isAdmin;
+    public UserDTO(User user) {
+        this.userID = user.getUserID();
+        this.fullName = user.getFullName();
+        this.login = user.getLogin();
+        this.passcodeHash = user.getPasscodeHash();
+        this.isBlocked = user.isBlocked();
+        this.isAdmin = user.isAdmin();
     }
 
-    public User() {
+    public UserDTO() {
 
     }
 
@@ -67,7 +60,7 @@ public class User implements Serializable {
     }
 
     public void setBlocked(boolean isBlocked) {
-        this.isBlocked = isBlocked;
+        isBlocked = isBlocked;
     }
 
     public void setAdmin(boolean isAdmin) {
@@ -91,14 +84,14 @@ public class User implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        User user = (User) o;
+        UserDTO userDTO = (UserDTO) o;
 
-        if (userID != user.userID) return false;
-        if (isBlocked != user.isBlocked) return false;
-        if (isAdmin != user.isAdmin) return false;
-        if (!fullName.equals(user.fullName)) return false;
-        if (!login.equals(user.login)) return false;
-        return passcodeHash.equals(user.passcodeHash);
+        if (userID != userDTO.userID) return false;
+        if (isBlocked != userDTO.isBlocked) return false;
+        if (isAdmin != userDTO.isAdmin) return false;
+        if (!fullName.equals(userDTO.fullName)) return false;
+        if (!login.equals(userDTO.login)) return false;
+        return passcodeHash.equals(userDTO.passcodeHash);
     }
 
     @Override

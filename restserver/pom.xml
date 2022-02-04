@@ -22,6 +22,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.stroganov</groupId>
+            <artifactId>apidtoobjects</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
             <version>8.4.3</version>
@@ -130,6 +136,7 @@
             <version>5.8.2</version>
             <scope>compile</scope>
         </dependency>
+
 
     </dependencies>
 
