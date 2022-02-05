@@ -2,7 +2,9 @@ package org.stroganov.rs.controller;
 
 import org.stroganov.entities.BookMark;
 import org.stroganov.entities.User;
+import org.stroganov.models.BookMarkDTO;
 import org.stroganov.rs.filter.JWTTokenNeeded;
+import org.stroganov.util.TransitionObjectsService;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -44,8 +46,9 @@ public class BookMarkController extends Controller {
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
     @JWTTokenNeeded
-    public Response addBookMark(BookMark bookMark) {
+    public Response addBookMark(BookMarkDTO bookMarkDTO) {
         boolean operationResult;
+        BookMark bookMark = TransitionObjectsService.getBookMark(bookMarkDTO);
         try {
             operationResult = libraryDAO.addBookMark(bookMark);
         } catch (IOException e) {

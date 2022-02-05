@@ -11,7 +11,7 @@ import org.stroganov.JsonDBAPI.JsonParser;
 import org.stroganov.dao.LibraryDAO;
 import org.stroganov.entities.*;
 import org.stroganov.exceptions.ClientServiceException;
-import org.stroganov.models.UserDTO;
+import org.stroganov.models.*;
 import org.stroganov.util.PropertiesManager;
 import org.stroganov.util.TransitionObjectsService;
 
@@ -45,12 +45,28 @@ public class LibraryRestServiceClient implements LibraryDAO {
 
     @Override
     public boolean addBook(Book book) {
-        return false;
+        String bookJSONFormat = gson.toJson(new BookDTO(book), BookDTO.class);
+        String result;
+        try {
+            result = postJSONStringToServer("/book/add", bookJSONFormat);
+        } catch (Exception e) {
+            logger.error("Error addBook ", e);
+            return false;
+        }
+        return gson.fromJson(result, Boolean.class);
     }
 
     @Override
     public boolean addBook(List<Book> bookList) {
-        return false;
+        String bookListJSONFormat = gson.toJson(bookList, List.class);
+        String result;
+        try {
+            result = postJSONStringToServer("/book/addList", bookListJSONFormat);
+        } catch (Exception e) {
+            logger.error("Error addBook ", e);
+            return false;
+        }
+        return gson.fromJson(result, Boolean.class);
     }
 
     @Override
@@ -70,8 +86,10 @@ public class LibraryRestServiceClient implements LibraryDAO {
     public Book findBook(String numberISBN) {
         try {
             String responseJSON = getJSONStringFromServer("/search/" + numberISBN, true);
-            return gson.fromJson(responseJSON, Book.class);
-            //return getJSONStringFromServer("/search/" + numberISBN, true).getEntity(Book.class);
+            System.out.println(responseJSON);
+            Book book = TransitionObjectsService.getBook(gson.fromJson(responseJSON, BookDTO.class));
+            System.out.println(book);
+            return book;
         } catch (Exception e) {
             logger.error("Error in findBook method", e);
             return null;
@@ -83,8 +101,6 @@ public class LibraryRestServiceClient implements LibraryDAO {
         try {
             String responseJSON = getJSONStringFromServer("/search/partOfName/" + partOfName, true);
             return JsonParser.getListEntitiesFromJsonString(responseJSON, Book.class);
-
-            // return getJSONStringFromServer("/search/partOfName/" + partOfName, true).getEntity(List.class);
         } catch (Exception e) {
             logger.error("Error in findBooksByPartName method", e);
             return Collections.emptyList();
@@ -94,7 +110,8 @@ public class LibraryRestServiceClient implements LibraryDAO {
 
     @Override
     public boolean addUser(User user) {
-        String userJSONFormat = gson.toJson(user, BookMark.class);
+        UserDTO userDTO = new UserDTO(user);
+        String userJSONFormat = gson.toJson(userDTO, UserDTO.class);
         String result;
         try {
             result = postJSONStringToServer(USER_PATH, userJSONFormat);
@@ -158,7 +175,8 @@ public class LibraryRestServiceClient implements LibraryDAO {
 
     @Override
     public boolean addBookMark(BookMark bookMark) {
-        String bookMArkJSONFormat = gson.toJson(bookMark, BookMark.class);
+        BookMarkDTO bookMarkDTO = new BookMarkDTO(bookMark);
+        String bookMArkJSONFormat = gson.toJson(bookMarkDTO, BookMarkDTO.class);
         String result;
         try {
             result = postJSONStringToServer(BOOK_MARK_PATH, bookMArkJSONFormat);
@@ -185,8 +203,9 @@ public class LibraryRestServiceClient implements LibraryDAO {
     @Override
     public boolean addAuthor(Author author) {
         String result = null;
+        AuthorDTO authorDTO = new AuthorDTO(author);
         try {
-            result = postJSONStringToServer("/author", author);
+            result = postJSONStringToServer("/author", authorDTO);
         } catch (JsonProcessingException e) {
             logger.error("Error serialization when add new Author", e);
         }
@@ -296,7 +315,8 @@ public class LibraryRestServiceClient implements LibraryDAO {
 
     @Override
     public boolean addHistoryEvent(History history) {
-        String historyEventJSONFormat = gson.toJson(history, History.class);
+        HistoryDTO historyDTO = new HistoryDTO(history);
+        String historyEventJSONFormat = gson.toJson(historyDTO, HistoryDTO.class);
         String result;
         try {
             result = postJSONStringToServer(BOOK_MARK_PATH, historyEventJSONFormat);

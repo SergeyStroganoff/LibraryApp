@@ -20,7 +20,8 @@ public class AuthenticationServiceClient {
 
     public static final String FAILED_HTTP_ERROR_CODE = "Failed : HTTP error code : ";
     private static final Logger LOGGER = Logger.getLogger(AuthenticationServiceClient.class);
-    private static final String REST_SERVICE_AUTHENTICATION_URL = PropertiesManager.getProperties().getProperty("restServiceAuthenticationURL");
+    public static final String ERROR_GETTING_URL_REST_SERVICE = "Error getting URL RestService";
+
     private static String jwtToken;
 
 
@@ -28,9 +29,15 @@ public class AuthenticationServiceClient {
         if (jwtToken != null) {
             return jwtToken;
         }
+        final String restServiceAuthenticationURL = PropertiesManager.getProperties().getProperty("restServiceAuthenticationURL");
+        if (restServiceAuthenticationURL==null){
+            LOGGER.error(ERROR_GETTING_URL_REST_SERVICE);
+            throw new RuntimeException(ERROR_GETTING_URL_REST_SERVICE);
+        }
+
         ObjectMapper mapper = new ObjectMapper();
         final Client client = Client.create();
-        WebResource webResource = client.resource(REST_SERVICE_AUTHENTICATION_URL);
+        WebResource webResource = client.resource(restServiceAuthenticationURL);
         ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).post(ClientResponse.class, mapper.writeValueAsString(user));
         if (response.getStatus() != Response.Status.OK.getStatusCode()) {
             LOGGER.error("Error jwt token getting. Server response:" + response.getStatus());

@@ -2,7 +2,9 @@ package org.stroganov.rs.controller;
 
 
 import org.stroganov.entities.Book;
+import org.stroganov.models.BookDTO;
 import org.stroganov.rs.filter.JWTTokenNeeded;
+import org.stroganov.util.TransitionObjectsService;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -43,8 +45,9 @@ public class BookController extends Controller {
     @Path("/add")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    public Response addBook(Book book) {
+    public Response addBook(BookDTO bookDTO) {
         boolean operationResult;
+        Book book = TransitionObjectsService.getBook(bookDTO);
         try {
             operationResult = libraryDAO.addBook(book);
         } catch (IOException e) {

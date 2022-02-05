@@ -1,8 +1,10 @@
 package org.stroganov.rs.controller;
 
 import org.stroganov.entities.History;
+import org.stroganov.models.HistoryDTO;
 import org.stroganov.rs.filter.AdminStatusNeeded;
 import org.stroganov.rs.filter.JWTTokenNeeded;
+import org.stroganov.util.TransitionObjectsService;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -18,7 +20,8 @@ public class HistoryController extends Controller {
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
     @JWTTokenNeeded
-    public Response addHistoryEvent(History history) {
+    public Response addHistoryEvent(HistoryDTO historyDTO) {
+        History history = TransitionObjectsService.getHistory(historyDTO);
         boolean operationResult = libraryDAO.addHistoryEvent(history);
         return Response.status(Response.Status.OK)
                 .entity(operationResult)

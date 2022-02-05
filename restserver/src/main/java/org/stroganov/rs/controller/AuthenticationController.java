@@ -6,6 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.stroganov.entities.User;
+import org.stroganov.models.UserDTO;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -31,16 +32,15 @@ public class AuthenticationController extends Controller {
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
     // QueryParam
-    public Response authentication(User user) {
+    public Response authentication(UserDTO userDTO) {
 
-        User ourUser = libraryDAO.findUser(user.getLogin());
-        System.out.println(ourUser.getLogin());
-        if (!ourUser.getPasscodeHash().equals(user.getPasscodeHash())) {
+        User user = libraryDAO.findUser(userDTO.getLogin());
+        if (!user.getPasscodeHash().equals(userDTO.getPasscodeHash())) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity("Password is not correct: " + user.getLogin())
                     .build();
         }
-        String newJWTToken = createJWTToken(ourUser);
+        String newJWTToken = createJWTToken(user);
         final ObjectMapper mapper = new ObjectMapper();
         ObjectNode json = mapper.createObjectNode();
         json.put(BEARER, newJWTToken);

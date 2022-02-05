@@ -22,7 +22,11 @@ public class MySQLLibraryDAO implements LibraryDAO {
 
     public static synchronized MySQLLibraryDAO getInstance(SessionFactory sessionFactory) {
         if (instance == null) {
-            instance = new MySQLLibraryDAO(sessionFactory);
+            synchronized (MySQLLibraryDAO.class) {
+                if (instance == null) {
+                    instance = new MySQLLibraryDAO(sessionFactory);
+                }
+            }
         }
         return instance;
     }

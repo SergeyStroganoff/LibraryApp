@@ -60,7 +60,7 @@ public class UserDTO implements Serializable {
     }
 
     public void setBlocked(boolean isBlocked) {
-        isBlocked = isBlocked;
+        this.isBlocked = isBlocked;
     }
 
     public void setAdmin(boolean isAdmin) {

@@ -2,7 +2,6 @@ package org.stroganov.dialogue;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.log4j.Logger;
-import org.stroganov.dao.DAOFactory;
 import org.stroganov.dao.DAOType;
 import org.stroganov.dao.LibraryDAO;
 import org.stroganov.entities.User;
@@ -27,7 +26,7 @@ public class InitialDialogue {
     public InitialDialogue(UserInterface userInterface) {
         this.userInterface = userInterface;
         try {
-            libraryDAO = DAOFactory.getLibraryDAO(DAOType.WEB_SERVICE_REST);
+            libraryDAO = DAOType.WEB_SERVICE_REST.getLibraryDAO();
         } catch (DBExceptions e) {
             userInterface.showMessage(e.getMessage());
             System.exit(1);

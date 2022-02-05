@@ -19,7 +19,6 @@ public class PropertiesManager {
             properties = configLoader.getAppProp();
         } catch (IOException | PropertiesException e) {
             LOGGER.error(ERROR_LOADING_CONFIGURATION_FILE_MESSAGE + e.getMessage());
-
             System.exit(1);
         }
     }
@@ -30,5 +29,4 @@ public class PropertiesManager {
         }
         return properties;
     }
-
 }

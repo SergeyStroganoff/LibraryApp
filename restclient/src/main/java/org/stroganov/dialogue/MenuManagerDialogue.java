@@ -340,12 +340,7 @@ public class MenuManagerDialogue {
                 userInterface.showMessage("An error happen:" + e.getMessage());
                 return false;
             }
-            String successMessage;
-            if (operationResult) {
-                successMessage = AUTHOR + authorName + "was successfully deleted with all his books";
-            } else {
-                successMessage = AUTHOR + authorName + "was not successfully deleted. See logs";
-            }
+            String successMessage = AUTHOR + authorName + (operationResult ? "was successfully deleted with all his books" : "was not successfully deleted. See logs");
             historyManager.saveAction(successMessage + " by User " + currentUser.getLogin());
             userInterface.showMessage(successMessage);
             return true;

@@ -2,8 +2,9 @@ package org.stroganov.dao;
 
 import org.hibernate.SessionFactory;
 import org.stroganov.exceptions.DBExceptions;
-import org.stroganov.util.HibernateUtil;
 import org.stroganov.restservice.LibraryRestServiceClient;
+import org.stroganov.util.HibernateUtil;
+
 
 public enum DAOType {
 

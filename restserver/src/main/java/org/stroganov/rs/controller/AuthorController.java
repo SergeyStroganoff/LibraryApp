@@ -1,7 +1,9 @@
 package org.stroganov.rs.controller;
 
 import org.stroganov.entities.Author;
+import org.stroganov.models.AuthorDTO;
 import org.stroganov.rs.filter.JWTTokenNeeded;
+import org.stroganov.util.TransitionObjectsService;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -16,8 +18,8 @@ public class AuthorController extends Controller {
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
     @JWTTokenNeeded
-    public Response addAuthor(Author author) throws IOException {
-        boolean operationResult = libraryDAO.addAuthor(author);
+    public Response addAuthor(AuthorDTO authorDTO) throws IOException {
+        boolean operationResult = libraryDAO.addAuthor(TransitionObjectsService.getAuthor(authorDTO));
         logger.info("Result of addAuthor: " + operationResult);
         return Response.status(Response.Status.OK)
                 .entity(operationResult)

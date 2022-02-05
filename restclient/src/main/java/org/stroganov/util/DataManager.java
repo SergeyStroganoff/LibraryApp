@@ -1,7 +1,6 @@
 package org.stroganov.util;
 
 import org.apache.log4j.Logger;
-import org.stroganov.dao.DAOFactory;
 import org.stroganov.dao.DAOType;
 import org.stroganov.dao.LibraryDAO;
 import org.stroganov.exceptions.DBExceptions;
@@ -17,7 +16,7 @@ public class DataManager {
 
     private static void libraryDAOInitialization() {
         try {
-            libraryDAO = DAOFactory.getLibraryDAO(DAOType.MYSQL);
+            libraryDAO = DAOType.WEB_SERVICE_REST.getLibraryDAO();
         } catch (DBExceptions e) {
             logger.error(e.getMessage());
             System.exit(1);

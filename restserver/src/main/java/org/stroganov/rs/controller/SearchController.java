@@ -2,6 +2,7 @@ package org.stroganov.rs.controller;
 
 import org.stroganov.entities.Book;
 import org.stroganov.entities.User;
+import org.stroganov.models.BookDTO;
 import org.stroganov.rs.filter.JWTTokenNeeded;
 
 import javax.ws.rs.*;
@@ -21,7 +22,7 @@ public class SearchController extends Controller {
     public Response findBook(@PathParam("numberISBN") String numberISBN) {
         Book book = libraryDAO.findBook(numberISBN);
         return Response.status(Response.Status.OK)
-                .entity(book)
+                .entity(new BookDTO(book))
                 .build();
     }
 
