@@ -25,8 +25,13 @@ public class JsonLibraryDAO implements LibraryDAO {
 
     public static synchronized JsonLibraryDAO getInstance() throws DBExceptions {
         if (instance == null) {
-            instance = new JsonLibraryDAO();
+            synchronized (JsonLibraryDAO.class) {
+                if (instance == null) {
+                    instance = new JsonLibraryDAO();
+                }
+            }
         }
+
         return instance;
     }
 

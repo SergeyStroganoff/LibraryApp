@@ -68,9 +68,9 @@ public class Book implements Serializable {
         return authorName;
     }
 
-    public void setAuthorName(Author authorName) {
-        this.authorName = authorName;
-    }
+    // public void setAuthorName(Author authorName) { // todo
+    //     this.authorName = authorName;
+    // }
 
     public void setYearPublishing(int yearPublishing) {
         this.yearPublishing = yearPublishing;

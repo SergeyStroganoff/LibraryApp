@@ -4,6 +4,7 @@ import org.stroganov.entities.User;
 import org.stroganov.models.UserDTO;
 import org.stroganov.rs.filter.AdminStatusNeeded;
 import org.stroganov.rs.filter.JWTTokenNeeded;
+import org.stroganov.util.TransitionObjectsService;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -97,7 +98,8 @@ public class UserController extends Controller {
     @Produces({MediaType.APPLICATION_JSON})
     @JWTTokenNeeded
     @AdminStatusNeeded
-    public Response addUser(User user) throws IOException {
+    public Response addUser(UserDTO userDTO) throws IOException {
+        User user = TransitionObjectsService.getUser(userDTO);
         boolean operationResult = libraryDAO.addUser(user);
         return Response.status(Response.Status.OK)
                 .entity(operationResult)

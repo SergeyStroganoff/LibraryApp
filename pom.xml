@@ -11,6 +11,7 @@
         <module>restclient</module>
         <module>restserver</module>
         <module>apidtoobjects</module>
+        <module>entities</module>
     </modules>
     <packaging>pom</packaging>
 

@@ -1,6 +1,6 @@
 package org.stroganov.entities;
 
-import org.stroganov.util.PasswordAuthentication;
+import org.stroganov.utils.PasswordAuthentication;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -25,11 +25,11 @@ public class User implements Serializable {
     @Column(name = "isadmin")
     private boolean isAdmin;
 
-    public User(int userID, String fullName, String login, String passcodeHash, boolean isBlocked, boolean isAdmin) {
+    public User(int userID, String fullName, String login, String password, boolean isBlocked, boolean isAdmin) {
         this.userID = userID;
         this.fullName = fullName;
         this.login = login;
-        this.passcodeHash = PasswordAuthentication.hash(passcodeHash.toCharArray());
+        this.passcodeHash = PasswordAuthentication.hash(password.toCharArray());
         this.isBlocked = isBlocked;
         this.isAdmin = isAdmin;
     }
