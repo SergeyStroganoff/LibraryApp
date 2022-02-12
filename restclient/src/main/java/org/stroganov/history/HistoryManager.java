@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import net.logstash.log4j.JSONEventLayoutV1;
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
 import org.stroganov.App;
 import org.stroganov.entities.HistoryEvent;
 import org.stroganov.util.FileUtil;
@@ -29,7 +30,7 @@ import java.util.List;
  * "message":"Example of some logging"
  * }
  */
-
+@Component
 public class HistoryManager {
 
     private final Logger logger = Logger.getLogger(HistoryManager.class);
