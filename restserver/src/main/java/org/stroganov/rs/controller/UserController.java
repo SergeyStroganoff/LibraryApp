@@ -37,8 +37,9 @@ public class UserController extends Controller {
             try {
                 operationResult = libraryDAO.deleteUser(user);
             } catch (IOException e) {
+                logger.error(e);
                 return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                        .entity(e.getMessage())
+                        .entity(IO_EXCEPTION_IN_LIBRARY_DAO_MESSAGE)
                         .build();
             }
         }
@@ -61,8 +62,9 @@ public class UserController extends Controller {
             try {
                 operationResult = libraryDAO.blockUser(user);
             } catch (IOException e) {
+                logger.error(e);
                 return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                        .entity(e.getMessage())
+                        .entity(IO_EXCEPTION_IN_LIBRARY_DAO_MESSAGE)
                         .build();
             }
         }
@@ -84,7 +86,10 @@ public class UserController extends Controller {
             try {
                 operationResult = libraryDAO.unblockUser(user);
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error(e);
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                        .entity(IO_EXCEPTION_IN_LIBRARY_DAO_MESSAGE)
+                        .build();
             }
         }
         return Response.ok()

@@ -19,6 +19,7 @@ public class BookController extends Controller {
 
     public static final String SERVER_ERROR_ADD_BOOKS_MESSAGE = "Server error when 'addBooks' method was called";
 
+
     @DELETE
     @Path("/{bookISBN}")
     @Consumes({MediaType.APPLICATION_JSON})
@@ -31,8 +32,9 @@ public class BookController extends Controller {
             try {
                 operationResult = libraryDAO.deleteBook(book);
             } catch (IOException e) {
+                logger.error(e.getMessage());
                 return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                        .entity(e.getMessage())
+                        .entity(IO_EXCEPTION_IN_LIBRARY_DAO_MESSAGE)
                         .build();
             }
         }
@@ -51,8 +53,9 @@ public class BookController extends Controller {
         try {
             operationResult = libraryDAO.addBook(book);
         } catch (IOException e) {
+            logger.error(e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(e.getMessage())
+                    .entity(IO_EXCEPTION_IN_LIBRARY_DAO_MESSAGE)
                     .build();
         }
         return Response.status(Response.Status.OK)
@@ -69,6 +72,7 @@ public class BookController extends Controller {
         try {
             operationResult = libraryDAO.addBook(bookList);
         } catch (IOException e) {
+            logger.error(e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity(SERVER_ERROR_ADD_BOOKS_MESSAGE)
                     .build();

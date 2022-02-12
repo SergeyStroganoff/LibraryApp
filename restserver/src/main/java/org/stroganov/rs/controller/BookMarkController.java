@@ -32,8 +32,9 @@ public class BookMarkController extends Controller {
         try {
             operationResult = libraryDAO.deleteBookMark(bookMark);
         } catch (IOException e) {
+            logger.error(e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(e.getMessage())
+                    .entity(IO_EXCEPTION_IN_LIBRARY_DAO_MESSAGE)
                     .build();
         }
         return Response.status(Response.Status.OK)
@@ -52,8 +53,9 @@ public class BookMarkController extends Controller {
         try {
             operationResult = libraryDAO.addBookMark(bookMark);
         } catch (IOException e) {
+            logger.error(e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(e.getMessage())
+                    .entity(IO_EXCEPTION_IN_LIBRARY_DAO_MESSAGE)
                     .build();
         }
         return Response.status(Response.Status.OK)
@@ -68,12 +70,14 @@ public class BookMarkController extends Controller {
     @JWTTokenNeeded
     public Response findUserBookMarks(@PathParam("userLogin") String userLogin) {
         User user = libraryDAO.findUser(userLogin);
-        List<BookMark> bookMarkList = Collections.emptyList();
+        List<BookMark> bookMarkList;
+        List<BookMarkDTO> bookMarkDTOList = Collections.emptyList();
         if (user != null) {
             bookMarkList = libraryDAO.findUserBookMarks(user);
+            bookMarkDTOList = TransitionObjectsService.getBookMarkDTOList(bookMarkList);
         }
         return Response.status(Response.Status.OK)
-                .entity(bookMarkList)
+                .entity(bookMarkDTOList)
                 .build();
     }
 }

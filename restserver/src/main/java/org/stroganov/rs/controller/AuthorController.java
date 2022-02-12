@@ -33,8 +33,9 @@ public class AuthorController extends Controller {
     @JWTTokenNeeded
     public Response findAuthor(@PathParam("authorName") String authorName) {
         Author author = libraryDAO.findAuthor(authorName);
+        AuthorDTO authorDTO = new AuthorDTO(author);
         return Response.status(Response.Status.OK)
-                .entity(author)
+                .entity(authorDTO)
                 .build();
     }
 

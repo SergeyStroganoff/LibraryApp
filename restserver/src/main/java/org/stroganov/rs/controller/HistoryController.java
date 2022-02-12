@@ -36,8 +36,9 @@ public class HistoryController extends Controller {
     @AdminStatusNeeded
     public Response getAllHistory() {
         List<History> allHistory = libraryDAO.getAllHistory();
+        List<HistoryDTO> historyDTOList = TransitionObjectsService.getHistoryDTOList(allHistory);
         return Response.status(Response.Status.OK)
-                .entity(allHistory)
+                .entity(historyDTOList)
                 .build();
     }
 }

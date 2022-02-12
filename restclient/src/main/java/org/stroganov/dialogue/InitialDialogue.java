@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import org.stroganov.dao.DAOType;
 import org.stroganov.dao.LibraryDAO;
 import org.stroganov.entities.User;
+import org.stroganov.exceptions.AuthenticationException;
 import org.stroganov.exceptions.DBExceptions;
 import org.stroganov.gui.UserInterface;
 import org.stroganov.history.HistoryManager;
@@ -70,14 +71,14 @@ public class InitialDialogue {
         } while (user == null && countAttempt > 0);
 
         if (user == null) {
-            userInterface.showMessage("You entered incorrect credentials three times,\nprogram will be closed");
+            userInterface.showMessage("You entered incorrect credentials three times,\n program will be closed");
             System.exit(1);
         }
         historyManager.saveAction("User " + user.getLogin() + " entered in system");
         logger.info("User " + user.getLogin() + " entered in system");
         try {
             AuthenticationServiceClient.getJWTToken(user);
-        } catch (JsonProcessingException e) {
+        } catch (JsonProcessingException | AuthenticationException e) {
             logger.error(e);
             userInterface.showMessage("We have got error: " + e.getMessage());
         }

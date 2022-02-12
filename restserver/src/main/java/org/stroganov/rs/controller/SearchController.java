@@ -4,6 +4,7 @@ import org.stroganov.entities.Book;
 import org.stroganov.entities.User;
 import org.stroganov.models.BookDTO;
 import org.stroganov.rs.filter.JWTTokenNeeded;
+import org.stroganov.util.TransitionObjectsService;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -32,8 +33,9 @@ public class SearchController extends Controller {
     @Produces({MediaType.APPLICATION_JSON})
     public Response findUserBookMarks(@PathParam("partOfName") String partOfName) {
         List<Book> bookList = libraryDAO.findBooksByPartName(partOfName);
+        List<BookDTO> bookDTOList = TransitionObjectsService.getBookDTOList(bookList);
         return Response.status(Response.Status.OK)
-                .entity(bookList)
+                .entity(bookDTOList)
                 .build();
     }
 
@@ -43,8 +45,9 @@ public class SearchController extends Controller {
     @Produces({MediaType.APPLICATION_JSON})
     public Response findBooksByPartAuthorName(@PathParam("partAuthorName") String partOfName) {
         List<Book> bookList = libraryDAO.findBooksByPartAuthorName(partOfName);
+        List<BookDTO> bookDTOList = TransitionObjectsService.getBookDTOList(bookList);
         return Response.status(Response.Status.OK)
-                .entity(bookList)
+                .entity(bookDTOList)
                 .build();
     }
 
@@ -53,10 +56,11 @@ public class SearchController extends Controller {
     @Path("/findBooksByYearsRange")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    public Response findUserBookMarks(@QueryParam("firstYear") int firstYear, @QueryParam("secondYear") int secondYear) {
+    public Response findBooksByYearsRange(@QueryParam("firstYear") int firstYear, @QueryParam("secondYear") int secondYear) {
         List<Book> bookList = libraryDAO.findBooksByYearsRange(firstYear, secondYear);
+        List<BookDTO> bookDTOList = TransitionObjectsService.getBookDTOList(bookList);
         return Response.status(Response.Status.OK)
-                .entity(bookList)
+                .entity(bookDTOList)
                 .build();
     }
 
@@ -66,8 +70,9 @@ public class SearchController extends Controller {
     @Produces({MediaType.APPLICATION_JSON})
     public Response findBooksByParameters(@QueryParam("bookYear") int bookYear, @QueryParam("bookPages") int bookPages, @QueryParam("partBookName") String partBookName) {
         List<Book> bookList = libraryDAO.findBooksByParameters(bookYear, bookPages, partBookName);
+        List<BookDTO> bookDTOList = TransitionObjectsService.getBookDTOList(bookList);
         return Response.status(Response.Status.OK)
-                .entity(bookList)
+                .entity(bookDTOList)
                 .build();
     }
 
@@ -81,8 +86,9 @@ public class SearchController extends Controller {
         if (user != null) {
             bookList = libraryDAO.findBooksWithUserBookMarks(user);
         }
+        List<BookDTO> bookDTOList = TransitionObjectsService.getBookDTOList(bookList);
         return Response.status(Response.Status.OK)
-                .entity(bookList)
+                .entity(bookDTOList)
                 .build();
     }
 }

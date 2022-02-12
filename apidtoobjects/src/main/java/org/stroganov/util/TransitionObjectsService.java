@@ -3,6 +3,9 @@ package org.stroganov.util;
 import org.stroganov.entities.*;
 import org.stroganov.models.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TransitionObjectsService {
 
     private TransitionObjectsService() {
@@ -48,5 +51,23 @@ public class TransitionObjectsService {
         history.setLocalDateTime(historyDTO.getLocalDateTime());
         history.setUser(getUser(historyDTO.getUser()));
         return history;
+    }
+
+    public static List<BookMarkDTO> getBookMarkDTOList(List<BookMark> bookMarkList) {
+        List<BookMarkDTO> bookMarkDTOList = new ArrayList<>();
+        bookMarkList.forEach(bookMark -> bookMarkDTOList.add(new BookMarkDTO(bookMark)));
+        return bookMarkDTOList;
+    }
+
+    public static List<HistoryDTO> getHistoryDTOList(List<History> allHistory) {
+        List<HistoryDTO> historyDTOList = new ArrayList<>();
+        allHistory.forEach(historyObject -> historyDTOList.add(new HistoryDTO(historyObject)));
+        return historyDTOList;
+    }
+
+    public static List<BookDTO> getBookDTOList(List<Book> bookList) {
+        List<BookDTO> bookDTOList = new ArrayList<>();
+        bookList.forEach(book -> bookDTOList.add(new BookDTO(book)));
+        return bookDTOList;
     }
 }
