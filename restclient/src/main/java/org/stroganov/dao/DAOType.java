@@ -1,11 +1,12 @@
 package org.stroganov.dao;
 
 import org.hibernate.SessionFactory;
+import org.springframework.stereotype.Component;
 import org.stroganov.exceptions.DBExceptions;
 import org.stroganov.restservice.LibraryRestServiceClient;
 import org.stroganov.util.HibernateUtil;
 
-
+@Component
 public enum DAOType {
 
     JSON() {

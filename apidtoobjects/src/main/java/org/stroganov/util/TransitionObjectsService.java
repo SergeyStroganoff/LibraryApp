@@ -5,6 +5,7 @@ import org.stroganov.models.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TransitionObjectsService {
 
@@ -54,15 +55,11 @@ public class TransitionObjectsService {
     }
 
     public static List<BookMarkDTO> getBookMarkDTOList(List<BookMark> bookMarkList) {
-        List<BookMarkDTO> bookMarkDTOList = new ArrayList<>();
-        bookMarkList.forEach(bookMark -> bookMarkDTOList.add(new BookMarkDTO(bookMark)));
-        return bookMarkDTOList;
+        return bookMarkList.stream().map(BookMarkDTO::new).collect(Collectors.toList());
     }
 
     public static List<HistoryDTO> getHistoryDTOList(List<History> allHistory) {
-        List<HistoryDTO> historyDTOList = new ArrayList<>();
-        allHistory.forEach(historyObject -> historyDTOList.add(new HistoryDTO(historyObject)));
-        return historyDTOList;
+        return allHistory.stream().map(HistoryDTO::new).collect(Collectors.toList());
     }
 
     public static List<BookDTO> getBookDTOList(List<Book> bookList) {

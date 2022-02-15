@@ -31,7 +31,7 @@ public class MySQLLibraryDAO implements LibraryDAO {
         return instance;
     }
 
-    public MySQLLibraryDAO(SessionFactory sessionFactory) {
+    private MySQLLibraryDAO(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 

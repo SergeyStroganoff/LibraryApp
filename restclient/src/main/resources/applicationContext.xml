@@ -5,7 +5,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
 
     <!-- bean definitions here -->
-    <context:property-placeholder location="classpath:app.properties"/>
+    <context:property-placeholder location="classpath:application.properties"/>
     <context:component-scan base-package="org.stroganov"/>
 
 
@@ -14,6 +14,11 @@
           factory-method="getUserInterface">
         <constructor-arg value="ConsoleInterface"/>
     </bean>
+
+    <bean id="libraryDAO" class="org.stroganov.dao.DAOType" factory-method="valueOf" init-method="getLibraryDAO">
+        <constructor-arg value="WEB_SERVICE_REST" />
+    </bean>
+
 
 </beans>
 
