@@ -27,7 +27,7 @@ public class BookDTO implements Serializable {
     public BookDTO(Book book) {
         this.numberISBN = book.getNumberISBN();
         this.bookName = book.getBookName();
-        this.authorDTOName = new AuthorDTO(book.getAuthorName());
+        this.authorDTOName = new AuthorDTO(book.getAuthor());
         this.yearPublishing = book.getYearPublishing();
         this.pagesNumber = book.getPagesNumber();
     }
