@@ -16,6 +16,8 @@ public class History {
     @ManyToOne
     @JoinColumn(name = "user_login")
     User user;
+    @Temporal(value = TemporalType.TIMESTAMP)
+    @Column(name = "localdatetime")
     Date localDateTime;
     String event;
 
