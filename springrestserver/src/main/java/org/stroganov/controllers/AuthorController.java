@@ -1,6 +1,5 @@
 package org.stroganov.controllers;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,17 +9,16 @@ import org.stroganov.exceptions.AuthorDeleteException;
 import org.stroganov.exceptions.AuthorSavingException;
 import org.stroganov.models.AuthorDTO;
 import org.stroganov.repository.AuthorRepository;
-import org.stroganov.servise.AuthorService;
+import org.stroganov.servise.impl.AuthorServiceImpl;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api")
 public class AuthorController {
+
     @Autowired
-    AuthorRepository authorRepository;
-    @Autowired
-    AuthorService authorService;
+    AuthorServiceImpl authorService;
 
     @PostMapping("author/")
     //@JWTTokenNeeded
@@ -29,14 +27,14 @@ public class AuthorController {
             authorService.saveAuthor(authorDTO);
             return ResponseEntity.ok("Author saved");
         } catch (AuthorSavingException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 
     @GetMapping("author/{authorName}")
     //@JWTTokenNeeded
     public ResponseEntity findAuthor(@PathVariable("authorName") String authorName) {
-        List<Author> authors = authorRepository.findAuthorByAuthorNameContaining(authorName);
+        List<Author> authors = authorService.findAuthorByAuthorName(authorName);
         if (authors.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

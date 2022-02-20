@@ -3,7 +3,7 @@ package org.stroganov.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.stroganov.entities.User;
 
-public interface UserRepository extends JpaRepository<User, Integer> {
+public interface UserRepository extends JpaRepository<User, String> {
 
     default void unblockUser(User user) {
         user.setBlocked(Boolean.FALSE);
