@@ -54,7 +54,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("user/block/")
+    @PostMapping("user/unblock/")
     // @JWTTokenNeeded
     // @AdminStatusNeeded
     public ResponseEntity unblockUser(@RequestBody String userLogin) {
@@ -69,7 +69,8 @@ public class UserController {
     @PostMapping("user/")
     //@JWTTokenNeeded
     //@AdminStatusNeeded
-    public ResponseEntity addUser(UserDTO userDTO)  {
+    public ResponseEntity addUser(@RequestBody UserDTO userDTO) {
         userService.addUser(userDTO);
+        return ResponseEntity.ok().build();
     }
 }
