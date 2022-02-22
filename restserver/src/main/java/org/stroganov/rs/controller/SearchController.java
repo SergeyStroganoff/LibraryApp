@@ -31,7 +31,7 @@ public class SearchController extends Controller {
     @Path("/partOfName/{partOfName}")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    public Response findUserBookMarks(@PathParam("partOfName") String partOfName) {
+    public Response findBookByPartOfName(@PathParam("partOfName") String partOfName) {
         List<Book> bookList = libraryDAO.findBooksByPartName(partOfName);
         List<BookDTO> bookDTOList = TransitionObjectsService.getBookDTOList(bookList);
         return Response.status(Response.Status.OK)

@@ -67,4 +67,10 @@ public class TransitionObjectsService {
         bookList.forEach(book -> bookDTOList.add(new BookDTO(book)));
         return bookDTOList;
     }
+
+    public static List<Book> getBookList(List<BookDTO> bookDTOList) {
+        List<Book> bookList = new ArrayList<>();
+        bookDTOList.forEach(bookDTO -> bookList.add(getBook(bookDTO)));
+        return bookList;
+    }
 }
