@@ -38,7 +38,6 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void addBook(BookDTO bookDTO) throws AddBookException {
-
         Book book = TransitionObjectsService.getBook(bookDTO);
         try {
             bookRepository.save(book);

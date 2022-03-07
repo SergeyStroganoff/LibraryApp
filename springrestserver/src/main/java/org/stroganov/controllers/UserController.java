@@ -33,37 +33,25 @@ public class UserController {
     @DeleteMapping("user/{userLogin}")
     //@JWTTokenNeeded
     //@AdminStatusNeeded
-    public ResponseEntity deleteUser(@PathVariable("userLogin") String userLogin) {
-        try {
+    public ResponseEntity deleteUser(@PathVariable("userLogin") String userLogin) throws UserNotExistException {
             userService.deleteUserByUserLogin(userLogin);
             return ResponseEntity.ok().build();
-        } catch (UserNotExistException e) {
-            return ResponseEntity.badRequest().body(USER_WAS_NOT_FOUND);
-        }
     }
 
     @PostMapping("user/block/")
     // @JWTTokenNeeded
     // @AdminStatusNeeded
-    public ResponseEntity blockUser(@RequestBody String userLogin) {
-        try {
+    public ResponseEntity blockUser(@RequestBody String userLogin) throws UserNotExistException {
             userService.blockUser(userLogin);
             return ResponseEntity.ok().build();
-        } catch (UserNotExistException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
     @PostMapping("user/unblock/")
     // @JWTTokenNeeded
     // @AdminStatusNeeded
-    public ResponseEntity unblockUser(@RequestBody String userLogin) {
-        try {
+    public ResponseEntity unblockUser(@RequestBody String userLogin) throws UserNotExistException {
             userService.unBlockUser(userLogin);
             return ResponseEntity.ok().build();
-        } catch (UserNotExistException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
     @PostMapping("user/")

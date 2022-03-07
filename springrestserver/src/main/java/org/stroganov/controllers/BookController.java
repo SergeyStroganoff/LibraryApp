@@ -19,43 +19,27 @@ public class BookController {
     BookService bookService;
 
     @DeleteMapping("book/{bookISBN}")
-    public ResponseEntity<String> deleteBook(@PathVariable("bookISBN") String bookISBN) {
-        try {
-            bookService.delete(bookISBN);
-            return ResponseEntity.ok().build();
-        } catch (BookNotExistException e) {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<String> deleteBook(@PathVariable("bookISBN") String bookISBN) throws BookNotExistException {
+        bookService.delete(bookISBN);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("book/add")
     public ResponseEntity<String> addBook(BookDTO bookDTO) {
-        try {
             bookService.addBook(bookDTO);
             return ResponseEntity.ok().build();
-        } catch (AddBookException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
     }
 
     @PostMapping("book/addList")
     public ResponseEntity<String> addBooks(List<BookDTO> bookList) {
-        try {
             bookService.addBooks(bookList);
             return ResponseEntity.ok().build();
-        } catch (AddBookException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
     }
 
     @GetMapping("book/{numberISBN}")
-    public ResponseEntity<BookDTO> findBook(@PathVariable("numberISBN") String numberISBN) {
-        try {
+    public ResponseEntity<BookDTO> findBook(@PathVariable("numberISBN") String numberISBN) throws BookNotExistException {
             BookDTO bookDTO = bookService.findBook(numberISBN);
             return ResponseEntity.ok(bookDTO);
-        } catch (BookNotExistException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
     }
 
     @GetMapping("book/partOfName/{partOfName}")

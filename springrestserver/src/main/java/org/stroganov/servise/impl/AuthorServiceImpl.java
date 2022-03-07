@@ -1,11 +1,11 @@
 package org.stroganov.servise.impl;
 
+import lombok.AllArgsConstructor;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.stroganov.entities.Author;
-import org.stroganov.exceptions.AuthorDeleteException;
-import org.stroganov.exceptions.AuthorSavingException;
+import org.stroganov.exceptions.AuthorServiceException;
 import org.stroganov.models.AuthorDTO;
 import org.stroganov.repository.AuthorRepository;
 import org.stroganov.servise.AuthorService;
@@ -13,6 +13,7 @@ import org.stroganov.util.TransitionObjectsService;
 
 import java.util.List;
 
+@AllArgsConstructor
 @Service
 public class AuthorServiceImpl implements AuthorService {
 
@@ -26,30 +27,30 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public void saveAuthor(AuthorDTO authorDTO) throws AuthorSavingException {
+    public void saveAuthor(AuthorDTO authorDTO) throws AuthorServiceException {
         if (!authorRepository.findAuthorByAuthorNameContaining(authorDTO.getAuthorName()).isEmpty()) {
             logger.info(AUTHOR_EXIST);
-            throw new AuthorSavingException(AUTHOR_EXIST);
+            throw new AuthorServiceException(AUTHOR_EXIST);
         }
         try {
             authorRepository.save(TransitionObjectsService.getAuthor(authorDTO));
         } catch (Exception e) {
             logger.error(e.getMessage());
-            throw new AuthorSavingException(e.getMessage(), e);
+            throw new AuthorServiceException(e.getMessage(), e);
         }
     }
 
     @Override
-    public void deleteAuthor(String authorName) throws AuthorDeleteException {
+    public void deleteAuthor(String authorName) throws AuthorServiceException {
         List<Author> authors = authorRepository.findAuthorByAuthorNameContaining(authorName);
         if (authors.isEmpty()) {
             logger.info("Автор не найден, удаление невозможно");
-            throw new AuthorDeleteException(AUTHOR_EXIST);
+            throw new AuthorServiceException(AUTHOR_EXIST);
         }
         try {
             authorRepository.delete(authors.get(0));
         } catch (Exception e) {
-            throw new AuthorDeleteException(e.getMessage());
+            throw new AuthorServiceException(e.getMessage());
         }
     }
 
