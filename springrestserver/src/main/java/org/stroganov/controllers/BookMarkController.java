@@ -1,8 +1,8 @@
 package org.stroganov.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.stroganov.entities.BookMark;
 import org.stroganov.exceptions.BookMarkServiceException;
@@ -12,8 +12,9 @@ import org.stroganov.servise.BookMarkService;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class BookMarkController {
 
     public static final String MARK_WAS_DELETED_MESSAGE = "BookMark was deleted";

@@ -1,10 +1,9 @@
 package org.stroganov.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.stroganov.exceptions.AddBookException;
 import org.stroganov.exceptions.BookNotExistException;
 import org.stroganov.models.BookDTO;
 import org.stroganov.servise.BookService;
@@ -14,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class BookController {
     @Autowired
     BookService bookService;
@@ -26,20 +26,20 @@ public class BookController {
 
     @PostMapping("book/add")
     public ResponseEntity<String> addBook(BookDTO bookDTO) {
-            bookService.addBook(bookDTO);
-            return ResponseEntity.ok().build();
+        bookService.addBook(bookDTO);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("book/addList")
     public ResponseEntity<String> addBooks(List<BookDTO> bookList) {
-            bookService.addBooks(bookList);
-            return ResponseEntity.ok().build();
+        bookService.addBooks(bookList);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("book/{numberISBN}")
     public ResponseEntity<BookDTO> findBook(@PathVariable("numberISBN") String numberISBN) throws BookNotExistException {
-            BookDTO bookDTO = bookService.findBook(numberISBN);
-            return ResponseEntity.ok(bookDTO);
+        BookDTO bookDTO = bookService.findBook(numberISBN);
+        return ResponseEntity.ok(bookDTO);
     }
 
     @GetMapping("book/partOfName/{partOfName}")
@@ -55,19 +55,19 @@ public class BookController {
     }
 
 
-    @GetMapping("book/findBooksByYearsRange")
+    @GetMapping("book/findInYearsRange")
     public ResponseEntity<List<BookDTO>> findBooksByYearsRange(@PathParam("firstYear") int firstYear, @PathParam("secondYear") int secondYear) {
         List<BookDTO> bookDTOList = bookService.findBooksByYearsRange(firstYear, secondYear);
         return ResponseEntity.ok(bookDTOList);
     }
 
-    @GetMapping("book/findBooksByParameters")
+    @GetMapping("book/findByParameters")
     public ResponseEntity<List<BookDTO>> findBooksByParameters(@PathParam("bookYear") int bookYear, @PathParam("bookPages") int bookPages, @PathParam("partBookName") String partBookName) {
         List<BookDTO> bookDTOList = bookService.findBooksByParameters(bookYear, bookPages, partBookName);
         return ResponseEntity.ok(bookDTOList);
     }
 
-    @GetMapping("book/findBooksWithUserBookMarks/{userLogin}")
+    @GetMapping("book/findWithBookMarks/{userLogin}")
     public ResponseEntity<List<BookDTO>> findBooksWithUserBookMarks(@PathVariable("userLogin") String userLogin) {
         List<BookDTO> bookDTOList = bookService.findBooksWithUserBookMarks(userLogin);
         return ResponseEntity.ok(bookDTOList);

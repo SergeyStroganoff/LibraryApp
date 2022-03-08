@@ -1,18 +1,19 @@
 package org.stroganov.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.stroganov.entities.History;
 import org.stroganov.exceptions.HistorySavingException;
 import org.stroganov.models.HistoryDTO;
-import org.stroganov.repository.HistoryRepository;
 import org.stroganov.servise.impl.HistoryServiceImpl;
 import org.stroganov.util.TransitionObjectsService;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api")
 public class HistoryController {
 
@@ -25,8 +26,8 @@ public class HistoryController {
     @PostMapping("/history")
     // @JWTTokenNeeded
     public ResponseEntity<String> addHistoryEvent(@RequestBody HistoryDTO historyDTO) throws HistorySavingException {
-            historyService.historyEventSave(historyDTO);
-            return ResponseEntity.ok(SAVED_SUCCESSFULLY);
+        historyService.historyEventSave(historyDTO);
+        return ResponseEntity.ok(SAVED_SUCCESSFULLY);
     }
 
     @GetMapping("/history")

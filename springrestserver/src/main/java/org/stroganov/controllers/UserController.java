@@ -1,9 +1,9 @@
 package org.stroganov.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.stroganov.entities.User;
 import org.stroganov.exceptions.UserNotExistException;
@@ -12,11 +12,11 @@ import org.stroganov.servise.UserService;
 
 import java.util.Optional;
 
-@Controller
+@RestController
+@RequiredArgsConstructor
 @RequestMapping("/api")
 public class UserController {
 
-    private static final String USER_WAS_NOT_FOUND = "User was non found";
     @Autowired
     UserService userService;
 
@@ -34,24 +34,24 @@ public class UserController {
     //@JWTTokenNeeded
     //@AdminStatusNeeded
     public ResponseEntity deleteUser(@PathVariable("userLogin") String userLogin) throws UserNotExistException {
-            userService.deleteUserByUserLogin(userLogin);
-            return ResponseEntity.ok().build();
+        userService.deleteUserByUserLogin(userLogin);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("user/block/")
     // @JWTTokenNeeded
     // @AdminStatusNeeded
     public ResponseEntity blockUser(@RequestBody String userLogin) throws UserNotExistException {
-            userService.blockUser(userLogin);
-            return ResponseEntity.ok().build();
+        userService.blockUser(userLogin);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("user/unblock/")
     // @JWTTokenNeeded
     // @AdminStatusNeeded
     public ResponseEntity unblockUser(@RequestBody String userLogin) throws UserNotExistException {
-            userService.unBlockUser(userLogin);
-            return ResponseEntity.ok().build();
+        userService.unBlockUser(userLogin);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("user/")
