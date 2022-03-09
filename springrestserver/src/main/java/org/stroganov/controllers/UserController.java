@@ -1,6 +1,7 @@
 package org.stroganov.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +21,15 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    ModelMapper modelMapper;
+
     @GetMapping("user/{userLogin}")
     public ResponseEntity findUser(@PathVariable("userLogin") String userLogin) {
         Optional<User> user = userService.findUserByUserLogin(userLogin);
         if (user.isPresent()) {
-            return ResponseEntity.ok(new UserDTO(user.get()));
+            // return ResponseEntity.ok(new UserDTO(user.get()));
+            return ResponseEntity.ok(modelMapper.map(user.get(), UserDTO.class));
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -58,7 +63,7 @@ public class UserController {
     //@JWTTokenNeeded
     //@AdminStatusNeeded
     public ResponseEntity addUser(@RequestBody UserDTO userDTO) {
-        userService.addUser(userDTO);
+        userService.addUser(modelMapper.map(userDTO, User.class));
         return ResponseEntity.ok().build();
     }
 }

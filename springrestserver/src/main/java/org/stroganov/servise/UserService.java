@@ -17,5 +17,5 @@ public interface UserService {
 
     void unBlockUser(String userLogin) throws UserNotExistException;
 
-    void addUser(UserDTO userDTO);
+    void addUser(User user);
 }

@@ -11,7 +11,7 @@ public class TransitionObjectsService {
 
     private TransitionObjectsService() {
     }
-
+/*
     public static User getUser(UserDTO userDTO) {
         User user = new User();
         user.setUserID(userDTO.getUserID());
@@ -23,16 +23,25 @@ public class TransitionObjectsService {
         return user;
     }
 
+    public static BookMark getBookMark(BookMarkDTO bookMarkDTO) {
+        return new BookMark(getBook(bookMarkDTO.getBook()), getUser(bookMarkDTO.getUser()), bookMarkDTO.getBookPageNumber());
+    }
+
+    public static History getHistory(HistoryDTO historyDTO) {
+        History history = new History();
+        history.setId(historyDTO.getId());
+        history.setEvent(historyDTO.getEvent());
+        history.setLocalDateTime(historyDTO.getLocalDateTime());
+        history.setUser(getUser(historyDTO.getUser()));
+        return history;
+    }
+*/
+
     public static Author getAuthor(AuthorDTO authorDTO) {
         Author author = new Author();
         author.setAuthorID(authorDTO.getAuthorID());
         author.setAuthorName(authorDTO.getAuthorName());
         return author;
-    }
-
-
-    public static BookMark getBookMark(BookMarkDTO bookMarkDTO) {
-        return new BookMark(getBook(bookMarkDTO.getBook()), getUser(bookMarkDTO.getUser()), bookMarkDTO.getBookPageNumber());
     }
 
     public static Book getBook(BookDTO bookDTO) {
@@ -45,14 +54,6 @@ public class TransitionObjectsService {
         return book;
     }
 
-    public static History getHistory(HistoryDTO historyDTO) {
-        History history = new History();
-        history.setId(historyDTO.getId());
-        history.setEvent(historyDTO.getEvent());
-        history.setLocalDateTime(historyDTO.getLocalDateTime());
-        history.setUser(getUser(historyDTO.getUser()));
-        return history;
-    }
 
     public static List<BookMarkDTO> getBookMarkDTOList(List<BookMark> bookMarkList) {
         return bookMarkList.stream().map(BookMarkDTO::new).collect(Collectors.toList());

@@ -2,6 +2,7 @@ package org.stroganov.servise.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.log4j.Logger;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.stroganov.entities.Book;
@@ -23,6 +24,9 @@ public class BookServiceImpl implements BookService {
     Logger logger = Logger.getLogger(BookServiceImpl.class);
 
     @Autowired
+    ModelMapper modelMapper;
+
+    @Autowired
     public BookServiceImpl(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
@@ -40,7 +44,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void addBook(BookDTO bookDTO) throws AddBookException {
-        Book book = TransitionObjectsService.getBook(bookDTO);
+        Book book = modelMapper.map(bookDTO,Book.class);   //TransitionObjectsService.getBook(bookDTO);
         try {
             bookRepository.save(book);
         } catch (Exception e) {

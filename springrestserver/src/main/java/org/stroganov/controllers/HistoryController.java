@@ -1,6 +1,7 @@
 package org.stroganov.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,9 @@ public class HistoryController {
 
     @Autowired
     HistoryServiceImpl historyService;
+
+    @Autowired
+    ModelMapper modelMapper;
 
     @PostMapping("/history")
     // @JWTTokenNeeded

@@ -66,8 +66,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addUser(UserDTO userDTO) {
-        User user = TransitionObjectsService.getUser(userDTO);
+    public void addUser(User user) {
         userRepository.save(user);
     }
 }
