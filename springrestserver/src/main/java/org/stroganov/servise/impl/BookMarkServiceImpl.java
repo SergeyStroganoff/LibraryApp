@@ -1,6 +1,7 @@
 package org.stroganov.servise.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.apache.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2(topic="logger")
 public class BookMarkServiceImpl implements BookMarkService {
 
     public static final String BOOK_MARK_NOT_FOUND = "Закладка не найдена";
