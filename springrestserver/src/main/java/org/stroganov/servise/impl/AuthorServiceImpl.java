@@ -1,7 +1,6 @@
 package org.stroganov.servise.impl;
 
-import lombok.AllArgsConstructor;
-import org.apache.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.stroganov.entities.Author;
@@ -13,12 +12,11 @@ import org.stroganov.util.TransitionObjectsService;
 
 import java.util.List;
 
-@AllArgsConstructor
+@Log4j2
 @Service
 public class AuthorServiceImpl implements AuthorService {
 
     public static final String AUTHOR_EXIST = "Such author exist";
-    Logger logger = Logger.getLogger(AuthorServiceImpl.class);
     AuthorRepository authorRepository;
 
     @Autowired
@@ -29,13 +27,13 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public void saveAuthor(AuthorDTO authorDTO) throws AuthorServiceException {
         if (!authorRepository.findAuthorByAuthorNameContaining(authorDTO.getAuthorName()).isEmpty()) {
-            logger.info(AUTHOR_EXIST);
+            log.info(AUTHOR_EXIST);
             throw new AuthorServiceException(AUTHOR_EXIST);
         }
         try {
             authorRepository.save(TransitionObjectsService.getAuthor(authorDTO));
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             throw new AuthorServiceException(e.getMessage(), e);
         }
     }
@@ -44,7 +42,7 @@ public class AuthorServiceImpl implements AuthorService {
     public void deleteAuthor(String authorName) throws AuthorServiceException {
         List<Author> authors = authorRepository.findAuthorByAuthorNameContaining(authorName);
         if (authors.isEmpty()) {
-            logger.info("Автор не найден, удаление невозможно");
+            log.info("Автор не найден, удаление невозможно");
             throw new AuthorServiceException(AUTHOR_EXIST);
         }
         try {

@@ -2,7 +2,6 @@ package org.stroganov.entities;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 

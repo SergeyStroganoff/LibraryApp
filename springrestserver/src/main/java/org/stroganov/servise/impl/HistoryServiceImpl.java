@@ -1,7 +1,6 @@
 package org.stroganov.servise.impl;
 
-import lombok.RequiredArgsConstructor;
-import org.apache.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,18 +13,16 @@ import org.stroganov.servise.HistoryService;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
+@Log4j2
 public class HistoryServiceImpl implements HistoryService {
 
-    Logger logger = Logger.getLogger(HistoryServiceImpl.class);
-    HistoryRepository historyRepository;
+    private final HistoryRepository historyRepository;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    ModelMapper modelMapper;
-
-    @Autowired
-    public HistoryServiceImpl(HistoryRepository historyRepository) {
+    public HistoryServiceImpl(HistoryRepository historyRepository, ModelMapper modelMapper) {
         this.historyRepository = historyRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -34,7 +31,7 @@ public class HistoryServiceImpl implements HistoryService {
         try {
             historyRepository.save(history);
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             throw new HistorySavingException(e.getMessage());
         }
     }

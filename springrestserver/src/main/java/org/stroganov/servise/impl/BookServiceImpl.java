@@ -1,7 +1,6 @@
 package org.stroganov.servise.impl;
 
-import lombok.RequiredArgsConstructor;
-import org.apache.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,20 +15,19 @@ import org.stroganov.util.TransitionObjectsService;
 import java.util.List;
 import java.util.Optional;
 
+@Log4j2
 @Service
-@RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
 
-    BookRepository bookRepository;
-    Logger logger = Logger.getLogger(BookServiceImpl.class);
+    private final BookRepository bookRepository;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    ModelMapper modelMapper;
-
-    @Autowired
-    public BookServiceImpl(BookRepository bookRepository) {
+    public BookServiceImpl(BookRepository bookRepository, ModelMapper modelMapper) {
         this.bookRepository = bookRepository;
+        this.modelMapper = modelMapper;
     }
+
 
     @Override
     public void delete(String bookISBN) throws BookNotExistException {
@@ -37,18 +35,18 @@ public class BookServiceImpl implements BookService {
         if (book.isPresent()) {
             bookRepository.delete(book.get());
         } else {
-            logger.info("Book with bookISBN " + bookISBN + "was not found");
+            log.info("Book with bookISBN " + bookISBN + "was not found");
             throw new BookNotExistException("Book with bookISBN " + bookISBN + "was not found");
         }
     }
 
     @Override
     public void addBook(BookDTO bookDTO) throws AddBookException {
-        Book book = modelMapper.map(bookDTO,Book.class);   //TransitionObjectsService.getBook(bookDTO);
+        Book book = modelMapper.map(bookDTO, Book.class);   //TransitionObjectsService.getBook(bookDTO);
         try {
             bookRepository.save(book);
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             throw new AddBookException(e);
         }
     }
@@ -59,7 +57,7 @@ public class BookServiceImpl implements BookService {
         try {
             bookRepository.saveAllAndFlush(book);
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             throw new AddBookException(e);
         }
     }
