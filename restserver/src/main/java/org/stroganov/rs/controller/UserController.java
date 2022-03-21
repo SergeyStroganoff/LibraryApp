@@ -14,6 +14,8 @@ import java.io.IOException;
 @Path("/api/user")
 public class UserController extends Controller {
 
+
+
     @GET
     @Path("/{userLogin}")
     @Consumes({MediaType.APPLICATION_JSON})

@@ -7,6 +7,8 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import org.apache.log4j.Logger;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.stroganov.JsonDBAPI.JsonParser;
 import org.stroganov.dao.LibraryDAO;
 import org.stroganov.entities.*;
@@ -31,6 +33,9 @@ public class LibraryRestServiceClient implements LibraryDAO {
     private final Client client = Client.create();
     private final Gson gson = new Gson();
     private final String restServiceURL = PropertiesManager.getProperties().getProperty("restServiceURL");
+
+    @Autowired
+    ModelMapper modelMapper;
 
     public static LibraryRestServiceClient getInstance() {
         if (instance == null) {
@@ -127,7 +132,7 @@ public class LibraryRestServiceClient implements LibraryDAO {
         try {
             String responseJSON = getJSONStringFromServer(USER_PATH + userLogin, false);
             UserDTO userDTO = gson.fromJson(responseJSON, UserDTO.class);
-            return TransitionObjectsService.getUser(userDTO);
+            return modelMapper.map(userDTO, User.class);
         } catch (Exception e) {
             logger.error("Error in client method", e);
             return null;

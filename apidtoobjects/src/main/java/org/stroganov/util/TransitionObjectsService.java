@@ -11,7 +11,7 @@ public class TransitionObjectsService {
 
     private TransitionObjectsService() {
     }
-/*
+
     public static User getUser(UserDTO userDTO) {
         User user = new User();
         user.setUserID(userDTO.getUserID());
@@ -35,7 +35,6 @@ public class TransitionObjectsService {
         history.setUser(getUser(historyDTO.getUser()));
         return history;
     }
-*/
 
     public static Author getAuthor(AuthorDTO authorDTO) {
         Author author = new Author();
