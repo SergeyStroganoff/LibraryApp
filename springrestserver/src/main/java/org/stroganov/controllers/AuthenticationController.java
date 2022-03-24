@@ -1,51 +1,54 @@
-package org.stroganov.rs.controller;
+package org.stroganov.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.stroganov.entities.User;
 import org.stroganov.models.UserDTO;
+import org.stroganov.servise.UserService;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Optional;
 
-@Path("/api")
-public class AuthenticationController extends Controller {
+@RestController
+@RequestMapping("/api")
+public class AuthenticationController {
 
     public static final String BEARER = "Bearer";
     public static final String LIBRARY_SERVER = "LibraryServer";
     public static final String ADMIN = "admin";
     public static final long EXPIRATION_TIME = 45L;
+    UserService userService;
 
-    @POST
-    @Path("/authentication")
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
+    @Autowired
+    public AuthenticationController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @PostMapping("/authentication")
     // QueryParam
-    public Response authentication(UserDTO userDTO) {
-        User user = libraryDAO.findUser(userDTO.getLogin());
-        if (!user.getPasscodeHash().equals(userDTO.getPasscodeHash())) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity("Password is not correct: " + user.getLogin())
-                    .build();
+    public ResponseEntity<String> authentication(UserDTO userDTO) {
+        Optional<User> userOptional = userService.findUserByUserLogin(userDTO.getLogin());
+        if (userOptional.isEmpty() || !userOptional.get().getPasscodeHash().equals(userDTO.getPasscodeHash())) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        String newJWTToken = createJWTToken(user);
+        String newJWTToken = createJWTToken(userOptional.get());
         final ObjectMapper mapper = new ObjectMapper();
         ObjectNode json = mapper.createObjectNode();
         json.put(BEARER, newJWTToken);
-        return Response.status(Response.Status.OK)
-                .entity(json.toString())
-                .build();
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(json.toString());
     }
 
     private String createJWTToken(User user) {
