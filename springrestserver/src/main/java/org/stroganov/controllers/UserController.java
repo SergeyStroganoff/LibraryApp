@@ -28,40 +28,31 @@ public class UserController {
     public ResponseEntity findUser(@PathVariable("userLogin") String userLogin) {
         Optional<User> user = userService.findUserByUserLogin(userLogin);
         if (user.isPresent()) {
-            // return ResponseEntity.ok(new UserDTO(user.get()));
             return ResponseEntity.ok(modelMapper.map(user.get(), UserDTO.class));
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
-    @DeleteMapping("user/{userLogin}")
-    //@JWTTokenNeeded
-    //@AdminStatusNeeded
+    @DeleteMapping("admin/user/{userLogin}")
     public ResponseEntity deleteUser(@PathVariable("userLogin") String userLogin) throws UserNotExistException {
         userService.deleteUserByUserLogin(userLogin);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("user/block/")
-    // @JWTTokenNeeded
-    // @AdminStatusNeeded
+    @PostMapping("admin/user/block/")
     public ResponseEntity blockUser(@RequestBody String userLogin) throws UserNotExistException {
         userService.blockUser(userLogin);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("user/unblock/")
-    // @JWTTokenNeeded
-    // @AdminStatusNeeded
+    @PostMapping("admin/user/unblock/")
     public ResponseEntity unblockUser(@RequestBody String userLogin) throws UserNotExistException {
         userService.unBlockUser(userLogin);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("user/")
-    //@JWTTokenNeeded
-    //@AdminStatusNeeded
+    @PostMapping("admin/user/")
     public ResponseEntity addUser(@RequestBody UserDTO userDTO) {
         userService.addUser(modelMapper.map(userDTO, User.class));
         return ResponseEntity.ok().build();

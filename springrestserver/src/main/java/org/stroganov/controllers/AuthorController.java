@@ -21,14 +21,12 @@ public class AuthorController {
     AuthorServiceImpl authorService;
 
     @PostMapping("author/")
-    //@JWTTokenNeeded
     public ResponseEntity addAuthor(@RequestBody AuthorDTO authorDTO) throws AuthorServiceException {
         authorService.saveAuthor(authorDTO);
         return ResponseEntity.ok("Author saved");
     }
 
     @GetMapping("author/{authorName}")
-    //@JWTTokenNeeded
     public ResponseEntity findAuthor(@PathVariable("authorName") String authorName) {
         List<Author> authors = authorService.findAuthorByAuthorName(authorName);
         if (authors.isEmpty()) {
@@ -39,7 +37,6 @@ public class AuthorController {
     }
 
     @DeleteMapping("author/{authorName}")
-    //@JWTTokenNeeded
     public ResponseEntity deleteAuthorWithAllHisBooks(@PathVariable("authorName") String authorName) throws AuthorServiceException {
         authorService.deleteAuthor(authorName);
         return ResponseEntity.ok("Author deleted");

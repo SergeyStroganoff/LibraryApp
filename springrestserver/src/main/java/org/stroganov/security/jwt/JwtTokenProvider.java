@@ -33,30 +33,30 @@ public class JwtTokenProvider {
 
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-    @Autowired
-    private UserDetailsService userDetailsService;
-
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         return bCryptPasswordEncoder;
     }
 
+    @Autowired
+    private UserDetailsService userDetailsService;
+
     @PostConstruct
     protected void init() {
         secret = Base64.getEncoder().encodeToString(secret.getBytes());
     }
 
-    private String createJWTToken(User user) {
+    public String createToken(User user) {
         final String LIBRARY_SERVER = "LibraryServer";
-        final String ADMIN = "admin";
+        final String role = user.isAdmin() ? "ADMIN" : "USER";
         final long EXPIRATION_TIME = 45L;
         return Jwts.builder()
                 .setIssuer(LIBRARY_SERVER)
                 .setIssuedAt(new Date())
                 .setExpiration(Date.from(LocalDateTime.now().plusMinutes(EXPIRATION_TIME).atZone(ZoneId.systemDefault()).toInstant()))
                 .setSubject(user.getLogin())
-                .claim(ADMIN, user.isAdmin())
+                .claim("role", role)
                 .signWith(key)
                 .compact();
     }

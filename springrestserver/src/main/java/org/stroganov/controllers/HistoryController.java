@@ -28,20 +28,19 @@ public class HistoryController {
     ModelMapper modelMapper;
 
     @PostMapping("/history")
-    // @JWTTokenNeeded
     public ResponseEntity<String> addHistoryEvent(@RequestBody HistoryDTO historyDTO) throws HistorySavingException {
         historyService.historyEventSave(historyDTO);
         return ResponseEntity.ok(SAVED_SUCCESSFULLY);
     }
 
-    @GetMapping("/history")
+    @GetMapping("/admin/history")
     public ResponseEntity<List<HistoryDTO>> getAllHistory() {
         List<History> allHistory = historyService.getAllHistoryEvents();
         List<HistoryDTO> historyDTOList = TransitionObjectsService.getHistoryDTOList(allHistory);
         return ResponseEntity.ok(historyDTOList);
     }
 
-    @GetMapping("/history/{userLogin}")
+    @GetMapping("/admin/history/{userLogin}")
     public ResponseEntity<List<HistoryDTO>> getUserHistory(@PathVariable String userLogin) {
         List<History> allHistory = historyService.getAllHistoryEventsByUser(userLogin);
         List<HistoryDTO> historyDTOList = TransitionObjectsService.getHistoryDTOList(allHistory);
