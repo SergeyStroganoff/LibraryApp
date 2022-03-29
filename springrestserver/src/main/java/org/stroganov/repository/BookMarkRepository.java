@@ -9,5 +9,6 @@ import java.util.List;
 public interface BookMarkRepository extends JpaRepository<BookMark, Integer> {
 
     List<BookMark> findBookMarksByUser(User user);
+
     BookMark findBookMarkById(int bookMarkId);
 }

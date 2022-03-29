@@ -10,9 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -58,11 +55,11 @@ public class AuthenticationController {
         if (userOptional.isEmpty() || !PasswordAuthentication.authenticate(requestDto.getPassword().toCharArray(), userOptional.get().getPasscodeHash())) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-       // try {
-       //     authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(requestDto.getLogin(), requestDto.getPassword()));
-       // } catch (AuthenticationException e) {
-       //     throw new BadCredentialsException("Invalid username or password");
-       // }
+        // try {
+        //     authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(requestDto.getLogin(), requestDto.getPassword()));
+        // } catch (AuthenticationException e) {
+        //     throw new BadCredentialsException("Invalid username or password");
+        // }
 
         String newJWTToken = jwtTokenProvider.createToken(userOptional.get());
         final ObjectMapper mapper = new ObjectMapper();

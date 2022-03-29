@@ -7,15 +7,10 @@ import java.io.Serializable;
 public class UserDTO implements Serializable {
 
     private int userID;
-
     private String fullName;
-
     private String login;
-
     private String passcodeHash;
-
     private boolean isBlocked;
-
     private boolean isAdmin;
 
     public UserDTO(User user) {

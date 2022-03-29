@@ -2,6 +2,7 @@ package org.stroganov.security.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -23,8 +24,11 @@ import java.util.Base64;
 import java.util.Date;
 
 @Component
+@Log4j2
 public class JwtTokenProvider {
 
+    public static final String JWT_TOKEN_IS_EXPIRED_OR_INVALID_MESSAGE = "JWT token is expired or invalid";
+    public static final String TOKEN_IS_VALID = "Токен валиден по времени";
     @Value("${jwt.token.secret}")
     private String secret;
 
@@ -49,14 +53,16 @@ public class JwtTokenProvider {
 
     public String createToken(User user) {
         final String LIBRARY_SERVER = "LibraryServer";
-        final String role = user.isAdmin() ? "ADMIN" : "USER";
-        final long EXPIRATION_TIME = 45L;
+        String role = user.isAdmin() ? "ADMIN" : "USER";
+        role = "ROLE_" + role;
+        final long EXPIRATION_TIME = 450L;
+
         return Jwts.builder()
                 .setIssuer(LIBRARY_SERVER)
                 .setIssuedAt(new Date())
                 .setExpiration(Date.from(LocalDateTime.now().plusMinutes(EXPIRATION_TIME).atZone(ZoneId.systemDefault()).toInstant()))
                 .setSubject(user.getLogin())
-                .claim("role", role)
+                .claim("roles", role)
                 .signWith(key)
                 .compact();
     }
@@ -67,7 +73,7 @@ public class JwtTokenProvider {
     }
 
     public String getUsername(String token) {
-        return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject();
     }
 
     public String resolveToken(HttpServletRequest req) {
@@ -80,10 +86,12 @@ public class JwtTokenProvider {
 
     public boolean validateToken(String token) throws JwtAuthenticationException {
         try {
-            Jws<Claims> claims = Jwts.parser().setSigningKey(key).parseClaimsJws(token);
+            Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            log.debug(TOKEN_IS_VALID);
             return !claims.getBody().getExpiration().before(new Date());
         } catch (JwtException | IllegalArgumentException e) {
-            throw new JwtAuthenticationException("JWT token is expired or invalid");
+            log.debug(JWT_TOKEN_IS_EXPIRED_OR_INVALID_MESSAGE);
+            throw new JwtAuthenticationException(JWT_TOKEN_IS_EXPIRED_OR_INVALID_MESSAGE);
         }
     }
 }

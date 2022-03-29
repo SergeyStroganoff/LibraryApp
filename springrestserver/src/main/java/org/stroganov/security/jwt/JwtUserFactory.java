@@ -24,6 +24,7 @@ public class JwtUserFactory {
                 mapToGrantedAuthorities(user)
         );
     }
+
     private static List<GrantedAuthority> mapToGrantedAuthorities(User user) {
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         String role = user.isAdmin() ? ADMIN : USER;
