@@ -4,6 +4,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
+import org.stroganov.aspects.CurrentPrincipal;
 import org.stroganov.exceptions.JwtAuthenticationException;
 
 import javax.servlet.FilterChain;
@@ -28,12 +29,12 @@ public class JwtTokenFilter extends GenericFilterBean {
         try {
             if (token != null && jwtTokenProvider.validateToken(token)) {
                 Authentication auth = jwtTokenProvider.getAuthentication(token);
+                CurrentPrincipal.setPrincipalName(auth.getName());
                 if (auth != null) {
                     SecurityContextHolder.getContext().setAuthentication(auth);
                 }
             }
         } catch (JwtAuthenticationException e) {
-            System.out.println(e.getMessage());
             log.info(e.getMessage());
         }
         filterChain.doFilter(req, res);

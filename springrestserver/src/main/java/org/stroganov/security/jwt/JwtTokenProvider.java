@@ -29,6 +29,7 @@ public class JwtTokenProvider {
 
     public static final String JWT_TOKEN_IS_EXPIRED_OR_INVALID_MESSAGE = "JWT token is expired or invalid";
     public static final String TOKEN_IS_VALID = "Токен валиден по времени";
+
     @Value("${jwt.token.secret}")
     private String secret;
 
@@ -39,8 +40,7 @@ public class JwtTokenProvider {
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        return bCryptPasswordEncoder;
+        return new BCryptPasswordEncoder();
     }
 
     @Autowired
@@ -55,7 +55,7 @@ public class JwtTokenProvider {
         final String LIBRARY_SERVER = "LibraryServer";
         String role = user.isAdmin() ? "ADMIN" : "USER";
         role = "ROLE_" + role;
-        final long EXPIRATION_TIME = 450L;
+        final long EXPIRATION_TIME = validityInMilliseconds;
 
         return Jwts.builder()
                 .setIssuer(LIBRARY_SERVER)
