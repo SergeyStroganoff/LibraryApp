@@ -2,6 +2,11 @@ package org.stroganov.dialogue;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Component;
 import org.stroganov.dao.DAOType;
 import org.stroganov.dao.LibraryDAO;
 import org.stroganov.entities.User;
@@ -13,31 +18,29 @@ import org.stroganov.restservice.AuthenticationServiceClient;
 import org.stroganov.util.PasswordAuthentication;
 
 import java.io.IOException;
-
+@Component
+@Scope("singleton")
 public class InitialDialogue {
 
     public static final String EXIT_BEFORE_LOGIN_MESSAGE = "User asked exit before login";
     public static final String INPUT_LOGIN_MESSAGE = "Input login and password, 'q' for exit";
     public static final String ATTEMPTS_MESSAGE = "You have only 3 attempts";
     private final Logger logger = Logger.getLogger(InitialDialogue.class);
-    private LibraryDAO libraryDAO = null;
+    @Autowired
+    private LibraryDAO libraryDAO;
+    @Autowired
     private HistoryManager historyManager;
     private final UserInterface userInterface;
 
-    public InitialDialogue(UserInterface userInterface) {
+    @Autowired
+    public InitialDialogue(@Qualifier("userInterface") UserInterface userInterface) {
         this.userInterface = userInterface;
-        try {
-            libraryDAO = DAOType.WEB_SERVICE_REST.getLibraryDAO();
-        } catch (DBExceptions e) {
-            userInterface.showMessage(e.getMessage());
-            System.exit(1);
-        }
-        try {
-            historyManager = new HistoryManager();
-        } catch (
-                IOException e) {
-            logger.error(e.getMessage());
-        }
+     //  try {
+     //      libraryDAO = DAOType.WEB_SERVICE_REST.getLibraryDAO();
+     //  } catch (DBExceptions e) {
+     //      userInterface.showMessage(e.getMessage());
+     //      System.exit(1);
+     //  }
     }
 
     public void runDialogue() {
@@ -83,6 +86,8 @@ public class InitialDialogue {
             userInterface.showMessage("We have got error: " + e.getMessage());
         }
         MenuManagerDialogue menuManagerDialogue = new MenuManagerDialogue(libraryDAO, historyManager, userInterface, user);
+       // ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+       // MenuManagerDialogue menuManagerDialogue = context.getBean(MenuManagerDialogue.class);
         menuManagerDialogue.runDialogue();
     }
 }

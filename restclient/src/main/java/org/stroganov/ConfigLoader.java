@@ -10,7 +10,7 @@ public class ConfigLoader {
 
     public static final String FILE_HAS_INCORRECT_FORMAT = "configuration file has incorrect format";
     public static final String FILE_WAS_NOT_FOUND = "configuration file wasn't found";
-    public static final String APP_PROPERTIES = "/app.properties";
+    public static final String APP_PROPERTIES = "/application.properties";
 
     public Properties getAppProp() throws IOException, PropertiesException {
         Properties properties = new Properties();

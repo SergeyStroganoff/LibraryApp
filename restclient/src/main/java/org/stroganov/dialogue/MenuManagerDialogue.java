@@ -1,6 +1,8 @@
 package org.stroganov.dialogue;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.stroganov.JsonDBAPI.JsonDBLoader;
 import org.stroganov.dao.LibraryDAO;
 import org.stroganov.entities.Author;

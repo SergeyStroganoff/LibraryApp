@@ -1,8 +1,11 @@
 package org.stroganov.gui;
 
+import org.springframework.stereotype.Component;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+@Component
 public class UserInterfaceFactory {
 
     private static final String REALIZATION_EXCEPTION_MESSAGE = "SwingInterface - не реализовано";
@@ -11,7 +14,7 @@ public class UserInterfaceFactory {
     private UserInterfaceFactory() {
     }
 
-    public static UserInterface getUserInterface(String userInterFaceType) {
+    public  UserInterface getUserInterface(String userInterFaceType) {
         UserInterface userInterface;
 
         switch (userInterFaceType) {
@@ -28,4 +31,6 @@ public class UserInterfaceFactory {
         }
         return userInterface;
     }
+
+
 }

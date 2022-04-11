@@ -5,6 +5,7 @@ import org.stroganov.models.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TransitionObjectsService {
 
@@ -22,16 +23,24 @@ public class TransitionObjectsService {
         return user;
     }
 
+    public static BookMark getBookMark(BookMarkDTO bookMarkDTO) {
+        return new BookMark(getBook(bookMarkDTO.getBook()), getUser(bookMarkDTO.getUser()), bookMarkDTO.getBookPageNumber());
+    }
+
+    public static History getHistory(HistoryDTO historyDTO) {
+        History history = new History();
+        history.setId(historyDTO.getId());
+        history.setEvent(historyDTO.getEvent());
+        history.setLocalDateTime(historyDTO.getLocalDateTime());
+        history.setUser(getUser(historyDTO.getUser()));
+        return history;
+    }
+
     public static Author getAuthor(AuthorDTO authorDTO) {
         Author author = new Author();
         author.setAuthorID(authorDTO.getAuthorID());
         author.setAuthorName(authorDTO.getAuthorName());
         return author;
-    }
-
-
-    public static BookMark getBookMark(BookMarkDTO bookMarkDTO) {
-        return new BookMark(getBook(bookMarkDTO.getBook()), getUser(bookMarkDTO.getUser()), bookMarkDTO.getBookPageNumber());
     }
 
     public static Book getBook(BookDTO bookDTO) {
@@ -44,30 +53,24 @@ public class TransitionObjectsService {
         return book;
     }
 
-    public static History getHistory(HistoryDTO historyDTO) {
-        History history = new History();
-        history.setId(historyDTO.getId());
-        history.setEvent(historyDTO.getEvent());
-        history.setLocalDateTime(historyDTO.getLocalDateTime());
-        history.setUser(getUser(historyDTO.getUser()));
-        return history;
-    }
 
     public static List<BookMarkDTO> getBookMarkDTOList(List<BookMark> bookMarkList) {
-        List<BookMarkDTO> bookMarkDTOList = new ArrayList<>();
-        bookMarkList.forEach(bookMark -> bookMarkDTOList.add(new BookMarkDTO(bookMark)));
-        return bookMarkDTOList;
+        return bookMarkList.stream().map(BookMarkDTO::new).collect(Collectors.toList());
     }
 
     public static List<HistoryDTO> getHistoryDTOList(List<History> allHistory) {
-        List<HistoryDTO> historyDTOList = new ArrayList<>();
-        allHistory.forEach(historyObject -> historyDTOList.add(new HistoryDTO(historyObject)));
-        return historyDTOList;
+        return allHistory.stream().map(HistoryDTO::new).collect(Collectors.toList());
     }
 
     public static List<BookDTO> getBookDTOList(List<Book> bookList) {
         List<BookDTO> bookDTOList = new ArrayList<>();
         bookList.forEach(book -> bookDTOList.add(new BookDTO(book)));
         return bookDTOList;
+    }
+
+    public static List<Book> getBookList(List<BookDTO> bookDTOList) {
+        List<Book> bookList = new ArrayList<>();
+        bookDTOList.forEach(bookDTO -> bookList.add(getBook(bookDTO)));
+        return bookList;
     }
 }

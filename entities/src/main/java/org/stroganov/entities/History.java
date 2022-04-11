@@ -2,7 +2,6 @@ package org.stroganov.entities;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
@@ -16,6 +15,8 @@ public class History {
     @ManyToOne
     @JoinColumn(name = "user_login")
     User user;
+    @Temporal(value = TemporalType.TIMESTAMP)
+    @Column(name = "localdatetime")
     Date localDateTime;
     String event;
 
