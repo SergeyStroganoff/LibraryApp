@@ -35,20 +35,20 @@
 2. Реализована объектная модель и бизнес логика приложения с использованием паттерна Data Access Object (DAO)
 В качестве источника данных могут использоваться файлы формата XML || JSON  либо  БД MySQL;
 Функционал и в т.ч операции CRUD реализованы через консольный клиент.
-- ветка https://github.com/SergeyStroganoff/LibraryApp/tree/dataBase/src/main/java/org/stroganov
+- ветка https://github.com/SergeyStroganoff/LibraryApp/tree/dataBase/
 
 3. Реализован SOAP веб-сервис, соответствующий спецификации SOAP  с использованием Jakarta EE
 Для деплоя использован TomCat 10.0
 Так же содан клиент для веб сервиса с консольным UI;
-- века https://github.com/SergeyStroganoff/LibraryApp/tree/master_soap/src/main/java/org/stroganov/wsClient
+- века https://github.com/SergeyStroganoff/LibraryApp/tree/master_soap/
 
 4. Реализован RESTful веб-сервис спецификации JAX-RS через Jersey;
 Для деплоя использован TomCat 9.0
-- века https://github.com/SergeyStroganoff/LibraryApp/blob/rest_develop/restserver/src/main/webapp/WEB-INF/web.xml
+- века https://github.com/SergeyStroganoff/LibraryApp/tree/rest_develop
 
 5. Реализован WEB сервис с исполизованием технологии Servlets + JSP (HTML, CSS, JS, BootStrap 4.0)
 Использован паттерн MVC. ORM - Hibirnate 7.
-- ветка https://github.com/SergeyStroganoff/LibraryApp/tree/web_dewelopment/src
+- ветка https://github.com/SergeyStroganoff/LibraryApp/tree/web_dewelopment/
 
 6. Реализован RESTful веб-сервис с использованием SPRING Boot + Hibernte + AOP + Security.
  - века https://github.com/SergeyStroganoff/LibraryApp/tree/spring
