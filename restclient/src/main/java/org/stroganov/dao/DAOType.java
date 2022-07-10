@@ -22,6 +22,7 @@ public enum DAOType {
 
     },
     WEB_SERVICE_REST() {
+        @Override
         public LibraryDAO getLibraryDAO() throws DBExceptions {
             return LibraryRestServiceClient.getInstance();
         }

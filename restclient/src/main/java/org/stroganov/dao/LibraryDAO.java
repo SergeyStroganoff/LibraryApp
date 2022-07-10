@@ -1,5 +1,6 @@
 package org.stroganov.dao;
 
+import org.springframework.stereotype.Component;
 import org.stroganov.entities.*;
 
 import java.io.IOException;
@@ -8,6 +9,7 @@ import java.util.List;
 /**
  * Interface for defining functions with DB
  */
+@Component
 public interface LibraryDAO {
     boolean addBook(Book book) throws IOException;
 

@@ -18,7 +18,5 @@
     <bean id="libraryDAO" class="org.stroganov.dao.DAOType" factory-method="valueOf" init-method="getLibraryDAO">
         <constructor-arg value="WEB_SERVICE_REST" />
     </bean>
-
-
 </beans>
 

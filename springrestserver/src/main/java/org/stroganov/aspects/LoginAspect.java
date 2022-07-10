@@ -48,10 +48,7 @@ public class LoginAspect {
 
         User incomingUser = null;
         Optional<User> userOptional = userService.findUserByUserLogin(authenticationRequestDto.getLogin());
-        if (userOptional.isPresent()) {
-            incomingUser = userOptional.get();
-        } else
-            incomingUser = userService.findUserByUserLogin("notAuthoredUser").get();
+        incomingUser = userOptional.orElseGet(() -> userService.findUserByUserLogin("notAuthoredUser").get());
         UserDTO userDTO = modelMapper.map(incomingUser, UserDTO.class);
         String event = retVal.getStatusCode().is2xxSuccessful() ? "User have got authentication successfully"
                 : "User attempted to get authentication  not successfully from" + retVal.getHeaders().getHost();
