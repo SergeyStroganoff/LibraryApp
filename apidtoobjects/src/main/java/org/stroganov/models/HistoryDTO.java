@@ -7,10 +7,10 @@ import java.util.Objects;
 
 public class HistoryDTO {
 
-    int id;
-    UserDTO userDTO;
-    Date localDateTime;
-    String event;
+   private int id;
+   private UserDTO userDTO;
+   private Date localDateTime;
+   private String event;
 
     public HistoryDTO(UserDTO userDTO, String event) {
         this.userDTO = userDTO;
